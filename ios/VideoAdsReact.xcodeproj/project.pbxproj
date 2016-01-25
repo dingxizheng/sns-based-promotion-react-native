@@ -20,6 +20,8 @@
 		8A75268C1C44B34D00C695EC /* libreact-native-fbsdklogin.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8A7526861C44B34D00C695EC /* libreact-native-fbsdklogin.a */; };
 		8A75268D1C44B34D00C695EC /* libReact.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8A7526871C44B34D00C695EC /* libReact.a */; };
 		8A8837D41C530A4B00C74ECF /* libRNRecorder.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8A8837D11C5309E600C74ECF /* libRNRecorder.a */; };
+		8A8837DB1C56CC9500C74ECF /* libRNOverlay.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8A8837DA1C56CC8500C74ECF /* libRNOverlay.a */; };
+		8A8837E21C56D26900C74ECF /* libRNBlur.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8A8837E11C56D25C00C74ECF /* libRNBlur.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -44,6 +46,20 @@
 			remoteGlobalIDString = D42CB35C1B2538DE00FD0AE2;
 			remoteInfo = RNRecorderTests;
 		};
+		8A8837D91C56CC8500C74ECF /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 8A8837D51C56CC8400C74ECF /* RNOverlay.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 134814201AA4EA6300B7C361;
+			remoteInfo = RNOverlay;
+		};
+		8A8837E01C56D25C00C74ECF /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 8A8837DC1C56D25C00C74ECF /* RNBlur.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = A68BD7BC1BC31318005F02DF;
+			remoteInfo = RNBlur;
+		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
@@ -67,6 +83,8 @@
 		8A7526861C44B34D00C695EC /* libreact-native-fbsdklogin.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libreact-native-fbsdklogin.a"; path = "Pods/../build/Debug-iphoneos/libreact-native-fbsdklogin.a"; sourceTree = "<group>"; };
 		8A7526871C44B34D00C695EC /* libReact.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libReact.a; path = "Pods/../build/Debug-iphoneos/libReact.a"; sourceTree = "<group>"; };
 		8A8837CA1C5309E600C74ECF /* RNRecorder.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RNRecorder.xcodeproj; path = "../node_modules/react-native-screcorder/ios/RNRecorder.xcodeproj"; sourceTree = "<group>"; };
+		8A8837D51C56CC8400C74ECF /* RNOverlay.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RNOverlay.xcodeproj; path = "../node_modules/react-native-overlay/RNOverlay.xcodeproj"; sourceTree = "<group>"; };
+		8A8837DC1C56D25C00C74ECF /* RNBlur.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RNBlur.xcodeproj; path = "../node_modules/react-native-blur/ios/RNBlur.xcodeproj"; sourceTree = "<group>"; };
 		EA855DB7B4C911AB56558D84 /* Pods-VideoAdsReact.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-VideoAdsReact.release.xcconfig"; path = "Pods/Target Support Files/Pods-VideoAdsReact/Pods-VideoAdsReact.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -82,6 +100,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8A8837E21C56D26900C74ECF /* libRNBlur.a in Frameworks */,
+				8A8837DB1C56CC9500C74ECF /* libRNOverlay.a in Frameworks */,
 				8A8837D41C530A4B00C74ECF /* libRNRecorder.a in Frameworks */,
 				8A7526881C44B34D00C695EC /* libBolts.a in Frameworks */,
 				8A7526891C44B34D00C695EC /* libFBSDKCoreKit.a in Frameworks */,
@@ -153,6 +173,8 @@
 		832341AE1AAA6A7D00B99B32 /* Libraries */ = {
 			isa = PBXGroup;
 			children = (
+				8A8837DC1C56D25C00C74ECF /* RNBlur.xcodeproj */,
+				8A8837D51C56CC8400C74ECF /* RNOverlay.xcodeproj */,
 				8A8837CA1C5309E600C74ECF /* RNRecorder.xcodeproj */,
 			);
 			name = Libraries;
@@ -186,6 +208,22 @@
 			children = (
 				8A8837D11C5309E600C74ECF /* libRNRecorder.a */,
 				8A8837D31C5309E600C74ECF /* RNRecorderTests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		8A8837D61C56CC8400C74ECF /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				8A8837DA1C56CC8500C74ECF /* libRNOverlay.a */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		8A8837DD1C56D25C00C74ECF /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				8A8837E11C56D25C00C74ECF /* libRNBlur.a */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -260,6 +298,14 @@
 			projectDirPath = "";
 			projectReferences = (
 				{
+					ProductGroup = 8A8837DD1C56D25C00C74ECF /* Products */;
+					ProjectRef = 8A8837DC1C56D25C00C74ECF /* RNBlur.xcodeproj */;
+				},
+				{
+					ProductGroup = 8A8837D61C56CC8400C74ECF /* Products */;
+					ProjectRef = 8A8837D51C56CC8400C74ECF /* RNOverlay.xcodeproj */;
+				},
+				{
 					ProductGroup = 8A8837CB1C5309E600C74ECF /* Products */;
 					ProjectRef = 8A8837CA1C5309E600C74ECF /* RNRecorder.xcodeproj */;
 				},
@@ -285,6 +331,20 @@
 			fileType = wrapper.cfbundle;
 			path = RNRecorderTests.xctest;
 			remoteRef = 8A8837D21C5309E600C74ECF /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		8A8837DA1C56CC8500C74ECF /* libRNOverlay.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libRNOverlay.a;
+			remoteRef = 8A8837D91C56CC8500C74ECF /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		8A8837E11C56D25C00C74ECF /* libRNBlur.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libRNBlur.a;
+			remoteRef = 8A8837E01C56D25C00C74ECF /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 /* End PBXReferenceProxy section */

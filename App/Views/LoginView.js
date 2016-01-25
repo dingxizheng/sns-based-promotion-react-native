@@ -2,7 +2,7 @@
 * @Author: dingxizheng
 * @Date:   2016-01-23 15:32:22
 * @Last Modified by:   dingxizheng
-* @Last Modified time: 2016-01-23 21:42:07
+* @Last Modified time: 2016-01-25 12:20:25
 */
 
 'use strict';
@@ -13,6 +13,7 @@ var t = require('tcomb-form-native');
 
 var formStyles = require('../formStyles');
 var theme = require('../theme');
+var accountApis = require('../apiCalls').accounts;
 
 var {
 	View,
@@ -34,6 +35,25 @@ var LoginForm = t.struct({
 var options = {};
 
 var LoginView = React.createClass({
+
+	_handleLogin: async function() {
+		try {
+			var res = await accountApis.login({
+						method: 'POST',
+						body: {
+							email: 'dingxizheng@gmail.com',
+							password: 'hello'
+						}
+					});
+
+			console.log(await res.json());
+
+		} catch (err) {
+			console.log(err);
+		}
+		
+	},
+
 	render: function() {
 		return (
 			<View style={styles.container}>
@@ -45,10 +65,13 @@ var LoginView = React.createClass({
 					type={LoginForm}
 					options={options}/>
 				
-				<TouchableOpacity style={styles.button}>
+				<TouchableOpacity style={styles.button}
+					onPress={this._handleLogin}>
 					<Text style={styles.buttonText}>Login</Text>
 				</TouchableOpacity>
+				
 				<Text style={styles.onelineText}>or</Text>
+				
 				<TouchableOpacity style={styles.button}>
 					<Text style={styles.buttonText}>Facebook</Text>
 				</TouchableOpacity>				
@@ -74,8 +97,10 @@ var styles = StyleSheet.create({
 
 	},
 	onelineText: {
+		textAlign: 'center',
 		justifyContent: 'center',
-		alignItems: 'center'
+		marginTop: 10,
+		marginBottom: 10
 	},
 	button: {
 		height: theme.buttons.BUTTON_HEIGHT,
@@ -84,7 +109,7 @@ var styles = StyleSheet.create({
 		borderRadius: 5,
 		justifyContent: 'center',
 		alignSelf: 'stretch',
-		marginBottom: 20
+		// marginBottom: 20
 	},
 	buttonText: {
 		fontSize: theme.fonts.FONT_SIZE,
