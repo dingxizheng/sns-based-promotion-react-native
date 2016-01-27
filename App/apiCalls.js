@@ -2,7 +2,7 @@
 * @Author: dingxizheng
 * @Date:   2016-01-24 16:40:14
 * @Last Modified by:   dingxizheng
-* @Last Modified time: 2016-01-25 15:00:06
+* @Last Modified time: 2016-01-25 18:14:07
 */
 
 'use strict';
@@ -45,33 +45,46 @@ var asyncFetch = async function(path, params) {
   }
 };
 
-module.exports = {
-	fetch: asyncFetch,
-
-	accounts: {
-		login: function(params) {
-			return asyncFetch(BASE_URL + '/' + API_VERSION + '/accounts/signin', {
-				method: 'POST',
-				body: params
-			});
-		},
-
-		signinWithFacebook: function(params) {
-			return asyncFetch(BASE_URL + '/' + API_VERSION + '/accounts/facebooklogin', params);
-		},
-
-		signup: async function(params) {
-
-		}
-	},
-
-	// add before callbacks
-	addBeforeAction: function(fn) {
-
-	},
-
-	// add after callbacks
-	addAfterAction: function(fn) {
-
-	}
+var inSiteFetch = function(method, path, params) {
+	return asyncFetch(BASE_URL + '/' + API_VERSION + path, params);
 };
+
+// APIS module to be exposed
+var APIS = {};
+
+APIS.asyncFetch = asyncFetch;
+
+APIS.addAfterAction = function(fn) {
+
+};
+
+APIS.addAfterAction = function(fn) {
+
+};
+
+// user actions
+APIS.accounts = {};
+
+APIS.accounts.login = function(params) {
+	return inSiteFetch('/accounts/signin', {
+		method: 'POST',
+		body: params
+	});
+};
+
+APIS.accounts.signinWithFacebook = function(params) {
+	return inSiteFetch('/accounts/facebooklogin', {
+		method: ''
+	});
+};
+
+APIS.accounts.signup = function(params) {
+	return inSiteFetch('/accounts/signup', params);
+};
+
+APIS.accounts.logout = function(params) {
+	return inSiteFetch('/accounts/signout', params);
+};
+
+// exports APIS
+module.exports = APIS;

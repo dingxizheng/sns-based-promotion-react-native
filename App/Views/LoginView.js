@@ -2,7 +2,7 @@
 * @Author: dingxizheng
 * @Date:   2016-01-23 15:32:22
 * @Last Modified by:   dingxizheng
-* @Last Modified time: 2016-01-25 12:20:25
+* @Last Modified time: 2016-01-27 16:57:05
 */
 
 'use strict';
@@ -22,6 +22,10 @@ var {
 	TouchableOpacity,
 } = React;
 
+var {
+  Actions
+} = require('react-native-router-flux');
+
 var Form = t.form.Form;
 
 Form.stylesheet = formStyles;
@@ -33,6 +37,17 @@ var LoginForm = t.struct({
 });
 
 var options = {};
+
+setTimeout(function() {
+	Actions.login();
+}, 2000);
+
+var GlobalEvent = require('../GlobalEvent');
+
+
+setTimeout(function() {
+	GlobalEvent.trigger('info_toast', "what the hell is this!!!!");
+}, 5000);
 
 var LoginView = React.createClass({
 
