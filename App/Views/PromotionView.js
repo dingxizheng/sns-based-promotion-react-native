@@ -2,7 +2,7 @@
 * @Author: dingxizheng
 * @Date:   2016-01-28 20:26:18
 * @Last Modified by:   dingxizheng
-* @Last Modified time: 2016-01-31 17:18:21
+* @Last Modified time: 2016-01-31 18:44:10
 */
 
 'use strict';
@@ -17,6 +17,7 @@ var Swiper = require('react-native-swiper');
 var Lightbox = require('react-native-lightbox');
 var dimensions = require('Dimensions');
 var Icon        = require('react-native-vector-icons/MaterialIcons');
+var Actions   = require('react-native-router-flux').Actions;
 
 // console.log(dimensions.get('window'));
 var {width, height} = dimensions.get('window');
@@ -66,6 +67,18 @@ var PromotionView = React.createClass({
 		this.currentImage = image;
 	},
 
+	makeComent: function(text) {
+		console.log("text >>>>");
+		return true;
+	},
+
+	commentThis: function() {
+		Actions.comment({
+			title: 'New Comment',
+			onDone: this.makeComent
+		});
+	},
+
 	render: function() {
 		return (
 			<View style={styles.container}>
@@ -101,14 +114,16 @@ var PromotionView = React.createClass({
 
 				</ScrollView>
 				<View style={styles.footer}>
-					<TouchableOpacity style={styles.footerMenuItemWrapper}>
+					<TouchableOpacity style={styles.footerMenuItemWrapper} onPress={this.commentThis}>
 						<Icon name="chat-bubble-outline" style={styles.footerMenuItemIcon} />
 						<Text style={styles.footerMenuItemText}>comment</Text>
 					</TouchableOpacity>
+					
 					<TouchableOpacity style={styles.footerMenuItemWrapper}>
 						<Icon name="repeat" style={styles.footerMenuItemIcon} />
 						<Text style={styles.footerMenuItemText}>repromote</Text>
 					</TouchableOpacity>
+					
 					<TouchableOpacity style={styles.footerMenuItemWrapper}>
 						<Icon name="favorite-border" style={styles.footerMenuItemIcon}/>
 						<Text style={styles.footerMenuItemText}>like</Text>

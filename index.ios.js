@@ -2,7 +2,7 @@
 * @Author: dingxizheng
 * @Date:   2016-01-23 13:24:54
 * @Last Modified by:   dingxizheng
-* @Last Modified time: 2016-01-29 16:27:23
+* @Last Modified time: 2016-01-31 18:25:34
 */
 
 'use strict';
@@ -35,6 +35,7 @@ var RightButtons = require('./App/Views/RightActionButtons');
 var LeftButtons  = require('./App/Views/LeftActionButtons');
 var PromotionView= require('./App/Views/PromotionView');
 var GlobalEvent  = require('./App/GlobalEvent');
+var MakeComment  = require('./App/Views/MakeComment');
 
 // set status bar style
 StatusBarIOS.setStyle('light-content');
@@ -77,29 +78,31 @@ var App = React.createClass({
 
 	render: function () {
 		
-		return <Router hideNavBar={false} 
-					navigationBarStyle={{
-						backgroundColor: '#1E90FF'
-					}}
-					barButtonTextStyle={{
-						color: 'white'
-					}}
-					barButtonIconStyle={{
-						tintColor: 'white'
-					}}
-					renderTitle={ this.renderTitle }
-					renderLeftButton={ this.renderLeftButton }
-					renderRightButton={ this.renderRightButton }>
+		return <Router navigationBarStyle={{
+							backgroundColor: '#1E90FF'
+						}}
+						barButtonTextStyle={{
+							color: 'white'
+						}}
+						barButtonIconStyle={{
+							tintColor: 'white'
+						}}
+						renderTitle={ this.renderTitle }
+						renderLeftButton={ this.renderLeftButton }
+						renderRightButton={ this.renderRightButton }>
 					
-					<Schema header={() => toastView} name="modal"  sceneConfig={Navigator.SceneConfigs.FloatFromBottom}/>
+					<Schema hideNavBar={true} name="modal" sceneConfig={Navigator.SceneConfigs.FloatFromBottom}/>
 	                
-	                <Schema header={() => toastView} name="default" sceneConfig={Navigator.SceneConfigs.FloatFromRight}/>
+	                <Schema hideNavBar={false} header={() => toastView} name="default" sceneConfig={Navigator.SceneConfigs.FloatFromRight}/>
 
 	                <Route name="recorder" component={RecorderView} title="Record"/>
 	                
 	                <Route name="login" component={LoginView} title="Login"/>
 
 	                <Route name="promotion" component={PromotionView} initial={true}  title="Promotion"/>
+
+	                <Route name="comment" component={MakeComment} type="modal" title="Make a Comment"/>
+
 				</Router>
 
 	}
