@@ -2,7 +2,7 @@
 * @Author: dingxizheng
 * @Date:   2016-01-23 13:24:54
 * @Last Modified by:   dingxizheng
-* @Last Modified time: 2016-01-27 17:12:20
+* @Last Modified time: 2016-01-29 16:27:23
 */
 
 'use strict';
@@ -24,18 +24,25 @@ var {
   Route,
   Schema,
   Animations,
-  TabBar
+  TabBar,
+  Actions
 } = require('react-native-router-flux');
 
 var RecorderView = require('./App/Views/RecorderView.ios');
 var LoginView    = require('./App/Views/LoginView');
 var ToastView    = require('./App/Views/ToastView');
+var RightButtons = require('./App/Views/RightActionButtons');
+var LeftButtons  = require('./App/Views/LeftActionButtons');
+var PromotionView= require('./App/Views/PromotionView');
+var GlobalEvent  = require('./App/GlobalEvent');
 
 // set status bar style
 StatusBarIOS.setStyle('light-content');
 
 // custom toast view
-var toastView = <ToastView/>;
+var toastView    = <ToastView/>;
+
+var counter = 0;
 
 var App = React.createClass({
 
@@ -43,12 +50,6 @@ var App = React.createClass({
 		return { 
 			isToastViewVisible: true 
 		};
-	},
-
-	hideToastView: function() {
-		this.setState({
-			isToastViewVisible: false
-		});
 	},
 
 	renderTitle: function(navigator, index, state) {
@@ -60,6 +61,19 @@ var App = React.createClass({
 			</View>
 		);
 	},
+
+	renderRightButton: function(navigator, index, state) {
+		let currentReoute = state.routeStack[index];
+        return <RightButtons routeName={currentReoute.name}/>
+    },
+
+    renderLeftButton: function(navigator, index, state) {
+    	let currentReoute = state.routeStack[index];
+    	return <LeftButtons routeName={currentReoute.name} 
+    			navigator={navigator}
+    			index={index}
+    			state={state}/>;
+    },
 
 	render: function () {
 		
@@ -73,26 +87,23 @@ var App = React.createClass({
 					barButtonIconStyle={{
 						tintColor: 'white'
 					}}
-					renderTitle={ this.renderTitle }>
+					renderTitle={ this.renderTitle }
+					renderLeftButton={ this.renderLeftButton }
+					renderRightButton={ this.renderRightButton }>
 					
-					<Schema header={() => toastView} name="modal" sceneConfig={Navigator.SceneConfigs.FloatFromBottom}/>
+					<Schema header={() => toastView} name="modal"  sceneConfig={Navigator.SceneConfigs.FloatFromBottom}/>
 	                
-	                <Schema header={ToastView} name="default" sceneConfig={Navigator.SceneConfigs.FloatFromRight} navBar={"nihao"}/>
+	                <Schema header={() => toastView} name="default" sceneConfig={Navigator.SceneConfigs.FloatFromRight}/>
 
-	                <Route name="recorder" component={RecorderView} initial={true} title="Record"/>
+	                <Route name="recorder" component={RecorderView} title="Record"/>
 	                
 	                <Route name="login" component={LoginView} title="Login"/>
+
+	                <Route name="promotion" component={PromotionView} initial={true}  title="Promotion"/>
 				</Router>
 
 	}
 });
-
-// { /* It doesn't matter where we put this component */ }
-// <ToastView isVisible={this.state.isToastViewVisible || false} onDismiss={this.hideToastView}>
-// 	<TouchableOpacity onPress={() => { console.log("DISMISSED"); }}>
-//         <Text style={styles.toastText}>This message is easy to display and dismiss! Write as much as you want to, also! It will just flow down.</Text>
-//     </TouchableOpacity>
-// </ToastView>
 
 var styles = StyleSheet.create({
   container: {

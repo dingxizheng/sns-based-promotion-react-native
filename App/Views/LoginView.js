@@ -2,18 +2,18 @@
 * @Author: dingxizheng
 * @Date:   2016-01-23 15:32:22
 * @Last Modified by:   dingxizheng
-* @Last Modified time: 2016-01-27 16:57:05
+* @Last Modified time: 2016-01-28 20:27:02
 */
 
 'use strict';
 
 var React = require('react-native');
-var Recorder = require('react-native-screcorder');
 var t = require('tcomb-form-native');
 
 var formStyles = require('../formStyles');
 var theme = require('../theme');
 var accountApis = require('../apiCalls').accounts;
+var CustomButtonsMixin = require('../CustomButtonsMixin');
 
 var {
 	View,
@@ -34,22 +34,30 @@ var LoginForm = t.struct({
 	email: t.String,
 	password: t.String,
 	rememberMe: t.Boolean
-});
+}); 
 
 var options = {};
 
-setTimeout(function() {
-	Actions.login();
-}, 2000);
-
-var GlobalEvent = require('../GlobalEvent');
-
-
-setTimeout(function() {
-	GlobalEvent.trigger('info_toast', "what the hell is this!!!!");
-}, 5000);
-
 var LoginView = React.createClass({
+
+	mixins: [CustomButtonsMixin],
+
+	_handleRightClick: function() {
+		console.log("RIGHT ...");
+	},
+
+	rightButtonsDidMount: function() {
+		this.setRightButtons([
+			{
+				text: 'Register',
+				onPress: this._handleRightClick
+			}
+		]);
+	},
+
+	leftButtonsDidMount: function() {
+
+	},
 
 	_handleLogin: async function() {
 		try {

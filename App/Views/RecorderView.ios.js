@@ -2,14 +2,15 @@
 * @Author: dingxizheng
 * @Date:   2016-01-22 20:15:03
 * @Last Modified by:   dingxizheng
-* @Last Modified time: 2016-01-23 15:45:53
+* @Last Modified time: 2016-01-28 17:40:32
 */
 
 'use strict';
 
 var React = require('react-native');
-
 var Recorder = require('react-native-screcorder');
+var theme = require('../theme');
+var CustomButtonsMixin = require('../CustomButtonsMixin');
 
 var {
 	View,
@@ -20,6 +21,8 @@ var {
 } = React;
 
 var VideoRecorder = React.createClass({
+
+	mixins: [CustomButtonsMixin],
 
 	getInitialState: function() {
 		return {
@@ -53,10 +56,14 @@ var VideoRecorder = React.createClass({
 		);
 	}, 
 
+	rightButtonsDidMount: function() {
+	},
+
+	leftButtonsDidMount: function() {
+	},
+
 	render: function() {
 		var bar = this._renderBar();
-		
-		console.log(styles.wrapper);
 		return (
 			<View style={styles.wrapper}>
 				
@@ -102,7 +109,7 @@ var styles = StyleSheet.create({
 	},
 	durationBar: {
 		flex: .01,
-		backgroundColor: 'pink'
+		backgroundColor: theme.colors.MAIN
 	},
 	controlsWrapper: {
 		flex: .15,
@@ -127,7 +134,7 @@ var styles = StyleSheet.create({
 		width: 80,
 		height: 80,
 		borderRadius: 40,
-		borderColor: 'pink',
+		borderColor: theme.colors.MAIN,
 		borderWidth: 2,
 		alignItems: 'center',
 		justifyContent: 'center'
@@ -136,7 +143,7 @@ var styles = StyleSheet.create({
 		width: 70,
 		height: 70,
 		borderRadius: 35,
-		backgroundColor: 'pink'
+		backgroundColor: theme.colors.MAIN
 	}
 });
 

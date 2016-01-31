@@ -2,7 +2,7 @@
 * @Author: dingxizheng
 * @Date:   2016-01-25 18:17:47
 * @Last Modified by:   dingxizheng
-* @Last Modified time: 2016-01-27 17:16:09
+* @Last Modified time: 2016-01-27 17:59:46
 */
 
 'use strict';
@@ -21,7 +21,24 @@ var {
   Text,
 } = React;
 
+// make sure only the last ToastView will be triggered
+GlobalEvent.on('info_toast', function(msg, onPress) {
+	ToastView.info_renders[ToastView.info_renders.length - 1](msg, onPress);
+});
+GlobalEvent.on('error_toast', function(msg, onPress) {
+	ToastView.error_renders[ToastView.error_renders.length - 1](msg, onPress);
+});
+GlobalEvent.on('custom_toast', function(view) {
+	ToastView.view_renders[ToastView.view_renders.length - 1](view);
+});
+
 var ToastView = React.createClass({
+
+	statics: {
+		info_renders: [],
+		error_renders: [],
+		view_renders: []
+	},
 
 	getInitialState: function() {
 		return { 
@@ -36,9 +53,9 @@ var ToastView = React.createClass({
 		});
 	},
 
-	_showInfo: function(msg) {
-		console.log("I AM TRIGGERED:", msg);
+	_showInfo: function(msg, onPress) {
 		this.info_msg = msg;
+		this.on_press = onPress || this.onDismiss;
 		this.setState({
 			view_type: 'info',
 			isVisible: true
@@ -46,16 +63,16 @@ var ToastView = React.createClass({
 	},
 
 	_renderInfo: function() {
-		console.log("RENDERING...", this.info_msg);
 		return (
-			<TouchableOpacity onPress={() => { console.log("DISMISSED"); }}>
+			<TouchableOpacity onPress={this.on_press}>
 		        <Text style={styles.infoToastText}>{this.info_msg}</Text>
 		    </TouchableOpacity>
 		);
 	},
 
-	_showError: function(error_msg) {
+	_showError: function(error_msg, onPress) {
 		this.error_msg = error_msg;
+		this.on_press = onPress || this.onDismiss;
 		this.setState({
 			view_type: 'error',
 			isVisible: true
@@ -64,7 +81,7 @@ var ToastView = React.createClass({
 
 	_renderError: function() {
 		return (
-			<TouchableOpacity onPress={() => { console.log("DISMISSED"); }}>
+			<TouchableOpacity onPress={this.on_press}>
 		        <Text style={styles.errorToastText}>{this.error_msg}</Text>
 		    </TouchableOpacity>
 		);
@@ -83,20 +100,15 @@ var ToastView = React.createClass({
 	},
 
 	componentDidMount: function() {
-		// GlobalEvent.off('info_toast');
-		// GlobalEvent.off('error_toast');
-		// GlobalEvent.off('custom_toast');
-
-		GlobalEvent.on('info_toast', this._showInfo);
-		GlobalEvent.on('error_toast', this._showError);
-		GlobalEvent.on('custom_toast', this._showView);
+		ToastView.info_renders.push(this._showInfo);
+		ToastView.error_renders.push(this._showError);
+		ToastView.view_renders.push(this._showView);
 	},
 
 	componentWillUnmount: function() {
-		console.log("ZHE SHI SHEN ME..");
-		GlobalEvent.off('info_toast', this._showInfo);
-		GlobalEvent.off('error_toast', this._showError);
-		GlobalEvent.off('custom_toast', this._showView);
+		ToastView.info_renders.pop();
+		ToastView.error_renders.pop();
+		ToastView.view_renders.pop();
 	},
 
 	render: function() {
@@ -157,7 +169,7 @@ var styles = StyleSheet.create({
   },
     infoToastText: {
     color: '#888888',
-    padding: 15,
+    padding: 20,
     backgroundColor: 'transparent',
     fontSize: 14,
   },

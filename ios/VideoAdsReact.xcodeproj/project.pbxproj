@@ -13,6 +13,7 @@
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
 		55E822B102FCD0F46AC992E1 /* libPods-VideoAdsReact.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 67EBFCC931EF6E46D522420F /* libPods-VideoAdsReact.a */; };
+		8A0541D51C5EAE5F00BF5103 /* libRCTVideo.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8A0541CF1C5EAE4A00BF5103 /* libRCTVideo.a */; };
 		8A7526881C44B34D00C695EC /* libBolts.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8A7526821C44B34D00C695EC /* libBolts.a */; };
 		8A7526891C44B34D00C695EC /* libFBSDKCoreKit.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8A7526831C44B34D00C695EC /* libFBSDKCoreKit.a */; };
 		8A75268A1C44B34D00C695EC /* libFBSDKLoginKit.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8A7526841C44B34D00C695EC /* libFBSDKLoginKit.a */; };
@@ -40,6 +41,13 @@
 			proxyType = 1;
 			remoteGlobalIDString = 13B07F861A680F5B00A75B9A;
 			remoteInfo = VideoAdsReact;
+		};
+		8A0541CE1C5EAE4A00BF5103 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 8A0541CA1C5EAE4900BF5103 /* RCTVideo.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 134814201AA4EA6300B7C361;
+			remoteInfo = RCTVideo;
 		};
 		8A8837D01C5309E600C74ECF /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -92,6 +100,7 @@
 		13B07FB71A68108700A75B9A /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = VideoAdsReact/main.m; sourceTree = "<group>"; };
 		29FAF26AD63F306DA37FB060 /* Pods-VideoAdsReact.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-VideoAdsReact.debug.xcconfig"; path = "Pods/Target Support Files/Pods-VideoAdsReact/Pods-VideoAdsReact.debug.xcconfig"; sourceTree = "<group>"; };
 		67EBFCC931EF6E46D522420F /* libPods-VideoAdsReact.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-VideoAdsReact.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		8A0541CA1C5EAE4900BF5103 /* RCTVideo.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTVideo.xcodeproj; path = "../node_modules/react-native-video/RCTVideo.xcodeproj"; sourceTree = "<group>"; };
 		8A7526821C44B34D00C695EC /* libBolts.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libBolts.a; path = "Pods/../build/Debug-iphoneos/libBolts.a"; sourceTree = "<group>"; };
 		8A7526831C44B34D00C695EC /* libFBSDKCoreKit.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libFBSDKCoreKit.a; path = "Pods/../build/Debug-iphoneos/libFBSDKCoreKit.a"; sourceTree = "<group>"; };
 		8A7526841C44B34D00C695EC /* libFBSDKLoginKit.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libFBSDKLoginKit.a; path = "Pods/../build/Debug-iphoneos/libFBSDKLoginKit.a"; sourceTree = "<group>"; };
@@ -125,6 +134,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8A0541D51C5EAE5F00BF5103 /* libRCTVideo.a in Frameworks */,
 				8A8837FA1C56F1E200C74ECF /* libRNVectorIcons.a in Frameworks */,
 				8A8837E21C56D26900C74ECF /* libRNBlur.a in Frameworks */,
 				8A8837DB1C56CC9500C74ECF /* libRNOverlay.a in Frameworks */,
@@ -199,6 +209,7 @@
 		832341AE1AAA6A7D00B99B32 /* Libraries */ = {
 			isa = PBXGroup;
 			children = (
+				8A0541CA1C5EAE4900BF5103 /* RCTVideo.xcodeproj */,
 				8A8837F41C56F1DB00C74ECF /* RNVectorIcons.xcodeproj */,
 				8A8837DC1C56D25C00C74ECF /* RNBlur.xcodeproj */,
 				8A8837D51C56CC8400C74ECF /* RNOverlay.xcodeproj */,
@@ -227,6 +238,14 @@
 			children = (
 				13B07F961A680F5B00A75B9A /* VideoAdsReact.app */,
 				00E356EE1AD99517003FC87E /* VideoAdsReactTests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		8A0541CB1C5EAE4900BF5103 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				8A0541CF1C5EAE4A00BF5103 /* libRCTVideo.a */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -350,6 +369,10 @@
 			projectDirPath = "";
 			projectReferences = (
 				{
+					ProductGroup = 8A0541CB1C5EAE4900BF5103 /* Products */;
+					ProjectRef = 8A0541CA1C5EAE4900BF5103 /* RCTVideo.xcodeproj */;
+				},
+				{
 					ProductGroup = 8A8837DD1C56D25C00C74ECF /* Products */;
 					ProjectRef = 8A8837DC1C56D25C00C74ECF /* RNBlur.xcodeproj */;
 				},
@@ -375,6 +398,13 @@
 /* End PBXProject section */
 
 /* Begin PBXReferenceProxy section */
+		8A0541CF1C5EAE4A00BF5103 /* libRCTVideo.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libRCTVideo.a;
+			remoteRef = 8A0541CE1C5EAE4A00BF5103 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
 		8A8837D11C5309E600C74ECF /* libRNRecorder.a */ = {
 			isa = PBXReferenceProxy;
 			fileType = archive.ar;
