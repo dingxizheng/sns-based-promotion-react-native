@@ -2,7 +2,7 @@
 * @Author: dingxizheng
 * @Date:   2016-01-23 13:24:54
 * @Last Modified by:   dingxizheng
-* @Last Modified time: 2016-02-01 01:14:45
+* @Last Modified time: 2016-02-01 13:00:12
 */
 
 'use strict';
@@ -57,11 +57,9 @@ var App = React.createClass({
 	renderTitle: function(navigator, index, state) {
         let currentReoute = state.routeStack[index];
         let title = currentReoute.getTitle(navigator, index, state);
-		return (
-			<View style={styles.barTitleTextWrapper}>
+		return  <View style={styles.barTitleTextWrapper}>
 				 <Text style={styles.barTitleText}>{title}</Text>
-			</View>
-		);
+				</View>;
 	},
 
 	renderRightButton: function(navigator, index, state) {
@@ -93,17 +91,11 @@ var App = React.createClass({
 						renderRightButton={ this.renderRightButton }>
 					
 					<Schema hideNavBar={true} name="modal" sceneConfig={Navigator.SceneConfigs.FloatFromBottom}/>
-	                
 	                <Schema hideNavBar={false} header={() => toastView} name="default" sceneConfig={Navigator.SceneConfigs.FloatFromRight}/>
-
 	                <Route name="recorder" component={RecorderView} title="Record"/>
-	                
 	                <Route name="login" component={LoginView} title="Login"/>
-
 	                <Route name="promotion" component={PromotionView} title="Promotion"/>
-
 	                <Route name="comments" component={CommentsView} initial={true} title="Comments"/>
-
 	                <Route name="comment" component={MakeComment} type="modal" title="Make a Comment"/>
 
 				</Router>

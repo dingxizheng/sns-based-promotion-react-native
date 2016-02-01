@@ -2,7 +2,7 @@
 * @Author: dingxizheng
 * @Date:   2016-01-31 18:55:51
 * @Last Modified by:   dingxizheng
-* @Last Modified time: 2016-02-01 01:57:02
+* @Last Modified time: 2016-02-01 02:01:43
 */
 
 'use strict';
@@ -58,22 +58,22 @@ var Comments = React.createClass({
 	},
 
 	componentDidMount: function() {
-		console.log(this.refs.comments);
 	    // ListView
 	    RCTRefreshControl.configure({
 	      node: this.refs["comments"]
-	    }, () => {
-	      this.setTimeout(() => {
-	        RCTRefreshControl.endRefreshing(this.refs["comments"]);
-	      }, 2000);
-	    });
+	    }, this._handleReload);
+	},
+
+	_handleReload: function() {
+      this.setTimeout(() => {
+        RCTRefreshControl.endRefreshing(this.refs["comments"]);
+      }, 2000);
 	},
 
 	getInitialState: function() {
 		var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
 		return {
 		  dataSource: ds.cloneWithRows(comments),
-		  isRefreshing: false
 		};
 	},
 
