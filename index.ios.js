@@ -2,7 +2,7 @@
 * @Author: dingxizheng
 * @Date:   2016-01-23 13:24:54
 * @Last Modified by:   dingxizheng
-* @Last Modified time: 2016-01-31 18:25:34
+* @Last Modified time: 2016-02-01 01:14:45
 */
 
 'use strict';
@@ -36,6 +36,7 @@ var LeftButtons  = require('./App/Views/LeftActionButtons');
 var PromotionView= require('./App/Views/PromotionView');
 var GlobalEvent  = require('./App/GlobalEvent');
 var MakeComment  = require('./App/Views/MakeComment');
+var CommentsView = require('./App/Views/CommentsView');
 
 // set status bar style
 StatusBarIOS.setStyle('light-content');
@@ -99,7 +100,9 @@ var App = React.createClass({
 	                
 	                <Route name="login" component={LoginView} title="Login"/>
 
-	                <Route name="promotion" component={PromotionView} initial={true}  title="Promotion"/>
+	                <Route name="promotion" component={PromotionView} title="Promotion"/>
+
+	                <Route name="comments" component={CommentsView} initial={true} title="Comments"/>
 
 	                <Route name="comment" component={MakeComment} type="modal" title="Make a Comment"/>
 

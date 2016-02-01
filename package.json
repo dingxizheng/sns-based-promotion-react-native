@@ -13,11 +13,14 @@
     "react-native-fbsdklogin": "0.0.7",
     "react-native-lightbox": "^0.5.0",
     "react-native-overlay": "^0.4.1",
+    "react-native-refresh-control": "^2.1.0",
     "react-native-router-flux": "^2.0.10",
     "react-native-screcorder": "^0.1.1",
     "react-native-swiper": "^1.4.3",
     "react-native-vector-icons": "^1.1.0",
     "react-native-video": "^0.6.1",
+    "react-refresh-control": "^2.0.5",
+    "react-timer-mixin": "^0.13.3",
     "tcomb-form-native": "^0.3.3"
   }
 }

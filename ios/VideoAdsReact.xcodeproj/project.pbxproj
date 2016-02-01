@@ -12,14 +12,15 @@
 		13B07FBD1A68108700A75B9A /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB11A68108700A75B9A /* LaunchScreen.xib */; };
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
-		55E822B102FCD0F46AC992E1 /* libPods-VideoAdsReact.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 67EBFCC931EF6E46D522420F /* libPods-VideoAdsReact.a */; };
 		8A0541D51C5EAE5F00BF5103 /* libRCTVideo.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8A0541CF1C5EAE4A00BF5103 /* libRCTVideo.a */; };
-		8A7526881C44B34D00C695EC /* libBolts.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8A7526821C44B34D00C695EC /* libBolts.a */; };
-		8A7526891C44B34D00C695EC /* libFBSDKCoreKit.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8A7526831C44B34D00C695EC /* libFBSDKCoreKit.a */; };
-		8A75268A1C44B34D00C695EC /* libFBSDKLoginKit.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8A7526841C44B34D00C695EC /* libFBSDKLoginKit.a */; };
-		8A75268B1C44B34D00C695EC /* libreact-native-fbsdkcore.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8A7526851C44B34D00C695EC /* libreact-native-fbsdkcore.a */; };
-		8A75268C1C44B34D00C695EC /* libreact-native-fbsdklogin.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8A7526861C44B34D00C695EC /* libreact-native-fbsdklogin.a */; };
-		8A75268D1C44B34D00C695EC /* libReact.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8A7526871C44B34D00C695EC /* libReact.a */; };
+		8A1545E31C5F289D00D84C0D /* libBolts.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8A7526821C44B34D00C695EC /* libBolts.a */; };
+		8A1545E41C5F289D00D84C0D /* libFBSDKCoreKit.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8A7526831C44B34D00C695EC /* libFBSDKCoreKit.a */; };
+		8A1545E51C5F289D00D84C0D /* libFBSDKLoginKit.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8A7526841C44B34D00C695EC /* libFBSDKLoginKit.a */; };
+		8A1545E61C5F289D00D84C0D /* libreact-native-fbsdkcore.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8A7526851C44B34D00C695EC /* libreact-native-fbsdkcore.a */; };
+		8A1545E71C5F289D00D84C0D /* libreact-native-fbsdklogin.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8A7526861C44B34D00C695EC /* libreact-native-fbsdklogin.a */; };
+		8A1545E81C5F289D00D84C0D /* libReact.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8A7526871C44B34D00C695EC /* libReact.a */; };
+		8A1545E91C5F289D00D84C0D /* libPods-VideoAdsReact.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 67EBFCC931EF6E46D522420F /* libPods-VideoAdsReact.a */; };
+		8A1546021C5F30ED00D84C0D /* libRCTRefreshControl.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8A1545FB1C5F30DE00D84C0D /* libRCTRefreshControl.a */; };
 		8A8837D41C530A4B00C74ECF /* libRNRecorder.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8A8837D11C5309E600C74ECF /* libRNRecorder.a */; };
 		8A8837DB1C56CC9500C74ECF /* libRNOverlay.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8A8837DA1C56CC8500C74ECF /* libRNOverlay.a */; };
 		8A8837E21C56D26900C74ECF /* libRNBlur.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8A8837E11C56D25C00C74ECF /* libRNBlur.a */; };
@@ -48,6 +49,13 @@
 			proxyType = 2;
 			remoteGlobalIDString = 134814201AA4EA6300B7C361;
 			remoteInfo = RCTVideo;
+		};
+		8A1545FA1C5F30DE00D84C0D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 8A1545F61C5F30DD00D84C0D /* RCTRefreshControl.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 134814201AA4EA6300B7C361;
+			remoteInfo = RCTRefreshControl;
 		};
 		8A8837D01C5309E600C74ECF /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -101,6 +109,7 @@
 		29FAF26AD63F306DA37FB060 /* Pods-VideoAdsReact.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-VideoAdsReact.debug.xcconfig"; path = "Pods/Target Support Files/Pods-VideoAdsReact/Pods-VideoAdsReact.debug.xcconfig"; sourceTree = "<group>"; };
 		67EBFCC931EF6E46D522420F /* libPods-VideoAdsReact.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-VideoAdsReact.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		8A0541CA1C5EAE4900BF5103 /* RCTVideo.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTVideo.xcodeproj; path = "../node_modules/react-native-video/RCTVideo.xcodeproj"; sourceTree = "<group>"; };
+		8A1545F61C5F30DD00D84C0D /* RCTRefreshControl.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTRefreshControl.xcodeproj; path = "../node_modules/react-refresh-control/RCTRefreshControl.xcodeproj"; sourceTree = "<group>"; };
 		8A7526821C44B34D00C695EC /* libBolts.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libBolts.a; path = "Pods/../build/Debug-iphoneos/libBolts.a"; sourceTree = "<group>"; };
 		8A7526831C44B34D00C695EC /* libFBSDKCoreKit.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libFBSDKCoreKit.a; path = "Pods/../build/Debug-iphoneos/libFBSDKCoreKit.a"; sourceTree = "<group>"; };
 		8A7526841C44B34D00C695EC /* libFBSDKLoginKit.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libFBSDKLoginKit.a; path = "Pods/../build/Debug-iphoneos/libFBSDKLoginKit.a"; sourceTree = "<group>"; };
@@ -134,18 +143,19 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8A1546021C5F30ED00D84C0D /* libRCTRefreshControl.a in Frameworks */,
 				8A0541D51C5EAE5F00BF5103 /* libRCTVideo.a in Frameworks */,
 				8A8837FA1C56F1E200C74ECF /* libRNVectorIcons.a in Frameworks */,
 				8A8837E21C56D26900C74ECF /* libRNBlur.a in Frameworks */,
 				8A8837DB1C56CC9500C74ECF /* libRNOverlay.a in Frameworks */,
 				8A8837D41C530A4B00C74ECF /* libRNRecorder.a in Frameworks */,
-				8A7526881C44B34D00C695EC /* libBolts.a in Frameworks */,
-				8A7526891C44B34D00C695EC /* libFBSDKCoreKit.a in Frameworks */,
-				8A75268A1C44B34D00C695EC /* libFBSDKLoginKit.a in Frameworks */,
-				8A75268B1C44B34D00C695EC /* libreact-native-fbsdkcore.a in Frameworks */,
-				8A75268C1C44B34D00C695EC /* libreact-native-fbsdklogin.a in Frameworks */,
-				8A75268D1C44B34D00C695EC /* libReact.a in Frameworks */,
-				55E822B102FCD0F46AC992E1 /* libPods-VideoAdsReact.a in Frameworks */,
+				8A1545E31C5F289D00D84C0D /* libBolts.a in Frameworks */,
+				8A1545E41C5F289D00D84C0D /* libFBSDKCoreKit.a in Frameworks */,
+				8A1545E51C5F289D00D84C0D /* libFBSDKLoginKit.a in Frameworks */,
+				8A1545E61C5F289D00D84C0D /* libreact-native-fbsdkcore.a in Frameworks */,
+				8A1545E71C5F289D00D84C0D /* libreact-native-fbsdklogin.a in Frameworks */,
+				8A1545E81C5F289D00D84C0D /* libReact.a in Frameworks */,
+				8A1545E91C5F289D00D84C0D /* libPods-VideoAdsReact.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -209,6 +219,7 @@
 		832341AE1AAA6A7D00B99B32 /* Libraries */ = {
 			isa = PBXGroup;
 			children = (
+				8A1545F61C5F30DD00D84C0D /* RCTRefreshControl.xcodeproj */,
 				8A0541CA1C5EAE4900BF5103 /* RCTVideo.xcodeproj */,
 				8A8837F41C56F1DB00C74ECF /* RNVectorIcons.xcodeproj */,
 				8A8837DC1C56D25C00C74ECF /* RNBlur.xcodeproj */,
@@ -246,6 +257,14 @@
 			isa = PBXGroup;
 			children = (
 				8A0541CF1C5EAE4A00BF5103 /* libRCTVideo.a */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		8A1545F71C5F30DD00D84C0D /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				8A1545FB1C5F30DE00D84C0D /* libRCTRefreshControl.a */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -369,6 +388,10 @@
 			projectDirPath = "";
 			projectReferences = (
 				{
+					ProductGroup = 8A1545F71C5F30DD00D84C0D /* Products */;
+					ProjectRef = 8A1545F61C5F30DD00D84C0D /* RCTRefreshControl.xcodeproj */;
+				},
+				{
 					ProductGroup = 8A0541CB1C5EAE4900BF5103 /* Products */;
 					ProjectRef = 8A0541CA1C5EAE4900BF5103 /* RCTVideo.xcodeproj */;
 				},
@@ -403,6 +426,13 @@
 			fileType = archive.ar;
 			path = libRCTVideo.a;
 			remoteRef = 8A0541CE1C5EAE4A00BF5103 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		8A1545FB1C5F30DE00D84C0D /* libRCTRefreshControl.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libRCTRefreshControl.a;
+			remoteRef = 8A1545FA1C5F30DE00D84C0D /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 		8A8837D11C5309E600C74ECF /* libRNRecorder.a */ = {
@@ -628,6 +658,7 @@
 				);
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = VideoAdsReact;
+				SDKROOT = iphoneos9.2;
 			};
 			name = Debug;
 		};
@@ -649,6 +680,7 @@
 				);
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = VideoAdsReact;
+				SDKROOT = iphoneos9.2;
 			};
 			name = Release;
 		};

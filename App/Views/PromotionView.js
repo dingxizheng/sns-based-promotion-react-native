@@ -2,7 +2,7 @@
 * @Author: dingxizheng
 * @Date:   2016-01-28 20:26:18
 * @Last Modified by:   dingxizheng
-* @Last Modified time: 2016-01-31 18:44:10
+* @Last Modified time: 2016-02-01 01:57:25
 */
 
 'use strict';
@@ -67,15 +67,15 @@ var PromotionView = React.createClass({
 		this.currentImage = image;
 	},
 
-	makeComent: function(text) {
-		console.log("text >>>>");
+	makeComment: function(text) {
+		console.log(text);
 		return true;
 	},
 
 	commentThis: function() {
 		Actions.comment({
 			title: 'New Comment',
-			onDone: this.makeComent
+			onDone: this.makeComment
 		});
 	},
 
@@ -137,9 +137,8 @@ var PromotionView = React.createClass({
 var styles = StyleSheet.create({
 	container: {
 		flex: 1,
-		paddingTop: 64,
+		marginTop: 64,
 		flexDirection: 'column',
-		justifyContent: 'flex-end'
 	},
 	content: {
 		flex: 1,
