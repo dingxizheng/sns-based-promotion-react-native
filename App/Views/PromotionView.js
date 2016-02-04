@@ -2,7 +2,7 @@
 * @Author: dingxizheng
 * @Date:   2016-01-28 20:26:18
 * @Last Modified by:   dingxizheng
-* @Last Modified time: 2016-02-01 01:57:25
+* @Last Modified time: 2016-02-02 15:47:19
 */
 
 'use strict';
@@ -18,9 +18,8 @@ var Lightbox = require('react-native-lightbox');
 var dimensions = require('Dimensions');
 var Icon        = require('react-native-vector-icons/MaterialIcons');
 var Actions   = require('react-native-router-flux').Actions;
-
-// console.log(dimensions.get('window'));
-var {width, height} = dimensions.get('window');
+var ImageGroup  = require('./ImagesView');
+var {BottomActions, BottomItem} = require('./BottomActionsView');
 
 var {
 	View,
@@ -97,38 +96,30 @@ var PromotionView = React.createClass({
 						<Text style={styles.promotionText}>
 							Hi, here is the text and i am going to beat you!!!
 						</Text>
-						<View style={styles.promotionImages}>
-							{images.map(function(img, i){
-
-								return <Lightbox key={i} navigator={this.props.navigator} swipeToDismiss={false} onOpen={()=> this._onImageOpen(img) } renderContent={() => this.renderCarousel(img)}>
-											<View style={ i % 2 === 0 ? styles.promotionImageItemWrapperLeft : styles.promotionImageItemWrapperRight}>
-												<Image
-													source={{ uri: img }} 
-													style={styles.promotionImageItem}/>
-										   </View>
-										</Lightbox>
-
-							}.bind(this))}
-						</View>
+						<ImageGroup 
+							style={{marginTop: 15}}
+							columns={2}
+							square={false}
+							imageHeight={120}
+							images={images}/>
 					</View>
 
 				</ScrollView>
-				<View style={styles.footer}>
-					<TouchableOpacity style={styles.footerMenuItemWrapper} onPress={this.commentThis}>
-						<Icon name="chat-bubble-outline" style={styles.footerMenuItemIcon} />
-						<Text style={styles.footerMenuItemText}>comment</Text>
-					</TouchableOpacity>
-					
-					<TouchableOpacity style={styles.footerMenuItemWrapper}>
-						<Icon name="repeat" style={styles.footerMenuItemIcon} />
-						<Text style={styles.footerMenuItemText}>repromote</Text>
-					</TouchableOpacity>
-					
-					<TouchableOpacity style={styles.footerMenuItemWrapper}>
-						<Icon name="favorite-border" style={styles.footerMenuItemIcon}/>
-						<Text style={styles.footerMenuItemText}>like</Text>
-					</TouchableOpacity>
-				</View>
+				<BottomActions style={{ height: 45 }}>
+					<BottomItem
+						icon="chat-bubble-outline"
+						text="comment"
+						onPress={this.commentThis}/>
+					<BottomItem
+						icon="repeat"
+						text="repromote"/>
+					<BottomItem
+						icon="favorite-border"
+						text="like"/>
+					<BottomItem
+						icon="more-horiz"
+						text="more"/>
+				</BottomActions>
 			</View>
 		);
 	}
@@ -143,28 +134,6 @@ var styles = StyleSheet.create({
 	content: {
 		flex: 1,
 		flexDirection: 'column'
-	},
-	footer: {
-		height: 45,
-		flexDirection: 'row',
-		borderTopColor: '#eeeeee',
-		borderTopWidth: .5
-	},
-	footerMenuItemWrapper: {
-		flex: .333,
-		justifyContent: 'center',
-		alignItems: 'center',
-		flexDirection: 'row'
-	},
-	footerMenuItemIcon: {
-		color: theme.colors.GREY_FONT,
-	    fontSize: 22,
-	    padding: 3
-	},
-	footerMenuItemText: {
-		color: theme.colors.GREY_FONT,
-	    fontSize: 13,
-	    padding: 3
 	},
 	profileBox: {
 		// height: 20,
@@ -207,30 +176,6 @@ var styles = StyleSheet.create({
 		color: theme.colors.TEXT,
 		fontSize: theme.fonts.FONT_SIZE,
 		fontWeight: theme.fonts.FONT_WEIGHT
-	},
-	promotionImages: {
-		marginTop: 15, 
-		flexDirection: 'row',
-		flexWrap: 'wrap'
-	},
-	promotionImageItemWrapperLeft: {
-		// flex: 0.5,
-		paddingRight: 2,
-		paddingTop: 4,
-	},
-	promotionImageItemWrapperRight: {
-		// flex: 0.5,
-		paddingLeft: 2,
-		paddingTop: 4,
-	},
-	promotionImageItem: {
-		// alignSelf: 'stretch',
-		height: 120,
-		width: (width - 28) / 2,
-		borderWidth: .5,
-		borderColor: '#bbbbbb',
-		borderRadius: 2,
-		// width: 50
 	}
 });
 

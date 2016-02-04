@@ -2,7 +2,7 @@
 * @Author: dingxizheng
 * @Date:   2016-01-31 18:55:51
 * @Last Modified by:   dingxizheng
-* @Last Modified time: 2016-02-01 02:01:43
+* @Last Modified time: 2016-02-02 19:24:13
 */
 
 'use strict';
@@ -58,7 +58,6 @@ var Comments = React.createClass({
 	},
 
 	componentDidMount: function() {
-	    // ListView
 	    RCTRefreshControl.configure({
 	      node: this.refs["comments"]
 	    }, this._handleReload);
@@ -96,7 +95,7 @@ var Comments = React.createClass({
 var styles = StyleSheet.create({
 	container: {
 		flex: 1,
-		marginTop: 64,
+		// marginTop: 64,
 		flexDirection: 'column',
 	},
 });

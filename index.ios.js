@@ -2,7 +2,7 @@
 * @Author: dingxizheng
 * @Date:   2016-01-23 13:24:54
 * @Last Modified by:   dingxizheng
-* @Last Modified time: 2016-02-01 13:00:12
+* @Last Modified time: 2016-02-02 18:42:05
 */
 
 'use strict';
@@ -37,6 +37,8 @@ var PromotionView= require('./App/Views/PromotionView');
 var GlobalEvent  = require('./App/GlobalEvent');
 var MakeComment  = require('./App/Views/MakeComment');
 var CommentsView = require('./App/Views/CommentsView');
+var TimeLineView = require('./App/Views/TimeLineView');
+var LikesAndComments = require('./App/Views/CommentsAndLikes');
 
 // set status bar style
 StatusBarIOS.setStyle('light-content');
@@ -94,9 +96,11 @@ var App = React.createClass({
 	                <Schema hideNavBar={false} header={() => toastView} name="default" sceneConfig={Navigator.SceneConfigs.FloatFromRight}/>
 	                <Route name="recorder" component={RecorderView} title="Record"/>
 	                <Route name="login" component={LoginView} title="Login"/>
-	                <Route name="promotion" component={PromotionView} title="Promotion"/>
-	                <Route name="comments" component={CommentsView} initial={true} title="Comments"/>
+	                <Route name="promotion" component={PromotionView} initial={false}  title="Promotion"/>
+	                <Route name="comments" component={CommentsView} title="Comments"/>
+	                <Route name="timeline" component={TimeLineView} title="Timeline"/>
 	                <Route name="comment" component={MakeComment} type="modal" title="Make a Comment"/>
+	                <Route name="comments_and_likes" component={LikesAndComments} initial={true} title="Likes"/>
 
 				</Router>
 
