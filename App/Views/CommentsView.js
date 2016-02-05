@@ -2,7 +2,7 @@
 * @Author: dingxizheng
 * @Date:   2016-01-31 18:55:51
 * @Last Modified by:   dingxizheng
-* @Last Modified time: 2016-02-02 19:24:13
+* @Last Modified time: 2016-02-03 21:44:39
 */
 
 'use strict';
@@ -12,8 +12,8 @@ var Actions = require('react-native-router-flux').Actions;
 var Icon    = require('react-native-vector-icons/MaterialIcons');
 var theme   = require('../theme');
 var Comment = require('./CommentView');
-var CustomButtonsMixin = require('../CustomButtonsMixin');
-var TimerMixin = require('react-timer-mixin');
+// var CustomButtonsMixin = require('../CustomButtonsMixin');
+// var TimerMixin = require('react-timer-mixin');
 var RCTRefreshControl = require('react-refresh-control');
 
 var {
@@ -49,7 +49,7 @@ var comments = [
 
 var Comments = React.createClass({
 
-	mixins: [CustomButtonsMixin, TimerMixin],
+	// mixins: [CustomButtonsMixin, TimerMixin],
 
 	rightButtonsDidMount: function() {
 	},

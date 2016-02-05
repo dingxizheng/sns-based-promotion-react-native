@@ -2,7 +2,7 @@
 * @Author: dingxizheng
 * @Date:   2016-01-23 13:24:54
 * @Last Modified by:   dingxizheng
-* @Last Modified time: 2016-02-02 18:42:05
+* @Last Modified time: 2016-02-04 19:49:21
 */
 
 'use strict';
@@ -27,6 +27,8 @@ var {
   TabBar,
   Actions
 } = require('react-native-router-flux');
+
+require('./App/httpTest');
 
 var RecorderView = require('./App/Views/RecorderView.ios');
 var LoginView    = require('./App/Views/LoginView');
