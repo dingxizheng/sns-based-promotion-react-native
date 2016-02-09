@@ -2,7 +2,7 @@
 * @Author: dingxizheng
 * @Date:   2016-01-28 20:26:18
 * @Last Modified by:   dingxizheng
-* @Last Modified time: 2016-02-02 15:47:19
+* @Last Modified time: 2016-02-06 18:37:33
 */
 
 'use strict';
@@ -11,14 +11,13 @@
 var React = require('react-native');
 var formStyles = require('../formStyles');
 var theme = require('../theme');
-var accountApis = require('../apiCalls').accounts;
 var CustomButtonsMixin = require('../CustomButtonsMixin');
 var Swiper = require('react-native-swiper');
 var Lightbox = require('react-native-lightbox');
 var dimensions = require('Dimensions');
-var Icon        = require('react-native-vector-icons/MaterialIcons');
-var Actions   = require('react-native-router-flux').Actions;
-var ImageGroup  = require('./ImagesView');
+var Icon = require('react-native-vector-icons/MaterialIcons');
+var Actions = require('react-native-router-flux').Actions;
+var ImageGroup = require('./ImagesView');
 var {BottomActions, BottomItem} = require('./BottomActionsView');
 
 var {
@@ -30,7 +29,7 @@ var {
 	ScrollView
 } = React;
 
-var image = 'https://lh3.googleusercontent.com/-ZadaXoUTBfs/AAAAAAAAAAI/AAAAAAAAAAA/3rh5IMTHOzg/photo.jpg';
+var image  = 'https://lh3.googleusercontent.com/-ZadaXoUTBfs/AAAAAAAAAAI/AAAAAAAAAAA/3rh5IMTHOzg/photo.jpg';
 var image1 = 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRjK0tZBJHXOlqL1qkw0pqqek8Vtgh0s7RGCfm4IxA3nwNx3WDboQ';
 var image2 = 'https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcTvpcNgqJn5wwr6iy_m5IrOBdzRLfXDtDB1Lxr0wOLoT8we-pq5';
 var image3 = 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQiWGXo4U6CCvNItlDYFgEQz4d3T-YjLj13nqUZ-crpAr3qMPx-';

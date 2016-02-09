@@ -2,7 +2,7 @@
 * @Author: dingxizheng
 * @Date:   2016-02-01 20:01:51
 * @Last Modified by:   dingxizheng
-* @Last Modified time: 2016-02-02 17:46:57
+* @Last Modified time: 2016-02-08 12:42:18
 */
 
 'use strict';
@@ -85,7 +85,6 @@ var Images = React.createClass({
 		if(columns === 1)
 			return styles.imageItemWrapperSingle;
 		else{
-			console.log(index, columns, index % columns);
 			if(index % columns === 0) {
 				return styles.imageItemWrapperLeft;
 			}
@@ -118,7 +117,7 @@ var Images = React.createClass({
 					if (this.state.parentLayouted) {
 						return this.renderImages();
 					}
-				}.bind(this)()}
+				}.bind(this).call()}
 			</View>
 		);
 	},

@@ -2,7 +2,7 @@
 * @Author: dingxizheng
 * @Date:   2016-01-23 13:24:54
 * @Last Modified by:   dingxizheng
-* @Last Modified time: 2016-02-04 19:49:21
+* @Last Modified time: 2016-02-08 18:42:01
 */
 
 'use strict';
@@ -40,6 +40,7 @@ var GlobalEvent  = require('./App/GlobalEvent');
 var MakeComment  = require('./App/Views/MakeComment');
 var CommentsView = require('./App/Views/CommentsView');
 var TimeLineView = require('./App/Views/TimeLineView');
+var StreetView   = require('./App/Views/StreetView');
 var LikesAndComments = require('./App/Views/CommentsAndLikes');
 
 // set status bar style
@@ -100,9 +101,10 @@ var App = React.createClass({
 	                <Route name="login" component={LoginView} title="Login"/>
 	                <Route name="promotion" component={PromotionView} initial={false}  title="Promotion"/>
 	                <Route name="comments" component={CommentsView} title="Comments"/>
-	                <Route name="timeline" component={TimeLineView} title="Timeline"/>
+	                <Route name="timeline" component={TimeLineView} initial={true} title="Timeline"/>
 	                <Route name="comment" component={MakeComment} type="modal" title="Make a Comment"/>
-	                <Route name="comments_and_likes" component={LikesAndComments} initial={true} title="Likes"/>
+	                <Route name="streetview" component={StreetView} initial={false} title="StreetView"/>
+	                <Route name="comments_and_likes" component={LikesAndComments} initial={false} title="Likes"/>
 
 				</Router>
 

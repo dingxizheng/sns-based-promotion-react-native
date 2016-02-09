@@ -2,7 +2,7 @@
 * @Author: dingxizheng
 * @Date:   2016-01-23 15:32:22
 * @Last Modified by:   dingxizheng
-* @Last Modified time: 2016-01-28 20:27:02
+* @Last Modified time: 2016-02-06 16:21:22
 */
 
 'use strict';
@@ -12,7 +12,6 @@ var t = require('tcomb-form-native');
 
 var formStyles = require('../formStyles');
 var theme = require('../theme');
-var accountApis = require('../apiCalls').accounts;
 var CustomButtonsMixin = require('../CustomButtonsMixin');
 
 var {
@@ -60,20 +59,6 @@ var LoginView = React.createClass({
 	},
 
 	_handleLogin: async function() {
-		try {
-			var res = await accountApis.login({
-						method: 'POST',
-						body: {
-							email: 'dingxizheng@gmail.com',
-							password: 'hello'
-						}
-					});
-
-			console.log(await res.json());
-
-		} catch (err) {
-			console.log(err);
-		}
 		
 	},
 

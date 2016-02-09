@@ -2,11 +2,12 @@
 * @Author: dingxizheng
 * @Date:   2016-02-04 10:47:54
 * @Last Modified by:   dingxizheng
-* @Last Modified time: 2016-02-04 21:42:14
+* @Last Modified time: 2016-02-06 17:33:14
 */
 
 'use strict';
 var queryString = require('query-string');
+var {NativeModules} = require('react-native');
 
 var Promisefy = function(fn) {
 	var newFn = function() {
@@ -99,10 +100,17 @@ var Resource = function(endpoint, options) {
 		};
 	};
 
-	// custom methods
+	// custom install methods
 	TypedResource.method = function (options_) {
 		TypedResource.prototype[options_.name] = function (options) {
-			return this.fetch([resourceType.url, this.get("id"), options_.path].join('/'), Object.assign(options_, options));
+			return this._fetch([resourceType.url, this.get("id"), options_.path].join('/'), Object.assign(options_, options));
+		};
+	};
+
+	// custom methods
+	TypedResource.staticMethod = function (options_) {
+		TypedResource[options_.name] = function (options) {
+			return Resource.fetch([resourceType.url, options_.path].join('/'), Object.assign(options_, options));
 		};
 	};
 
@@ -263,6 +271,24 @@ var convertQueryParams = function(request) {
 	return request;
 };
 
+// upload file 
+var uploadFile = function(endpoint, options) {
+	var obj = Object.assign(options, {
+		uploadUrl: endpoint
+	}, options.file);
+
+	var p = new Promise(function(resolve, rej) {	
+		NativeModules.FileTransfer.upload(res, function(err, res) {
+			if (err) {
+				rej(err);
+			} else {
+				resolve(res);
+			}
+		});
+	});
+
+	return p;
+};
 
 
-module.exports = {Resource, ResourceConfig};
+module.exports = {Resource, ResourceConfig, uploadFile};

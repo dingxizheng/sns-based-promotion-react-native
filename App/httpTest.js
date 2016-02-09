@@ -33,12 +33,13 @@ var User = new Resource("http://localhost:3000/v1/users");
 // 	console.log(e);
 // });
 
-User.fetchAll().then(function(list) {
-	return list[0].fetch()
-})
-.then(function(j) {
-	console.log(j);
-})
-.catch(function(e) {
-	console.log(e);
-});
+// User.fetchAll()
+// .then(function(list) {
+// 	return list[0].fetch()
+// })
+// .then(function(j) {
+// 	console.log(j);
+// })
+// .catch(function(e) {
+// 	console.log(e);
+// });

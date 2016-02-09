@@ -2,7 +2,7 @@
 * @Author: dingxizheng
 * @Date:   2016-02-01 14:14:30
 * @Last Modified by:   dingxizheng
-* @Last Modified time: 2016-02-02 17:50:33
+* @Last Modified time: 2016-02-08 17:50:08
 */
 
 'use strict';
@@ -12,11 +12,11 @@ var BlurView    = require('react-native-blur').BlurView;
 var Icon        = require('react-native-vector-icons/MaterialIcons');
 var theme       = require('../theme');
 var CustomButtonsMixin = require('../CustomButtonsMixin');
-var TimerMixin = require('react-timer-mixin');
+var QuotedView = require('./QuotedView');
 var RCTRefreshControl = require('react-refresh-control');
-var Triangle = require('react-native-triangle');
 var moment   = require('moment');
 var ImageGroup  = require('./ImagesView');
+var TagsView = require('./TagsView');
 var {BottomActions, BottomItem} = require('./BottomActionsView');
 var {StatusView, StatusItem}    = require('./StatusView');
 
@@ -57,25 +57,27 @@ var PromotionCard = React.createClass({
 					</View>
 				</View>
 				<View style={styles.promotionContainer}>
-					<View style={styles.promotionContentWrapper}>
-						<View style={styles.promotionBody}>
-						</View>
-						
+					<View style={styles.promotionBody}>
+						<TagsView  tags={['good', 'oliver', 'dingxizheng', 'promotionContainer', 'ImageGroup', 'StatusView']}/>
+					</View>
+					
+					<QuotedView style={{ marginLeft: 12, marginRight:12, padding: 0 }}>
 						<ImageGroup style={{marginLeft: 12, marginRight: 12}} columns={4} square={true} imageHeight={120} images={images}/>
-						
+					
 						<StatusView style={{padding: 12}}>
 							<StatusItem text="25" name="comments"/>
 							<StatusItem text="19" name="repremotes"/>
 							<StatusItem text="134" name="likes"/>
 						</StatusView>
+					</QuotedView>
 
-						<BottomActions style={{ height: 40 }}>
-							<BottomItem icon="chat-bubble-outline" text="comment" type="icon-only"/>
-							<BottomItem type="icon-only" icon="repeat" text="repromote"/>
-							<BottomItem type="icon-only" icon="favorite-border" text="like"/>
-							<BottomItem type="icon-only" icon="more-horiz" text="more"/>
-						</BottomActions>
-					</View>
+					<BottomActions style={{ height: 40 }}>
+						<BottomItem icon="chat-bubble-outline" text="comment" type="icon-only"/>
+						<BottomItem type="icon-only" icon="repeat" text="repromote"/>
+						<BottomItem type="icon-only" icon="favorite-border" text="like"/>
+						<BottomItem type="icon-only" icon="more-horiz" text="more"/>
+					</BottomActions>
+					
 				</View>
 			</View>
 		);
@@ -140,7 +142,8 @@ var styles = StyleSheet.create({
 		// marginRight: 12,
 	},
 	promotionBody: {
-
+		marginLeft: 12,
+		marginRight: 12,
 	}
 });
 
