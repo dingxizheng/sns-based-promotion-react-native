@@ -2,19 +2,20 @@
 * @Author: dingxizheng
 * @Date:   2016-02-01 02:59:09
 * @Last Modified by:   dingxizheng
-* @Last Modified time: 2016-02-01 19:52:16
+* @Last Modified time: 2016-02-18 19:20:23
 */
 
 'use strict';
-var React       = require('react-native');
-var Actions     = require('react-native-router-flux').Actions;
-var BlurView    = require('react-native-blur').BlurView;
-var Icon        = require('react-native-vector-icons/MaterialIcons');
-var theme       = require('../theme');
+var React              = require('react-native');
+var Actions            = require('react-native-router-flux').Actions;
+var BlurView           = require('react-native-blur').BlurView;
+var Icon               = require('react-native-vector-icons/MaterialIcons');
+var theme              = require('../theme');
 var CustomButtonsMixin = require('../CustomButtonsMixin');
-var TimerMixin = require('react-timer-mixin');
-var RCTRefreshControl = require('react-refresh-control');
-var PromotionCard = require('./PromotionCardView');
+var TimerMixin         = require('react-timer-mixin');
+var RCTRefreshControl  = require('react-refresh-control');
+var PromotionCard      = require('./PromotionCardView');
+var UserCard           = require('./UserCardView');
 
 var {
 	View, 
@@ -39,6 +40,11 @@ var promotions = [
 		name: 'yuanmiao',
 		time: '2016-02-1',
 	},
+	{
+		avatar: image,
+		name: 'Youtube',
+		type: 'user'
+	},
 	{	
 		avatar: image,
 		body: "this a good comment three",
@@ -55,7 +61,25 @@ var TimeLine = React.createClass({
 	},
 
 	leftButtonsDidMount: function() {
+		this.setRightButtons([
+			{
+				icon: 'edit',
+				onPress: () => Actions.simpleInput({
+									title: 'New Promotion',
+									onDone: function() {}
+								})
+			},
+			{
+				icon: 'camera',
+				onPress: () => Actions.newPromotion({ title: 'New Promotion'})
+			},
+		]);
 	},
+
+	// titleViewDidMount: function() {
+	// 	// console.log("???");
+	// 	// this.setTitleView("good");
+	// },
 
 	getInitialState: function() {
 		var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
@@ -72,6 +96,8 @@ var TimeLine = React.createClass({
 	},
 
 	renderRow: function(rowData) {
+		if (rowData.type === 'user')
+			return <UserCard user={rowData}/>
 		return <PromotionCard promotion={rowData}/>
 	},
 

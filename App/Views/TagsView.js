@@ -2,7 +2,7 @@
 * @Author: dingxizheng
 * @Date:   2016-02-08 17:22:39
 * @Last Modified by:   dingxizheng
-* @Last Modified time: 2016-02-08 19:49:39
+* @Last Modified time: 2016-02-16 18:40:32
 */
 
 'use strict';
@@ -20,19 +20,33 @@ var {
 
 var TagsView = React.createClass({
 
-	_renderTagItem: function(tag) {
-		return <View style={styles.tagItem}>
-					<Text style={styles.tagItemText}>#{tag}</Text>
-			   </View>;
+	_handleOnPress: function(tag, i) {
+		if (tag !== ' ... ' && this.props.onPress) {
+			this.props.onPress(tag, i);
+		}
+
+		if (tag === ' ... ' && this.props.onMore) {
+			this.props.onMore(tag, i);
+		}
+	},
+
+	_renderTagItem: function(tag, i) {
+		return <TouchableOpacity key={i} style={styles.tagItem} onPress={() => this._handleOnPress(tag, i)}>
+					<Text style={[styles.tagItemText, this.props.tagStyle]}>{tag === ' ... ' ? '' : '#'}{tag}</Text>
+			   </TouchableOpacity>;
 	},
 
 	render: function() {
 		var tags = this.props.tags || [];
 		var maxNumber = this.props.maxNumber || 5;
+		if (tags.length > maxNumber) {
+			tags = tags.slice(0, maxNumber);
+			tags.push(' ... ');
+		}
 		return (
-			<View style={styles.container}>
-				{tags.map(function(tag){
-					return this._renderTagItem(tag);
+			<View style={[styles.container, this.props.style]}>
+				{tags.map(function(tag, i){
+					return this._renderTagItem(tag, i);
 				}.bind(this))}
 			</View>
 		);

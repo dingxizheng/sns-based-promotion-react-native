@@ -2,7 +2,7 @@
 * @Author: dingxizheng
 * @Date:   2016-02-03 15:55:55
 * @Last Modified by:   dingxizheng
-* @Last Modified time: 2016-02-03 16:03:48
+* @Last Modified time: 2016-02-09 18:33:16
 */
 
 'use strict';
@@ -26,6 +26,36 @@ var Utilities = {
 	hexToRgbStr: function(hex) {
 		var c = this.hexToRgb(hex);
 		return 'rgb(' + c.r + ',' + c.g + ',' + c.b + ')';
+	},
+
+	googleMapImage: function() {
+		var url = 'https://maps.googleapis.com/maps/api/staticmap?';
+		var img = {
+			get: function() {
+                return url;
+            },
+
+            center: function(addr) {
+                url += 'center=' + encodeURIComponent(addr) + '&';
+                return this;
+            },
+
+            size: function(width, height) {
+                url += 'size=' + width + 'x' + height + '&';
+                return this;
+            },
+
+            zoom: function(scale) {
+                url += 'zoom=' + scale + '&';
+                return this;
+            },
+
+            markers: function(color, label, addr) {
+                url += 'markers=color:' + color + '%7Clabel:' + label + '%7C' + encodeURIComponent(addr) + '&';
+                return this;
+            }
+		};
+		return img;
 	}
 };
 

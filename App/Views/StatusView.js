@@ -2,15 +2,13 @@
 * @Author: dingxizheng
 * @Date:   2016-02-02 15:51:37
 * @Last Modified by:   dingxizheng
-* @Last Modified time: 2016-02-02 16:43:50
+* @Last Modified time: 2016-02-11 21:15:21
 */
 
 'use strict';
 
 var React      = require('react-native');
-var formStyles = require('../formStyles');
 var theme      = require('../theme');
-var Swiper     = require('react-native-swiper');
 
 var {
 	View,
@@ -54,7 +52,8 @@ var styles = StyleSheet.create({
 	container: {
 		flex: 1,
 		flexDirection: 'row',
-		padding: 10
+		paddingTop: 10,
+		paddingBottom: 10
 	},
 	statusItem: {
 		justifyContent: 'flex-start',

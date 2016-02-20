@@ -2,7 +2,7 @@
 * @Author: dingxizheng
 * @Date:   2016-01-23 15:54:30
 * @Last Modified by:   dingxizheng
-* @Last Modified time: 2016-01-23 16:40:10
+* @Last Modified time: 2016-02-20 15:27:27
 */
 
 'use strict';
@@ -13,7 +13,7 @@
 'use strict';
 
 var LABEL_COLOR = '#1E90FF';
-var INPUT_COLOR = '#999999';
+var INPUT_COLOR = '#555555';
 var ERROR_COLOR = '#a94442';
 var HELP_COLOR = '#999999';
 var BORDER_COLOR = '#cccccc';
@@ -42,7 +42,7 @@ var stylesheet = Object.freeze({
     },
     // the style applied when a validation error occours
     error: {
-      color: ERROR_COLOR,
+      color: LABEL_COLOR,
       fontSize: FONT_SIZE,
       marginBottom: 7,
       fontWeight: FONT_WEIGHT
@@ -51,18 +51,18 @@ var stylesheet = Object.freeze({
   helpBlock: {
     normal: {
       color: HELP_COLOR,
-      fontSize: FONT_SIZE,
+      fontSize: 13,
       marginBottom: 2
     },
     // the style applied when a validation error occours
     error: {
       color: HELP_COLOR,
-      fontSize: FONT_SIZE,
+      fontSize: 13,
       marginBottom: 2
     }
   },
   errorBlock: {
-    fontSize: FONT_SIZE,
+    fontSize: 13,
     marginBottom: 2,
     color: ERROR_COLOR
   },
@@ -74,8 +74,9 @@ var stylesheet = Object.freeze({
       padding: 7,
       borderRadius: 4,
       borderColor: BORDER_COLOR,
-      borderWidth: 1,
-      marginBottom: 5
+      borderWidth: 0,
+      marginBottom: 5,
+      backgroundColor: '#f4f4f4'
     },
     // the style applied when a validation error occours
     error: {
@@ -84,9 +85,10 @@ var stylesheet = Object.freeze({
       height: 36,
       padding: 7,
       borderRadius: 4,
-      borderColor: ERROR_COLOR,
-      borderWidth: 1,
-      marginBottom: 5
+      borderColor: BORDER_COLOR,
+      borderWidth: 0,
+      marginBottom: 5,
+      backgroundColor: '#f4f4f4'
     },
     // the style applied when the textbox is not editable
     notEditable: {

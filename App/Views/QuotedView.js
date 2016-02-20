@@ -2,7 +2,7 @@
 * @Author: dingxizheng
 * @Date:   2016-02-06 20:15:00
 * @Last Modified by:   dingxizheng
-* @Last Modified time: 2016-02-06 21:14:54
+* @Last Modified time: 2016-02-09 18:01:38
 */
 
 'use strict';
@@ -31,7 +31,8 @@ var styles = StyleSheet.create({
 	container: {
 		borderLeftColor: theme.colors.MAIN,
 		borderLeftWidth: 2,
-		padding: 5,
+		paddingTop: 5,
+		paddingBottom: 5,
 		backgroundColor: '#f5f5f5'
 	}
 });

@@ -2,7 +2,7 @@
 * @Author: dingxizheng
 * @Date:   2016-02-02 18:59:43
 * @Last Modified by:   dingxizheng
-* @Last Modified time: 2016-02-03 17:30:31
+* @Last Modified time: 2016-02-12 20:46:40
 */
 
 'use strict';
@@ -123,7 +123,7 @@ var FacebookTabBar = React.createClass({
     var tabUnderlineStyle = {
       position: 'absolute',
       width: containerWidth / numberOfTabs,
-      height: 1.5,
+      height: 2,
       backgroundColor: theme.colors.MAIN || this.props.underLineColor,
       bottom: 0,
     };

@@ -2,16 +2,15 @@
 * @Author: dingxizheng
 * @Date:   2016-01-25 18:17:47
 * @Last Modified by:   dingxizheng
-* @Last Modified time: 2016-01-27 17:59:46
+* @Last Modified time: 2016-02-19 19:59:23
 */
 
 'use strict';
 
 var React       = require('react-native');
-var Icon        = require('react-native-vector-icons/FontAwesome');
-var Overlay     = require('react-native-overlay');
-var BlurView    = require('react-native-blur').BlurView;
-var GlobalEvent = require('../GlobalEvent');
+var Icon        = require('react-native-vector-icons/MaterialIcons');
+var Actions     = require('react-native-router-flux').Actions;
+var theme   = require('../theme');
 
 var {
   View,
@@ -19,38 +18,58 @@ var {
   StyleSheet,
   TouchableOpacity,
   Text,
+  Animated
 } = React;
 
-// make sure only the last ToastView will be triggered
-GlobalEvent.on('info_toast', function(msg, onPress) {
-	ToastView.info_renders[ToastView.info_renders.length - 1](msg, onPress);
-});
-GlobalEvent.on('error_toast', function(msg, onPress) {
-	ToastView.error_renders[ToastView.error_renders.length - 1](msg, onPress);
-});
-GlobalEvent.on('custom_toast', function(view) {
-	ToastView.view_renders[ToastView.view_renders.length - 1](view);
-});
 
 var ToastView = React.createClass({
-
-	statics: {
-		info_renders: [],
-		error_renders: [],
-		view_renders: []
-	},
 
 	getInitialState: function() {
 		return { 
 			view_type: 'info',
-			isVisible: false
+			opacity: new Animated.Value(0)
 		};
 	},
 
 	onDismiss: function() {
-		this.setState({
-			isVisible: false
-		});
+		this._onClose();
+		clearTimeout(this.timeout);
+	},
+
+	componentWillMount: function() {
+		var nextProps = this.props;
+	  if (nextProps.type === 'error') {
+			this._showError(nextProps.msg, nextProps.onPress);
+		}
+
+		if (nextProps.type === 'info') {
+			this._showInfo(nextProps.msg, nextProps.onPress);
+		}
+
+		if (nextProps.type === 'view') {
+			this._showView(nextProps.view);
+		}
+	},
+
+	componentDidMount: function() {
+		var i = 0;
+		var interval = setInterval(function(){
+			i ++;
+			this.state.opacity.setValue(0 + (1 / 30) * i);
+			(i === 30) && clearInterval(interval);
+		}.bind(this), 5);
+
+		this.timeout = setTimeout(this._onClose, 5000);
+	},
+
+	_onClose: function() {
+		var i = 0;
+		var interval = setInterval(function(){
+			i ++;
+			this.state.opacity.setValue(1 - (1 / 10) * i);
+			(i === 10) && clearInterval(interval);
+			(i === 10) && Actions.dismiss();
+		}.bind(this), 5);
 	},
 
 	_showInfo: function(msg, onPress) {
@@ -64,7 +83,7 @@ var ToastView = React.createClass({
 
 	_renderInfo: function() {
 		return (
-			<TouchableOpacity onPress={this.on_press}>
+			<TouchableOpacity onPress={this.on_press} style={styles.msgWrapper}>
 		        <Text style={styles.infoToastText}>{this.info_msg}</Text>
 		    </TouchableOpacity>
 		);
@@ -81,7 +100,7 @@ var ToastView = React.createClass({
 
 	_renderError: function() {
 		return (
-			<TouchableOpacity onPress={this.on_press}>
+			<TouchableOpacity onPress={this.on_press} style={styles.msgWrapper}>
 		        <Text style={styles.errorToastText}>{this.error_msg}</Text>
 		    </TouchableOpacity>
 		);
@@ -99,85 +118,80 @@ var ToastView = React.createClass({
 		return this.custom_view || <Text style={styles.infoToastText}>no view component found</Text>
 	},
 
-	componentDidMount: function() {
-		ToastView.info_renders.push(this._showInfo);
-		ToastView.error_renders.push(this._showError);
-		ToastView.view_renders.push(this._showView);
-	},
-
-	componentWillUnmount: function() {
-		ToastView.info_renders.pop();
-		ToastView.error_renders.pop();
-		ToastView.view_renders.pop();
-	},
-
 	render: function() {
+		var opacity = this.state.opacity;
+		var backgroundColor = this.state.view_type === 'info' ? theme.colors.MAIN : 'pink';
 		return (
-			<Overlay 
-				isVisible={this.state.isVisible}
-				aboveStatusBar={ false }>
-				<BlurView style={styles.top} blurType="dark">
-					
-					<View style={styles.content}>
-					{function(){
-				        if (this.state.view_type === 'info') {
-				            return this._renderInfo();
-				        } else if (this.state.view_type === 'error') {
-				        	return this._renderError();
-				        } else {
-				        	return this._renderView();
-				        }
-				    }.call(this)}
-					</View>
-					
-					<TouchableOpacity onPress={this.onDismiss} style={styles.dismissWrapper}>
-			            <Icon name="times" style={styles.dismissButton} />
-			        </TouchableOpacity>
-				</BlurView>
-			</Overlay>
+			<Animated.View style={[styles.top, {opacity}, {backgroundColor}]}>
+				
+				<View style={[styles.content, {backgroundColor}]}>
+				{function(){
+			        if (this.state.view_type === 'info') {
+			            return this._renderInfo();
+			        } else if (this.state.view_type === 'error') {
+			        	return this._renderError();
+			        } else {
+			        	return this._renderView();
+			        }
+			    }.call(this)}
+				</View>
+				
+				<TouchableOpacity onPress={this.onDismiss} style={[styles.dismissWrapper, {backgroundColor}]}>
+		            <Icon name="close" style={styles.dismissButton} />
+		        </TouchableOpacity>
+			</Animated.View>
 		);
 	}
 });
 
 var styles = StyleSheet.create({
   top: {
-    paddingTop: 15,
     flexDirection: 'row',
     alignItems: 'center',
-  },
-  bottom: {
     position: 'absolute',
-    bottom: 0,
+    top: 64,
     left: 0,
     right: 0,
-    flexDirection: 'row',
-    alignItems: 'center',
+    shadowOffset:{
+        width: 0,
+        height: 0.3,
+    },
+    shadowColor: 'black',
+    shadowOpacity: 0.2,
   },
   content: {
     flex: .9,
   },
   dismissWrapper: {
   	flex: .1,
+
   },
   dismissButton: {
     height: 30,
     fontSize: 25,
-    color: '#888888',
+    color: 'white',
     alignSelf: 'stretch',
    	textAlign: 'center',
 	justifyContent: 'center',
   },
-    infoToastText: {
-    color: '#888888',
-    padding: 20,
-    backgroundColor: 'transparent',
-    fontSize: 14,
+  msgWrapper: {
+  	justifyContent: 'center',
+  	alignItems: 'flex-start',
+  	padding: 10,
+  	paddingVertical: 15
   },
-    errorToastText: {
-    color: '#888888',
-    padding: 15,
-    backgroundColor: 'transparent',
-    fontSize: 14,
+  infoToastText: {
+  	alignSelf: 'stretch',
+    color: 'white',
+    fontSize: 17,
+    textAlign: 'left',
+  },
+  errorToastText: {
+    alignSelf: 'stretch',
+    color: 'white',
+    fontSize: 17,
+    textAlign: 'left',
+
   }
 })
 

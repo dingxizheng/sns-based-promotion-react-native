@@ -2,7 +2,7 @@
 * @Author: dingxizheng
 * @Date:   2016-02-02 13:19:21
 * @Last Modified by:   dingxizheng
-* @Last Modified time: 2016-02-02 16:32:28
+* @Last Modified time: 2016-02-09 18:58:28
 */
 
 'use strict';
@@ -88,11 +88,11 @@ var BottomItem = React.createClass({
 
 var styles = StyleSheet.create({
 	footer: {
-		flex: 1,
+		// flex: 1,
 		height: 45,
 		flexDirection: 'row',
 		borderTopColor: '#eeeeee',
-		borderTopWidth: .5
+		borderTopWidth: 1
 	},
 	itemIcon: {
 		color: theme.colors.GREY_FONT,

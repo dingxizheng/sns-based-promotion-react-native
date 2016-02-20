@@ -2,21 +2,18 @@
 * @Author: dingxizheng
 * @Date:   2016-02-01 14:14:30
 * @Last Modified by:   dingxizheng
-* @Last Modified time: 2016-02-08 17:50:08
+* @Last Modified time: 2016-02-16 15:33:41
 */
 
 'use strict';
-var React       = require('react-native');
-var Actions     = require('react-native-router-flux').Actions;
-var BlurView    = require('react-native-blur').BlurView;
-var Icon        = require('react-native-vector-icons/MaterialIcons');
-var theme       = require('../theme');
-var CustomButtonsMixin = require('../CustomButtonsMixin');
-var QuotedView = require('./QuotedView');
-var RCTRefreshControl = require('react-refresh-control');
-var moment   = require('moment');
-var ImageGroup  = require('./ImagesView');
-var TagsView = require('./TagsView');
+var React                       = require('react-native');
+var Actions                     = require('react-native-router-flux').Actions;
+var theme                       = require('../theme');
+var QuotedView                  = require('./QuotedView');
+var moment                      = require('moment');
+var HTMLView                    = require('react-native-htmlview');
+var ImageGroup                  = require('./ImagesView');
+var TagsView                    = require('./TagsView');
 var {BottomActions, BottomItem} = require('./BottomActionsView');
 var {StatusView, StatusItem}    = require('./StatusView');
 
@@ -35,6 +32,8 @@ var image3 = 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQiWGXo4U6CCv
 var image4 = 'https://upload.wikimedia.org/wikipedia/commons/e/e0/Long_March_2D_launching_VRSS-1.jpg';
 
 var images = [image1, image4, image3, image2];
+
+var htmlContent = 'Suppose we had a custom tab bar called, we would inject it into our ScrollableTabView like this: <a href="good to go">http://google.com</a>'
 
 var PromotionCard = React.createClass({
 	render: function() {
@@ -58,10 +57,26 @@ var PromotionCard = React.createClass({
 				</View>
 				<View style={styles.promotionContainer}>
 					<View style={styles.promotionBody}>
-						<TagsView  tags={['good', 'oliver', 'dingxizheng', 'promotionContainer', 'ImageGroup', 'StatusView']}/>
+						<HTMLView 
+							style={styles.promotionText} 
+							value={htmlContent} 
+							stylesheet={{a:styles.a}}
+							onLinkPress={url => console.log(url)}/>
+						
+						<ImageGroup columns={4} square={true} imageHeight={120} images={images}/>
+
+						<TagsView style={{paddingTop: 4 }}
+							onPress={(tag, i) => console.log(tag, i)}
+							onMore={() => console.log("more")}
+							tags={['good', 'oliver', 'dingxizheng', 'promotionContainer', 'ImageGroup', 'StatusView']}/>
+
+						<StatusView>
+							<StatusItem text="25" name="comments"/>
+							<StatusItem text="19" name="repremotes"/>
+							<StatusItem text="134" name="likes"/>
+						</StatusView>
 					</View>
-					
-					<QuotedView style={{ marginLeft: 12, marginRight:12, padding: 0 }}>
+					{/*<QuotedView style={{ marginLeft: 12, marginRight:12, padding: 0 }}>
 						<ImageGroup style={{marginLeft: 12, marginRight: 12}} columns={4} square={true} imageHeight={120} images={images}/>
 					
 						<StatusView style={{padding: 12}}>
@@ -69,7 +84,7 @@ var PromotionCard = React.createClass({
 							<StatusItem text="19" name="repremotes"/>
 							<StatusItem text="134" name="likes"/>
 						</StatusView>
-					</QuotedView>
+					</QuotedView>*/}
 
 					<BottomActions style={{ height: 40 }}>
 						<BottomItem icon="chat-bubble-outline" text="comment" type="icon-only"/>
@@ -135,15 +150,19 @@ var styles = StyleSheet.create({
 	promotionContainer: {
 		flexDirection: 'column',
 	},
-	promotionContentWrapper: {
-		// height: 500,
-		// backgroundColor: '#eeeeee',
-		// marginLeft: 12,
-		// marginRight: 12,
-	},
 	promotionBody: {
 		marginLeft: 12,
 		marginRight: 12,
+	},
+	promotionText: {
+		paddingTop: 4,
+		paddingBottom: 2,
+		color: theme.colors.DARK_GREY_FONT,
+		fontWeight: theme.fonts.FONT_WEIGHT,
+		fontSize: theme.fonts.FONT_SIZE_SMALL
+	},
+	a: {
+		color: theme.colors.MAIN,
 	}
 });
 

@@ -2,14 +2,14 @@
 * @Author: dingxizheng
 * @Date:   2016-01-22 20:15:03
 * @Last Modified by:   dingxizheng
-* @Last Modified time: 2016-01-28 17:40:32
+* @Last Modified time: 2016-02-16 15:34:10
 */
 
 'use strict';
 
-var React = require('react-native');
-var Recorder = require('react-native-screcorder');
-var theme = require('../theme');
+var React              = require('react-native');
+var Recorder           = require('react-native-screcorder');
+var theme              = require('../theme');
 var CustomButtonsMixin = require('../CustomButtonsMixin');
 
 var {
