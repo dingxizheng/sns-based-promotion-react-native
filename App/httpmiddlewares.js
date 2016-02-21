@@ -2,14 +2,21 @@
 * @Author: dingxizheng
 * @Date:   2016-02-19 18:13:28
 * @Last Modified by:   dingxizheng
-* @Last Modified time: 2016-02-20 16:14:37
+* @Last Modified time: 2016-02-20 19:19:09
 */
 
 'use strict';
 var {Resource, ResourceConfig} = require('./Resource');
 var Actions = require('react-native-router-flux').Actions;
 
-Resource.addBeforeAction(function(request) {
+Resource.addBeforeAction(async function(request) {
+	try {
+		var session = await storage.load({ key: 'loginState' });
+		request.options.query = request.options.query || {};
+		request.options.query.access_token = session.access_token;
+	} catch(e) {
+		console.error(e);
+	}
 	return request;
 });
 
@@ -30,17 +37,29 @@ Resource.addAfterAction(async function(request, response) {
 				type: 'error'
 			});
 		}
-		var error = await response.json();
-		var msg = ""
-		Object.keys(error.fields).forEach(function(key) {
-			msg += key + ' ' + error.fields[key] + '  ';
-		});
+
 		if (response.status === 422) {
+			var error = await response.json();
+			var msg = ""
+			Object.keys(error.fields).forEach(function(key) {
+				msg += key + ' ' + error.fields[key] + '  ';
+			});
+
 			Actions.toast({
 				msg: msg,
 				type: 'error'
 			});
 		}
+
+		if (response.status === 401) {
+			var error = await response.json();
+			Actions.toast({
+				msg: 'Please login first!',
+				type: 'error'
+			});
+			setTimeout(()=>{ Actions.login() }, 1000);
+		}
+
 		throw response;
 	}
 	return response;

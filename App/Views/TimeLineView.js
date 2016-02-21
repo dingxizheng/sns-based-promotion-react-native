@@ -2,7 +2,7 @@
 * @Author: dingxizheng
 * @Date:   2016-02-01 02:59:09
 * @Last Modified by:   dingxizheng
-* @Last Modified time: 2016-02-18 19:20:23
+* @Last Modified time: 2016-02-20 17:15:13
 */
 
 'use strict';
@@ -89,7 +89,6 @@ var TimeLine = React.createClass({
 	},
 
 	componentDidMount: function() {
-	    ListView
 	    RCTRefreshControl.configure({
 	      node: this.refs["cards"]
 	    }, this._handleReload);

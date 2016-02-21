@@ -2,7 +2,7 @@
 * @Author: dingxizheng
 * @Date:   2016-02-16 16:19:13
 * @Last Modified by:   dingxizheng
-* @Last Modified time: 2016-02-19 16:36:52
+* @Last Modified time: 2016-02-20 17:59:19
 */
 
 /* @flow */
@@ -39,6 +39,8 @@ var TagsView = React.createClass({
 		this.setState({
 			tags: tags
 		});
+
+		this.props.tagsChange(this.tags);
 	},
 
 	_handleOnPress: function(tag, i) {
@@ -48,6 +50,7 @@ var TagsView = React.createClass({
 		this.setState({
 			tags: tags
 		});
+		this.props.tagsChange(this.tags);
 	},
 
 	_renderTagItem: function(tag, i) {
@@ -83,6 +86,7 @@ var TagsView = React.createClass({
 		this.setState({
 			tags: tags
 		});
+		this.props.tagsChange(this.tags);
 	},
 
 	render: function() {

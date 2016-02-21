@@ -2,7 +2,7 @@
 * @Author: dingxizheng
 * @Date:   2016-01-23 15:32:22
 * @Last Modified by:   dingxizheng
-* @Last Modified time: 2016-02-20 16:42:19
+* @Last Modified time: 2016-02-20 21:57:33
 */
 
 'use strict';
@@ -96,18 +96,6 @@ var LoginView = React.createClass({
 	},
 
 	componentDidMount: async function() {
-		// console.log("good");
-		// try {
-		// 	var account = await storage.load({ key: 'savedAccount' });
-		// 	this.setState({
-		// 		value: {
-		// 			email: account.email,
-		// 			password: account.password
-		// 		} 
-		// 	});
-		// } catch(e) {
-		// 	console.log(e);
-		// }
 	},
 
 	_viaFacebook: function() {
@@ -119,12 +107,7 @@ var LoginView = React.createClass({
 		    	FBSDKAccessToken.getCurrentAccessToken(async function(token) {
 		    		console.log({access_token: token.tokenString})
 		    		try {
-			    		var res = await Resource.fetch('https://graph.facebook.com/me', {
-			    			query:{
-			    				access_token: token.tokenString,
-			    				fields: 'id,email,name,birthday'
-			    			}
-			    		});
+			    		var res = await fetch('https://graph.facebook.com/me?fields=id,email,name,birthday&access_token=' + token.tokenString);
 			    		this._onFacebookLogedIn(await res.json(), token.tokenString);
 			    	} catch(e) {
 			    		console.log(e);
@@ -140,7 +123,7 @@ var LoginView = React.createClass({
 			var session = await Account.facebook({
 							body: Object.assign({ provider_access_token: access_token }, user)
 						});
-			this._saveSession(session);
+			this._saveSession(await session.json());
 		} catch(e) {
 			console.log(e);
 		}
@@ -148,6 +131,7 @@ var LoginView = React.createClass({
 
 	// save session
 	_saveSession: function(session) {
+		console.log(session);
 		storage.save({
 		    key: 'loginState',
 		    rawData: session,
@@ -168,8 +152,18 @@ var LoginView = React.createClass({
 
 	},
 
-	componentWillReceiveProps: function(nextProps) {
-	  console.log(nextProps);
+	componentWillReceiveProps: async function(nextProps) {
+		try {
+			var account = await storage.load({ key: 'savedAccount' });
+			this.setState({
+				value: {
+					email: account.email,
+					password: account.password
+				} 
+			});
+		} catch(e) {
+			console.log(e);
+		}
 	},
 
 	_handleLogin: async function() {
@@ -179,8 +173,9 @@ var LoginView = React.createClass({
 			try {
 				
 				var session = await Account.signin({body: value});
-				this._saveSession(session);
-			
+				this.setState({loading: false });
+				this._saveSession(await session.json());
+				Actions.pop();
 			} catch(e) {
 				console.log(e);
 				this.setState({
@@ -192,7 +187,6 @@ var LoginView = React.createClass({
 	},
 
 	render: function() {
-		console.log("back", this.props.user);
 		return (
 			<View style={styles.container}>
 

@@ -2,7 +2,7 @@
 * @Author: dingxizheng
 * @Date:   2016-02-18 17:30:00
 * @Last Modified by:   dingxizheng
-* @Last Modified time: 2016-02-19 17:21:36
+* @Last Modified time: 2016-02-20 18:01:42
 */
 
 'use strict';
@@ -66,6 +66,7 @@ var Images = React.createClass({
 		    this.setState({
 		      images: this.state.images
 		    });
+		    this.props.imagesChange(this.state.images);
 		  }
 		});
 	},
@@ -75,6 +76,7 @@ var Images = React.createClass({
 		this.setState({
 		    images: this.state.images
 		});
+		this.props.imagesChange(this.state.images);
 	},
 
 	renderCarousel: function(imgItem) {
@@ -87,7 +89,7 @@ var Images = React.createClass({
 	},
 
 	componentDidMount: function() {
-		
+		this.props.imagesChange(this.state.images);
 	},
 
 	_onImageOpen: function(image) {

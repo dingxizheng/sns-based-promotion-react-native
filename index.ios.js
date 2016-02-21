@@ -2,7 +2,7 @@
 * @Author: dingxizheng
 * @Date:   2016-01-23 13:24:54
 * @Last Modified by:   dingxizheng
-* @Last Modified time: 2016-02-20 14:53:08
+* @Last Modified time: 2016-02-20 19:19:32
 */
 
 'use strict';
@@ -103,12 +103,12 @@ var App = React.createClass({
 	                
 	                <Route name="recorder" component={RecorderView} title="Record"/>
 	                
-	                <Route name="login" component={LoginView} initial={true} title="Login"/>
+	                <Route name="login" component={LoginView} initial={false} title="Login"/>
 	                <Route name="signup" component={SignUpView} initial={false} title="Create Account"/>
 	                
 	                <Route name="promotion" component={PromotionView} initial={false}  title="Promotion"/>
 	                <Route name="comments" component={CommentsView} title="Comments"/>
-	                <Route name="timeline" component={TimeLineView} initial={false} title="Home"/>
+	                <Route name="timeline" component={TimeLineView} initial={true} title="Home"/>
 	                <Route name="streetview" component={StreetView} initial={false} title="StreetView"/>
 	                <Route name="comments_and_likes" component={LikesAndComments} initial={false} title="Likes"/>
 	                <Route name="newPromotion" component={NewPromotion} title="New Promtion"/>

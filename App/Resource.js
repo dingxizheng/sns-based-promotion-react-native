@@ -2,7 +2,7 @@
 * @Author: dingxizheng
 * @Date:   2016-02-04 10:47:54
 * @Last Modified by:   dingxizheng
-* @Last Modified time: 2016-02-12 18:22:15
+* @Last Modified time: 2016-02-20 19:24:52
 */
 
 'use strict';
@@ -83,20 +83,21 @@ var Resource = function(endpoint, options) {
 
 		this.fetch = function(options) {
 			if (this.get("id") !== undefined)
-				return self.fetch([resourceType.url, this.get("id")].join('/'), Object.assign({method: 'GET'}, options));
+				return self._fetch([resourceType.url, this.get("id")].join('/'), Object.assign({method: 'GET'}, options));
 			else
 				return Promise.reject(null);
 		};
 
 		this.save = function(options) {
-			if (this.get("id") === undefined)
-				return self.fetch(resourceType.url, Object.assign({method: 'POST', body: this.data }, options));
+			if (this.get("id") === undefined){
+				return self._fetch(resourceType.url, Object.assign({method: 'POST', body: this.data }, options));
+			}
 			else
-				return self.fetch([resourceType.url, this.get("id")].join('/'), Object.assign({method: 'PUT', body: self.updateData}, options));
+				return self._fetch([resourceType.url, this.get("id")].join('/'), Object.assign({method: 'PUT', body: self.updateData}, options));
 		};
 
 		this.remove = function(options) {
-			return self.fetch(resourceType.url, Object.assign({method: 'DELETE'}, options));
+			return self._fetch(resourceType.url, Object.assign({method: 'DELETE'}, options));
 		};
 	};
 
@@ -114,7 +115,7 @@ var Resource = function(endpoint, options) {
 		};
 	};
 
-	TypedResource.prototype.fetch = async function(url, options) {
+	TypedResource.prototype._fetch = async function(url, options) {
 		try {
 			var request = await globalBeforeActions.concat(resourceType.beforeActions).reduce(async function(res, current){
 				return await current.action(await res);
@@ -278,7 +279,7 @@ var uploadFile = function(endpoint, options) {
 	}, options.file);
 
 	var p = new Promise(function(resolve, rej) {	
-		NativeModules.FileTransfer.upload(res, function(err, res) {
+		NativeModules.FileTransfer.upload(obj, function(err, res) {
 			if (err) {
 				rej(err);
 			} else {
