@@ -2,7 +2,7 @@
 * @Author: dingxizheng
 * @Date:   2016-02-09 13:43:52
 * @Last Modified by:   dingxizheng
-* @Last Modified time: 2016-02-09 15:06:16
+* @Last Modified time: 2016-02-21 23:42:40
 */
 
 'use strict';
@@ -61,8 +61,11 @@ var BarTitleView = React.createClass({
 		var {navigator, index, state} = this.props;
         let currentReoute = state.routeStack[index];
         let title = currentReoute.getTitle(navigator, index, state);
+
+        var titleToRender = this.state.title || title;
+        var titleToShow = (titleToRender).length > 20 ? (titleToRender.substring(0, 20 - 3) + '...') : titleToRender;
 		return  <View style={styles.barTitleTextWrapper}>
-				 <Text style={styles.barTitleText}>{this.state.title || title}</Text>
+				 <Text style={styles.barTitleText}>{titleToShow}</Text>
 				</View>;
 	},
 
@@ -83,7 +86,8 @@ var styles = StyleSheet.create({
 	barTitleText: {
 		fontFamily: '.HelveticaNeueInterface-MediumP4',
 		fontSize: 17,
-		color: 'white'
+		color: 'white',
+		overflow: 'hidden'
 		// marginTop: 11 + Layout.pixel,
 	}
 });

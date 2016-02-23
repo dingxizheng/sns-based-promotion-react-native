@@ -1,15 +1,13 @@
 /* 
 * @Author: dingxizheng
-* @Date:   2016-02-17 17:31:43
+* @Date:   2016-02-22 20:54:46
 * @Last Modified by:   dingxizheng
-* @Last Modified time: 2016-02-22 21:59:46
+* @Last Modified time: 2016-02-22 20:59:35
 */
 
-/* @flow */
 'use strict';
 
 var React   = require('react-native');
-var Actions = require('react-native-router-flux').Actions;
 var Icon    = require('react-native-vector-icons/MaterialIcons');
 var theme   = require('../theme');
 
@@ -18,10 +16,11 @@ var {
     Text, 
     StyleSheet, 
     TouchableOpacity, 
-    TextInput
+    TextInput, 
 } = React;
 
-var AutoComplete = React.createClass({
+var AutoCompleteHead = React.createClass({
+    
     getInitialState: function() {
         return {
             enabled: false ,
@@ -29,18 +28,14 @@ var AutoComplete = React.createClass({
         };
     },
 
-    componentDidMount: function() {
-        // LayoutAnimation.configureNext(LayoutAnimation.Presets.spring);
-    },
-
     _onClose: function() {
-        Actions.dismiss();
+        this.props.onClose && this.props.onClose(this.inputText);
     },
 
     _onDone: function() {
         var ondone = this.props.onDone || function() {};
         if (this.inputText && this.inputText.length > 0) {
-            ondone(this.inputText) && Actions.dismiss();
+            ondone(this.inputText);
         }
     },
 
@@ -61,40 +56,26 @@ var AutoComplete = React.createClass({
         this.props.onChangeText && this.props.onChangeText(e);
     },
 
-    onRowPress: function(rowData) {
-        this.props.onRowPress || Actions.dismiss();
-        this.props.onRowPress && this.props.onRowPress(rowData) && Actions.dismiss();
-    },
-
     render: function() {
         var opacity = this.state.enabled ? 1 : 0.5;
-        var ContentView = this.props.listview;
         return (
-   
-            <View style={styles.container}>
-                <View style={styles.header}>
-                    <TouchableOpacity style={styles.iconWrapper} onPress={this._onClose}>
-                        <Icon name="close" style={styles.leftIcon}/>
-                    </TouchableOpacity>
+            <View style={styles.header}>
+                <TouchableOpacity style={styles.iconWrapper} onPress={this._onClose}>
+                    <Icon name="close" style={styles.leftIcon}/>
+                </TouchableOpacity>
+                
+                <View style={styles.rightHeader}>
+                    <TextInput onChangeText={this.onChangeText} 
+                        style={styles.contentInput} 
+                        multiline={false} 
+                        autoFocus={true} 
+                        placeholder={ this.props.placeholder || "search.." }/>
                     
-                    <View style={styles.rightHeader}>
-                        <TextInput onChangeText={this.onChangeText} 
-                            style={styles.contentInput} 
-                            multiline={false} 
-                            autoFocus={true} 
-                            placeholder={ this.props.placeholder || "search.." }/>
-                        
-                        <TouchableOpacity style={[styles.iconWrapper]} onPress={this._onDone}>
-                            <Text style={[styles.rightIcon, {opacity}]}>{ this.props.rightButton || 'Add' }</Text>
-                        </TouchableOpacity>
-                    </View>
-                </View>
-
-                <View style={styles.content}>
-                    <ContentView text={this.state.inputText} onRowPress={this.onRowPress}/>
+                    <TouchableOpacity style={[styles.iconWrapper]} onPress={this._onDone}>
+                        <Text style={[styles.rightIcon, {opacity}]}>{ this.props.rightButton || 'Add' }</Text>
+                    </TouchableOpacity>
                 </View>
             </View>
-            
         );
     }
 });
@@ -109,6 +90,7 @@ var styles = StyleSheet.create({
         bottom: 0
     },
     header: {
+    	flex: 1,
         height: 64,
         flexDirection: 'row',
         backgroundColor: theme.colors.MAIN,
@@ -147,4 +129,4 @@ var styles = StyleSheet.create({
 });
 
 
-module.exports = AutoComplete;
+module.exports = AutoCompleteHead;

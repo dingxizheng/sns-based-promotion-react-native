@@ -2,7 +2,7 @@
 * @Author: dingxizheng
 * @Date:   2016-02-17 16:00:47
 * @Last Modified by:   dingxizheng
-* @Last Modified time: 2016-02-20 22:34:50
+* @Last Modified time: 2016-02-21 21:00:42
 */
 
 'use strict';
@@ -26,10 +26,6 @@ var {
 } = React;
 
 var {Promotion, Resource, uploadImage, Feeds} = require('../apis');
-
-Feeds.fetchAll().then(function(e) {
-    console.log(e);
-})
 
 var NewPromotion = React.createClass({
     mixins: [CustomButtonsMixin],
@@ -62,11 +58,13 @@ var NewPromotion = React.createClass({
             
             var images = await this.images.reduce(async function(sum, img) {
                 var image = await uploadImage(img.uri);
+                var sum = await sum;
                 sum.push(JSON.parse(image.data).image);
                 return sum;
             }, []);
 
-            images.length > 0 && promotion.set({ photos: images }).save();
+            if (images.length > 0)
+                await promotion.set({ photos: images }).save();
 
             Actions.pop();
         

@@ -2,7 +2,7 @@
 * @Author: dingxizheng
 * @Date:   2016-01-31 17:23:24
 * @Last Modified by:   dingxizheng
-* @Last Modified time: 2016-02-16 20:41:29
+* @Last Modified time: 2016-02-22 17:26:41
 */
 
 'use strict';
@@ -19,7 +19,7 @@ var {
 	StyleSheet, 
 	TouchableOpacity, 
 	TextInput, 
-	Modal
+	LayoutAnimation
 } = React;
 
 var MakePromotion = React.createClass({
@@ -32,11 +32,12 @@ var MakePromotion = React.createClass({
 		};
 	},
 
-	componentDidMount: function() {
+	componentWillMount: function() {
+    	LayoutAnimation.configureNext(LayoutAnimation.Presets.spring);
 	},
 
-	componentWillUnmount: function() {
-
+	componentDidMount: function() {
+		// LayoutAnimation.configureNext(LayoutAnimation.Presets.spring);
 	},
 
 	onChangeText: function(text) {
@@ -57,10 +58,7 @@ var MakePromotion = React.createClass({
 	render: function() {
 
 		return (
-			<Modal animated={this.state.animated}
-          		   transparent={this.state.transparent}
-          		   visible={this.state.visible}>
-			<View style={[styles.container]}>
+			<View style={[styles.container]} >
 				<View style={[styles.contentWrapper]}>
 					<View style={styles.header}>
 						
@@ -86,7 +84,6 @@ var MakePromotion = React.createClass({
 				</View>
 				<KeyboardSpacer/>
 			</View>
-			</Modal>
 		);
 	}
 });
@@ -94,19 +91,21 @@ var MakePromotion = React.createClass({
 
 var styles = StyleSheet.create({
 	container: {
+		// flex: 1,
+		// flexDirection: 'column',
+		// justifyContent: 'flex-end'
         position: 'absolute',
         // top:0,
         bottom:0,
         left:0,
         right:0,
-        justifyContent: 'center',
-        alignItems: 'center',
+        // justifyContent: 'center',
+        // alignItems: 'center',
     },
     contentWrapper: {
     	borderWidth: 0.5,
 		borderColor: '#bbbbbb',
 		flexDirection: 'column',
-		alignSelf: 'stretch',
 		backgroundColor: 'white',
 		shadowOffset:{
             width: 1,

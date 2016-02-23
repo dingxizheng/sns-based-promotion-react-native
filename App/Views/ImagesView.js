@@ -2,7 +2,7 @@
 * @Author: dingxizheng
 * @Date:   2016-02-01 20:01:51
 * @Last Modified by:   dingxizheng
-* @Last Modified time: 2016-02-08 12:42:18
+* @Last Modified time: 2016-02-21 21:14:42
 */
 
 'use strict';
@@ -39,7 +39,7 @@ var Images = React.createClass({
 					{images.map(function(image, i){
 						return <Image
 								key={i}
-								source={{ uri: image }} 
+								source={{ uri: image.image_url }} 
 								resizeMode="contain"
 								style={{flex: 1}}/>
 					}.bind(this))}
@@ -99,11 +99,12 @@ var Images = React.createClass({
 
 	renderImages: function() {
 		var images = this.props.images || [];
+
 		return images.map(function(img, i) {
 			return <Lightbox key={i} navigator={this.props.navigator} swipeToDismiss={false} renderContent={() => this.renderCarousel(img)}>
-						<View style={this._getImageItemWrapperStyle(i)}>
+						<View key={i} style={this._getImageItemWrapperStyle(i)}>
 							<Image
-								source={{ uri: img }} 
+								source={{ uri: img.thumb_url }} 
 								style={this._getImageItemStyle()}/>
 					   </View>
 					</Lightbox>
@@ -111,15 +112,18 @@ var Images = React.createClass({
 	},
 
 	render: function() {
-		return (
-			<View style={[styles.imageGroup, this.props.style]} onLayout={this._onLayout}>
-				{function(){
-					if (this.state.parentLayouted) {
-						return this.renderImages();
-					}
-				}.bind(this).call()}
-			</View>
-		);
+		if (this.props.images && this.props.images.length > 0)
+			return (
+				<View style={[styles.imageGroup, this.props.style]} onLayout={this._onLayout}>
+					{function(){
+						if (this.state.parentLayouted) {
+							return this.renderImages();
+						}
+					}.bind(this).call()}
+				</View>
+			);
+		else 
+			return null;
 	},
 
 });
@@ -129,6 +133,7 @@ var styles = StyleSheet.create({
 		flexDirection: 'row',
 		flexWrap: 'wrap',
 		padding:0,
+		paddingTop: -4,
 	},
 	imageItemWrapperLeft: {
 		paddingRight: 2,

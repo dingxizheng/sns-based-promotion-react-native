@@ -2,7 +2,7 @@
 * @Author: dingxizheng
 * @Date:   2016-01-23 13:24:54
 * @Last Modified by:   dingxizheng
-* @Last Modified time: 2016-02-20 19:19:32
+* @Last Modified time: 2016-02-22 22:19:33
 */
 
 'use strict';
@@ -94,11 +94,14 @@ var App = React.createClass({
 						barButtonIconStyle={{
 							tintColor: 'white'
 						}}
+						titleStyle={{
+							color: 'white'
+						}}
 						renderTitle={ this.renderTitle }
 						renderLeftButton={ this.renderLeftButton }
 						renderRightButton={ this.renderRightButton }>
 					
-					<Schema hideNavBar={false} name="modal"/>
+					<Schema hideNavBar={false} name="modal" sceneConfig={Navigator.SceneConfigs.FloatFromRight}/>
 	                <Schema hideNavBar={false} name="default" sceneConfig={Navigator.SceneConfigs.FloatFromRight}/>
 	                
 	                <Route name="recorder" component={RecorderView} title="Record"/>
@@ -113,9 +116,7 @@ var App = React.createClass({
 	                <Route name="comments_and_likes" component={LikesAndComments} initial={false} title="Likes"/>
 	                <Route name="newPromotion" component={NewPromotion} title="New Promtion"/>
 
-	                <Route name="simpleInput" component={SimpleInput} type="modal" title="SimpleInput"/>
-	                <Route name="autoComplete" component={AutoComplete} type="modal" title="AutoComplete"/>
-
+	                <Route name="simpleInput" component={SimpleInput} type="modal" title="SimpleInput"/>                
 	                <Route name="toast" component={ToastView} type="modal" title="ToastView"/>
 
 				</Router>

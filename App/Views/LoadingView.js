@@ -2,7 +2,7 @@
 * @Author: dingxizheng
 * @Date:   2016-02-19 20:27:31
 * @Last Modified by:   dingxizheng
-* @Last Modified time: 2016-02-19 21:13:36
+* @Last Modified time: 2016-02-21 01:01:38
 */
 
 'use strict';
@@ -30,7 +30,7 @@ var Loading = React.createClass({
         
         <View style={styles.container} >
          	<View style={styles.header}>
-         		<Spinner isVisible={this.props.isVisible} size={25} type={"Wave"} color={"#ffffff"}/>
+         		<Spinner isVisible={this.props.isVisible} size={25} type={"Wave"} color={"#bbbbbb"}/>
          		{function(){
          			if (this.props.text)
          				return <Text style={styles.text}>{this.props.text}</Text>
@@ -48,6 +48,7 @@ var Loading = React.createClass({
 
 var styles = StyleSheet.create({
 	container: {
+		paddingTop: 64,
 		height: height,
 		width: width,
 		backgroundColor: '#55555555'
@@ -55,13 +56,19 @@ var styles = StyleSheet.create({
 	header: {
         height: 64,
         flexDirection: 'row',
-        backgroundColor: theme.colors.MAIN,
-        justifyContent: 'flex-start',
-        paddingTop: 35,
-        paddingLeft: 20
+        backgroundColor: '#eeeeee',
+        justifyContent: 'center',
+        alignItems: 'center',
+        // paddingLeft: 20,
+        shadowOffset:{
+	        width: 0,
+	        height: 0.1,
+	    },
+	    shadowColor: 'black',
+	    shadowOpacity: 0.2,
     },
     text: {
-    	color: '#FFF',
+    	color: '#bbbbbb',
         fontSize: 17,
         paddingLeft: 14,
     }

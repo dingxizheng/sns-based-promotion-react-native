@@ -2,7 +2,7 @@
 * @Author: dingxizheng
 * @Date:   2016-02-18 15:34:48
 * @Last Modified by:   dingxizheng
-* @Last Modified time: 2016-02-18 16:29:58
+* @Last Modified time: 2016-02-22 22:11:11
 */
 
 /* @flow */
@@ -10,6 +10,7 @@
 
 var React = require('react-native');
 var theme   = require('../theme');
+var {Tag}   = require('../apis');
 
 var {
     StyleSheet,
@@ -30,10 +31,17 @@ var TagListView = React.createClass({
 	},
 
 	componentWillReceiveProps: function(nextProps) {
-		if ( nextProps.text == "ni" )  {
+		this._onInputText(nextProps.text || "tag");
+	},
+
+	_onInputText: async function(e) {
+		try {
+			var tags = await Tag.fetchAll({ search: e});
 			this.setState({
-				dataSource: ds.cloneWithRows(["nihao", "tamen"])
+				dataSource: ds.cloneWithRows(tags.map((t) => t.data.body))
 			});
+		} catch(e) {
+			console.log(e);
 		}
 	},
 
@@ -64,6 +72,8 @@ var TagListView = React.createClass({
 var styles = StyleSheet.create({
 	container: {
 		flex: 1,
+		marginTop: 64,
+		backgroundColor: "#eeeeeeee"
 	},
 	row: {
 		justifyContent: 'center',

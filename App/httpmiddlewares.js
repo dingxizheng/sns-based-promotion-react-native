@@ -2,7 +2,7 @@
 * @Author: dingxizheng
 * @Date:   2016-02-19 18:13:28
 * @Last Modified by:   dingxizheng
-* @Last Modified time: 2016-02-20 19:19:09
+* @Last Modified time: 2016-02-22 15:38:35
 */
 
 'use strict';
@@ -34,7 +34,7 @@ Resource.addAfterAction(async function(request, response) {
 		if (response.status === 400) {
 			Actions.toast({
 				msg: 'Wrong password or username',
-				type: 'error'
+				view_type: 'error'
 			});
 		}
 
@@ -47,7 +47,7 @@ Resource.addAfterAction(async function(request, response) {
 
 			Actions.toast({
 				msg: msg,
-				type: 'error'
+				view_type: 'error'
 			});
 		}
 
@@ -55,9 +55,18 @@ Resource.addAfterAction(async function(request, response) {
 			var error = await response.json();
 			Actions.toast({
 				msg: 'Please login first!',
-				type: 'error'
+				view_type: 'error'
 			});
 			setTimeout(()=>{ Actions.login() }, 1000);
+		}
+
+		console.log(response);
+
+		if (response.status === 500) {
+			Actions.toast({
+				msg: 'Unknown server error!',
+				view_type: 'error'
+			});
 		}
 
 		throw response;

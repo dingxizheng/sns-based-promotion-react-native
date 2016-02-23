@@ -26,6 +26,7 @@
 		8A7387031C73C8680037F7DF /* libRCTAutoComplete.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8A7386FB1C73C85E0037F7DF /* libRCTAutoComplete.a */; };
 		8A73870A1C767F7C0037F7DF /* libRNImagePicker.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8A7387091C767F770037F7DF /* libRNImagePicker.a */; };
 		8A7387121C77F5850037F7DF /* libRNSpinkit.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8A7387111C77F57D0037F7DF /* libRNSpinkit.a */; };
+		8A7387271C7AEAAF0037F7DF /* libRCTGeolocation.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8A7387261C7AEAA80037F7DF /* libRCTGeolocation.a */; };
 		8A8837D41C530A4B00C74ECF /* libRNRecorder.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8A8837D11C5309E600C74ECF /* libRNRecorder.a */; };
 		8A8837DB1C56CC9500C74ECF /* libRNOverlay.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8A8837DA1C56CC8500C74ECF /* libRNOverlay.a */; };
 		8A8837E21C56D26900C74ECF /* libRNBlur.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8A8837E11C56D25C00C74ECF /* libRNBlur.a */; };
@@ -90,6 +91,13 @@
 			remoteGlobalIDString = D42CB3511B2538DE00FD0AE2;
 			remoteInfo = RNSpinkit;
 		};
+		8A7387251C7AEAA80037F7DF /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 8A7387211C7AEAA80037F7DF /* RCTGeolocation.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 134814201AA4EA6300B7C361;
+			remoteInfo = RCTGeolocation;
+		};
 		8A8837D01C5309E600C74ECF /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 8A8837CA1C5309E600C74ECF /* RNRecorder.xcodeproj */;
@@ -148,6 +156,9 @@
 		8A7386F51C73C85E0037F7DF /* RCTAutoComplete.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTAutoComplete.xcodeproj; path = "../node_modules/react-native-autocomplete/RCTAutoComplete.xcodeproj"; sourceTree = "<group>"; };
 		8A7387041C767F770037F7DF /* RNImagePicker.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RNImagePicker.xcodeproj; path = "../node_modules/react-native-image-picker/ios/RNImagePicker.xcodeproj"; sourceTree = "<group>"; };
 		8A73870C1C77F57C0037F7DF /* RNSpinkit.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RNSpinkit.xcodeproj; path = "../node_modules/react-native-spinkit/ios/RNSpinkit.xcodeproj"; sourceTree = "<group>"; };
+		8A73871D1C7AE3980037F7DF /* TSLocationManager.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = TSLocationManager.framework; path = "../node_modules/react-native-background-geolocation/RNBackgroundGeolocation/TSLocationManager.framework"; sourceTree = "<group>"; };
+		8A73871F1C7AE3DC0037F7DF /* libsqlite3.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libsqlite3.tbd; path = usr/lib/libsqlite3.tbd; sourceTree = SDKROOT; };
+		8A7387211C7AEAA80037F7DF /* RCTGeolocation.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTGeolocation.xcodeproj; path = "../node_modules/react-native/Libraries/Geolocation/RCTGeolocation.xcodeproj"; sourceTree = "<group>"; };
 		8A7526821C44B34D00C695EC /* libBolts.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libBolts.a; path = "Pods/../build/Debug-iphoneos/libBolts.a"; sourceTree = "<group>"; };
 		8A7526831C44B34D00C695EC /* libFBSDKCoreKit.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libFBSDKCoreKit.a; path = "Pods/../build/Debug-iphoneos/libFBSDKCoreKit.a"; sourceTree = "<group>"; };
 		8A7526841C44B34D00C695EC /* libFBSDKLoginKit.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libFBSDKLoginKit.a; path = "Pods/../build/Debug-iphoneos/libFBSDKLoginKit.a"; sourceTree = "<group>"; };
@@ -181,6 +192,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8A7387271C7AEAAF0037F7DF /* libRCTGeolocation.a in Frameworks */,
 				8A7387121C77F5850037F7DF /* libRNSpinkit.a in Frameworks */,
 				8A73870A1C767F7C0037F7DF /* libRNImagePicker.a in Frameworks */,
 				8A7387031C73C8680037F7DF /* libRCTAutoComplete.a in Frameworks */,
@@ -247,6 +259,8 @@
 		7396F6D5C4127A2A2C3A9E5A /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				8A73871F1C7AE3DC0037F7DF /* libsqlite3.tbd */,
+				8A73871D1C7AE3980037F7DF /* TSLocationManager.framework */,
 				8A7526821C44B34D00C695EC /* libBolts.a */,
 				8A7526831C44B34D00C695EC /* libFBSDKCoreKit.a */,
 				8A7526841C44B34D00C695EC /* libFBSDKLoginKit.a */,
@@ -261,6 +275,7 @@
 		832341AE1AAA6A7D00B99B32 /* Libraries */ = {
 			isa = PBXGroup;
 			children = (
+				8A7387211C7AEAA80037F7DF /* RCTGeolocation.xcodeproj */,
 				8A1546031C5FF69700D84C0D /* AirMaps.xcodeproj */,
 				8A1545F61C5F30DD00D84C0D /* RCTRefreshControl.xcodeproj */,
 				8A0541CA1C5EAE4900BF5103 /* RCTVideo.xcodeproj */,
@@ -344,6 +359,14 @@
 			isa = PBXGroup;
 			children = (
 				8A7387111C77F57D0037F7DF /* libRNSpinkit.a */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		8A7387221C7AEAA80037F7DF /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				8A7387261C7AEAA80037F7DF /* libRCTGeolocation.a */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -452,6 +475,9 @@
 						CreatedOnToolsVersion = 6.2;
 						TestTargetID = 13B07F861A680F5B00A75B9A;
 					};
+					13B07F861A680F5B00A75B9A = {
+						DevelopmentTeam = 878MXS7G5Z;
+					};
 				};
 			};
 			buildConfigurationList = 83CBB9FA1A601CBA00E9B192 /* Build configuration list for PBXProject "VideoAdsReact" */;
@@ -473,6 +499,10 @@
 				{
 					ProductGroup = 8A7386F61C73C85E0037F7DF /* Products */;
 					ProjectRef = 8A7386F51C73C85E0037F7DF /* RCTAutoComplete.xcodeproj */;
+				},
+				{
+					ProductGroup = 8A7387221C7AEAA80037F7DF /* Products */;
+					ProjectRef = 8A7387211C7AEAA80037F7DF /* RCTGeolocation.xcodeproj */;
 				},
 				{
 					ProductGroup = 8A1545F71C5F30DD00D84C0D /* Products */;
@@ -556,6 +586,13 @@
 			fileType = archive.ar;
 			path = libRNSpinkit.a;
 			remoteRef = 8A7387101C77F57D0037F7DF /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		8A7387261C7AEAA80037F7DF /* libRCTGeolocation.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libRCTGeolocation.a;
+			remoteRef = 8A7387251C7AEAA80037F7DF /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 		8A8837D11C5309E600C74ECF /* libRNRecorder.a */ = {
@@ -768,7 +805,10 @@
 			baseConfigurationReference = 29FAF26AD63F306DA37FB060 /* Pods-VideoAdsReact.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				DEAD_CODE_STRIPPING = NO;
+				FRAMEWORK_SEARCH_PATHS = "";
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
 					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
@@ -782,6 +822,7 @@
 				);
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = VideoAdsReact;
+				PROVISIONING_PROFILE = "";
 				SDKROOT = iphoneos9.2;
 			};
 			name = Debug;
@@ -791,6 +832,9 @@
 			baseConfigurationReference = EA855DB7B4C911AB56558D84 /* Pods-VideoAdsReact.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				FRAMEWORK_SEARCH_PATHS = "";
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
 					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
@@ -804,6 +848,7 @@
 				);
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = VideoAdsReact;
+				PROVISIONING_PROFILE = "";
 				SDKROOT = iphoneos9.2;
 			};
 			name = Release;

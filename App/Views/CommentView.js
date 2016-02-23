@@ -2,58 +2,93 @@
 * @Author: dingxizheng
 * @Date:   2016-01-31 18:56:08
 * @Last Modified by:   dingxizheng
-* @Last Modified time: 2016-02-01 02:51:24
+* @Last Modified time: 2016-02-22 15:39:03
 */
 
 'use strict';
 
-var React = require('react-native');
-var Actions = require('react-native-router-flux').Actions;
-var BlurView    = require('react-native-blur').BlurView;
-var Icon        = require('react-native-vector-icons/MaterialIcons');
-var theme = require('../theme');
+var React    = require('react-native');
+var Actions  = require('react-native-router-flux').Actions;
+var BlurView = require('react-native-blur').BlurView;
+var Icon     = require('react-native-vector-icons/MaterialIcons');
+var moment   = require('moment');
+var theme    = require('../theme');
 
 var {View, Text, StyleSheet, TouchableOpacity, Image} = React;
+var {Comment, Resource} = require('../apis');
 
-var Comment = React.createClass({
+var CommentView = React.createClass({
+
+	_replyComment: async function(text) {
+		try {
+
+			var comment = new Comment({
+				body: text,
+				promotion_id: this.props.comment.data.commentee_id,
+				parent_id: this.props.comment.data.id
+			});	
+			console.log(comment);
+			var result = await comment.save();		
+			Actions.toast({ msg: 'Commented successfully!', view_type: 'info', time: 1000});
+		} catch(e) {
+			console.log(e);
+		}
+	},
+
+	_writeReply: function() {
+		Actions.simpleInput({title: "Reply", placeholder: this.props.comment.data.body, onDone: this._replyComment });
+	},
+
+	_renderParent: function() {
+
+		if (this.props.comment.data.parent) {
+			var {body, created_at, commenteer} = this.props.comment.data.parent;
+			var {name, avatar, time} = commenteer;
+
+			return (
+				<View style={styles.parentComment}>
+					<TouchableOpacity style={styles.profileInfo}>
+					<Text style={styles.profileName}><Text style={{color: theme.colors.GREY_FONT}}>replied to </Text>{name}</Text>
+					</TouchableOpacity>
+					
+					<View style={styles.commentContent}>
+						<Text style={styles.commentContentText}>{body}</Text>
+					</View>
+				</View>
+			);
+		}
+	},
+
 	render: function() {
-		var {avatar, body, name, time} = this.props.comment;
+		var {body, created_at, commenteer} = this.props.comment.data;
+		var {name, avatar, time} = commenteer;
 
 		return (
 			<View style={styles.container}>
 				<TouchableOpacity style={styles.avatarWrapper}>
 					<Image
-						source={{ uri: avatar }} 
+						source={{ uri: avatar.thumb_url }} 
 						style={styles.avatar}/>
 				</TouchableOpacity>
 				<TouchableOpacity style={styles.contentWrapper}>
 					<TouchableOpacity style={styles.profileInfo}>
 						<Text style={styles.profileName}>{name}</Text>
-						<Text style={styles.profileTime}>{time}</Text>
+						<Text style={styles.profileTime}>{moment(created_at).fromNow()}</Text>
 					</TouchableOpacity>
 					
 					<View style={styles.commentContent}>
-						<Text style={styles.commentContentText}>{body}{"this is a very very long long and long comment"}</Text>
+						<Text style={styles.commentContentText}>{body.trim()}</Text>
 					</View>
 
-					<View style={styles.parentComment}>
-						<TouchableOpacity style={styles.profileInfo}>
-						<Text style={styles.profileName}><Text style={{color: theme.colors.GREY_FONT}}>replied to </Text>{name}</Text>
-						<Text style={styles.profileTime}>{time}</Text>
-						</TouchableOpacity>
-						
-						<View style={styles.commentContent}>
-							<Text style={styles.commentContentText}>{body}</Text>
-						</View>
-					</View>
+					{this._renderParent() }
 
 					<View style={styles.commentActions}>
-						<TouchableOpacity style={styles.actionItemWrapper}>
+						<TouchableOpacity style={styles.actionItemWrapper} onPress={this._writeReply}>
 							<Icon name="reply" style={styles.actionItemIcon} />
 							<Text style={styles.actionItemText}>100</Text>
 						</TouchableOpacity>
 						
-						<TouchableOpacity style={styles.actionItemWrapper}>
+						<TouchableOpacity style={styles.actionItemWrapper} onPress={this._likeComment}>
 							<Icon name="favorite-border" style={styles.actionItemIcon}/>
 							<Text style={styles.actionItemText}>56</Text>
 						</TouchableOpacity>
@@ -100,20 +135,21 @@ var styles = StyleSheet.create({
 		// height: 30,
 		flex: 1,
 		flexDirection: 'row',
-		paddingBottom: 5
+		paddingBottom: 5,
+		justifyContent: 'flex-end'
 		// alignItems: 'center'
 	},
 	profileName: {
-		flex: 0.7,
+		flex: 1,
 		color: theme.colors.MAIN,
 		fontWeight: theme.fonts.FONT_BOLD,
 		fontSize: theme.fonts.FONT_SIZE_SMALL
 	},
 	profileTime: {
 		textAlign: 'right',
-		flex: 0.3,
+		// flex: 0.3,
 		color: theme.colors.GREY_FONT,
-		fontSize: theme.fonts.FONT_SIZE_SMALL
+		fontSize: theme.fonts.FONT_SIZE_SMALL - 2
 	},
 	commentActions: {
 		marginTop: 8,
@@ -150,4 +186,4 @@ var styles = StyleSheet.create({
 	}
 });
 
-module.exports = Comment;
+module.exports = CommentView;

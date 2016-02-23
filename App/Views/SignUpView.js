@@ -2,7 +2,7 @@
 * @Author: dingxizheng
 * @Date:   2016-01-23 15:47:26
 * @Last Modified by:   dingxizheng
-* @Last Modified time: 2016-02-20 16:39:53
+* @Last Modified time: 2016-02-22 15:39:57
 */
 
 'use strict';
@@ -156,7 +156,7 @@ var SignupView = React.createClass({
 				
 				Actions.pop(1, {user: value});
 				
-				Actions.toast({msg: "Account Created Successfully!", type: 'info'});
+				Actions.toast({msg: "Account Created Successfully!", view_type: 'info'});
 			
 			} catch(e) {
 				console.log(e);

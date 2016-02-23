@@ -2,7 +2,7 @@
 * @Author: dingxizheng
 * @Date:   2016-01-23 15:32:22
 * @Last Modified by:   dingxizheng
-* @Last Modified time: 2016-02-20 21:57:33
+* @Last Modified time: 2016-02-22 15:39:11
 */
 
 'use strict';
@@ -101,7 +101,7 @@ var LoginView = React.createClass({
 	_viaFacebook: function() {
 		FBSDKLoginManager.logInWithReadPermissions(permissions, (error, result) => {
 		  if (error) {
-		     Actions.toast({msg: 'Can not login via facebook', type: 'error'});
+		     Actions.toast({msg: 'Can not login via facebook', view_type: 'error'});
 		  } else {
 		    if (!result.isCancelled) {
 		    	FBSDKAccessToken.getCurrentAccessToken(async function(token) {

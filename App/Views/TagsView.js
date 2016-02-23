@@ -2,14 +2,14 @@
 * @Author: dingxizheng
 * @Date:   2016-02-08 17:22:39
 * @Last Modified by:   dingxizheng
-* @Last Modified time: 2016-02-16 18:40:32
+* @Last Modified time: 2016-02-22 19:36:19
 */
 
 'use strict';
 
-var React       = require('react-native');
-var theme       = require('../theme');
-var Icon        = require('react-native-vector-icons/FontAwesome');
+var React = require('react-native');
+var theme = require('../theme');
+var Icon  = require('react-native-vector-icons/FontAwesome');
 
 var {
   View,
@@ -43,13 +43,16 @@ var TagsView = React.createClass({
 			tags = tags.slice(0, maxNumber);
 			tags.push(' ... ');
 		}
-		return (
-			<View style={[styles.container, this.props.style]}>
-				{tags.map(function(tag, i){
-					return this._renderTagItem(tag, i);
-				}.bind(this))}
-			</View>
-		);
+		if (this.props.tags && this.props.tags.length > 0)
+			return (
+				<View style={[styles.container, this.props.style]}>
+					{tags.map(function(tag, i){
+						return this._renderTagItem(tag, i);
+					}.bind(this))}
+				</View>
+			);
+		else
+			return null;
 	}
 });
 
@@ -58,6 +61,7 @@ var styles = StyleSheet.create({
 		flex: 1,
 		flexDirection: 'row',
 		flexWrap: 'wrap',
+		paddingBottom: -2
 	},
 	tagItem: {
 		// borderWidth: .5,

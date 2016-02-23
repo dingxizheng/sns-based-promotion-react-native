@@ -2,7 +2,7 @@
 * @Author: dingxizheng
 * @Date:   2016-01-28 20:26:18
 * @Last Modified by:   dingxizheng
-* @Last Modified time: 2016-02-12 21:00:44
+* @Last Modified time: 2016-02-22 19:18:58
 */
 
 'use strict';
@@ -28,50 +28,99 @@ var {
 	Image,
 	StyleSheet,
 	TouchableOpacity,
-	ScrollView
+	ScrollView,
+	LayoutAnimation
 } = React;
-
-var image  = 'https://lh3.googleusercontent.com/-ZadaXoUTBfs/AAAAAAAAAAI/AAAAAAAAAAA/3rh5IMTHOzg/photo.jpg';
-var image1 = 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRjK0tZBJHXOlqL1qkw0pqqek8Vtgh0s7RGCfm4IxA3nwNx3WDboQ';
-var image2 = 'https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcTvpcNgqJn5wwr6iy_m5IrOBdzRLfXDtDB1Lxr0wOLoT8we-pq5';
-var image3 = 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQiWGXo4U6CCvNItlDYFgEQz4d3T-YjLj13nqUZ-crpAr3qMPx-';
-var image4 = 'https://upload.wikimedia.org/wikipedia/commons/e/e0/Long_March_2D_launching_VRSS-1.jpg';
-
-var images = [image1, image4, image3, image2];
 
 var PromotionView = React.createClass({
 
+	componentWillMount: function() {
+		LayoutAnimation.configureNext(LayoutAnimation.Presets.spring);
+	},
+
+	_renderRoot: function() {
+		if (this.props.promotion.data.root){
+			var {body, photos, tags, created_at} = this.props.promotion.data.root;
+			var {avatar, name} = this.props.promotion.data.root.user;
+			
+			return (
+				<QuotedView style={{ marginTop: 2, marginLeft: 0, marginRight:0, paddingHorizontal: 10 }}>
+					<TouchableOpacity onPress={()=> Actions.promotion({ title: body, promotion: new Promotion(this.props.promotion.data.root)})}>
+					
+					<View style={[styles.profileBox, {paddingLeft: 0}]}>
+						<Image
+							source={{ uri: avatar.thumb_url }} 
+							style={styles.avatar}/>
+						
+						<View style={styles.profileInfo}>
+							<Text style={styles.profileName}>{name}</Text>
+							<Text style={styles.profileTime}>{moment(created_at).fromNow()}</Text>
+						</View>
+					</View>
+
+					<HTMLView 
+						style={styles.promotionText} 
+						value={body} 
+						stylesheet={{a:styles.a}}
+						onLinkPress={url => console.log(url)}/>
+
+					<TagsView style={{marginTop: 4, marginBottom: 10}}
+						onPress={(tag, i) => console.log(tag, i)}
+						onMore={() => console.log("more")}
+						tags={tags}/>
+					
+					<ImageGroup  style={{marginTop: 0, marginBottom: 10}}
+									columns={ photos.length == 1 ? 1 : 2 } square={true} imageHeight={120} images={photos}/>
+
+					<LocationImage style={{marginTop: 0, marginBottom: 10}}
+						address="472 Ruper St, Thunder Bay, Ontario"
+						coordinates={[48.425893, -89.243557]}/>
+
+					</TouchableOpacity>
+				</QuotedView>
+			);
+		}
+		else
+			return null;
+	},
+
 	render: function() {
+		var {user, body, created_at, root, parent, distance, photos, tags, likes, comments, reposts} = this.props.promotion.data;
+		var {avatar, name} = user;
+
 		return (
 			<ScrollView style={styles.container}>
 				<View style={styles.profileBox}>
 					<Image
-						source={{ uri: image }} 
+						source={{ uri: avatar.thumb_url }} 
 						style={styles.avatar}/>
 					
 					<View style={styles.profileInfo}>
-						<Text style={styles.profileName}>dingxizheng</Text>
-						<Text style={styles.profileTime}>1d</Text>
+						<Text style={styles.profileName}>{name}</Text>
+						<Text style={styles.profileTime}>{moment(created_at).fromNow()}{ distance > 0 ? "・within " + distance.toFixed(0) + " km" : ''}</Text>
 					</View>
 				</View>
 				<View style={styles.promotionContent}>
+					
 					<HTMLView 
 							style={styles.promotionText} 
-							value={"Hi, here is the text and i am going to beat you!!!"} 
+							value={body} 
 							stylesheet={{a:styles.a}}
 							onLinkPress={url => console.log(url)}/>
-		
-					<ImageGroup 
-						style={{marginTop: 5}}
-						columns={2}
-						square={false}
-						imageHeight={120}
-						images={images}/>
+					
+					{this._renderRoot()}
 
 					<TagsView style={{paddingTop: 10 }}
 						onPress={(tag, i) => console.log(tag, i)}
 						onMore={() => console.log("more")}
-						tags={['good', 'oliver', 'dingxizheng', 'promotionContainer', 'ImageGroup', 'StatusView']}/>
+						tags={tags}/>
+
+					<ImageGroup 
+						style={{marginTop: 5}}
+						columns={1}
+						square={false}
+						imageHeight={150}
+						images={photos}/>
 					
 					<LocationImage style={{marginTop: 10}} 
 						address="472 Ruper St, Thunder Bay, Ontario"
@@ -100,24 +149,28 @@ var styles = StyleSheet.create({
 		height: 40,
 		width: 40
 	},
-	profileInfo: {
-		paddingLeft: 10,
-		height: 40,
-		flex: 1,
-		flexDirection: 'row',
-		alignItems: 'center'
-	},
 	profileName: {
-		flex: 0.7,
 		color: theme.colors.MAIN,
 		fontWeight: theme.fonts.FONT_BOLD,
-		fontSize: theme.fonts.FONT_SIZE_SMALL
+		fontSize: theme.fonts.FONT_SIZE,
+		// alignSelf: 'stretch',
+		textAlign: 'left',
+	},
+	profileInfo: {
+		paddingLeft: 10,
+		// height: 34,
+		flex: 1,
+		flexDirection: 'column',
+		alignItems: 'flex-start',
+		justifyContent: 'center',
+		// alignItems: 'center',	
 	},
 	profileTime: {
-		textAlign: 'right',
-		flex: 0.3,
+		textAlign: 'left',
 		color: theme.colors.GREY_FONT,
-		fontSize: theme.fonts.FONT_SIZE_SMALL
+		fontSize: theme.fonts.FONT_SIZE_EXTRA_SMALL,
+		fontWeight: theme.fonts.FONT_WEIGHT,
+		// alignSelf: 'stretch'
 	},
 	promotionContent: {
 		padding: 12,
@@ -125,6 +178,7 @@ var styles = StyleSheet.create({
 		flexDirection: 'column'
 	},
 	promotionText: {
+		paddingBottom: 6,
 		color: theme.colors.TEXT,
 		fontSize: theme.fonts.FONT_SIZE,
 		fontWeight: theme.fonts.FONT_WEIGHT

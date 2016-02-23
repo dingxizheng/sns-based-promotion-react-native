@@ -2,7 +2,7 @@
 * @Author: dingxizheng
 * @Date:   2016-02-04 10:47:54
 * @Last Modified by:   dingxizheng
-* @Last Modified time: 2016-02-20 19:24:52
+* @Last Modified time: 2016-02-21 21:47:39
 */
 
 'use strict';
@@ -149,10 +149,6 @@ var Resource = function(endpoint, options) {
 		} catch(e) {
 			return Promise.reject(new Error(e));
 		}
-	};
-
-	TypedResource.method = function(options) {
-		
 	};
 
 	return TypedResource;

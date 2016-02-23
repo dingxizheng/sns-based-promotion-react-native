@@ -2,7 +2,7 @@
 * @Author: dingxizheng
 * @Date:   2016-02-16 16:19:13
 * @Last Modified by:   dingxizheng
-* @Last Modified time: 2016-02-20 17:59:19
+* @Last Modified time: 2016-02-22 22:19:13
 */
 
 /* @flow */
@@ -12,17 +12,16 @@ var React        = require('react-native');
 var theme        = require('../theme');
 var Icon         = require('react-native-vector-icons/MaterialIcons');
 var Actions      = require('react-native-router-flux').Actions;
+var {Tag}        = require('../apis');
+var AutoComplete = require('../AutoComplete/AutoCompleteWrapper');
 
 var {
   View,
   StyleSheet,
   TouchableOpacity,
   Text,
-  Modal,
   AlertIOS
 } = React;
-
-var tagsToReturn = [];
 
 var TagsView = React.createClass({
 
@@ -63,20 +62,21 @@ var TagsView = React.createClass({
 	},
 
 	_renderAddTagButton: function(tag, i) {
-		return <TouchableOpacity key={i} style={tagsStyles.tagItem} onPress={this._addTag}>
-					<Text style={[tagsStyles.tagItemText, this.props.tagStyle]}>
-						{'  Add Tag  '}
-					</Text>
-			   </TouchableOpacity>;
-	},
 
-	_addTag: function() {
-		Actions.autoComplete({ 
-			placeholder: "put tag here...", 
-			listview: require('../ListViews/TagListView'),
-			onDone: this._onAddTag,
-			onRowPress: this._onAddTag
-		});
+		return <View style={{marginRight: 4, marginBottom: 4}}> 
+					<AutoComplete
+						onDone={this._onAddTag}
+						contentProps={{ onRowPress: this._onAddTag }}
+						placeholder="put tag here..."
+						contentView={require('../ListViews/TagListView')}>
+
+					<View key={i} style={[tagsStyles.tagItem, {marginRight: 0, marginBottom: 0}]}>
+						<Text style={[tagsStyles.tagItemText, this.props.tagStyle]}>
+							{'  Add Tag  '}
+						</Text>
+				   </View>
+				   </AutoComplete>
+			   </View>;
 	},
 
 	_onAddTag: function(tag) {
@@ -87,6 +87,7 @@ var TagsView = React.createClass({
 			tags: tags
 		});
 		this.props.tagsChange(this.tags);
+		return false;
 	},
 
 	render: function() {

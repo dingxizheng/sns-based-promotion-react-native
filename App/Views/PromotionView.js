@@ -2,7 +2,7 @@
 * @Author: dingxizheng
 * @Date:   2016-01-28 20:26:18
 * @Last Modified by:   dingxizheng
-* @Last Modified time: 2016-02-16 20:44:16
+* @Last Modified time: 2016-02-22 16:10:13
 */
 
 'use strict';
@@ -55,12 +55,14 @@ var PromotionView = React.createClass({
 	render: function() {
 		return (
 			<View style={styles.container}>
-				<LazyTabView style={styles.content}
+				<LazyTabView
+					initialPage={this.props.initialPage || 0}
+					style={styles.content}
 					renderTabBar={()=> <TabBarView />} 
 					onChangeTab={this._onTabChanged}>
 
-					<PromotionContent tabLabel="home|content"/>
-					<CommentsView tabLabel="chat-bubble-outline|200"/>
+					<PromotionContent tabLabel="home|content" promotion={this.props.promotion}/>
+					<CommentsView tabLabel={"chat-bubble-outline|" + this.props.promotion.data.comments.count} promotion={this.props.promotion}/>
 					<CommentsView tabLabel="repeat|2K"/>
 					<CommentsView tabLabel="favorite-border|101"/>
 		    	</LazyTabView>

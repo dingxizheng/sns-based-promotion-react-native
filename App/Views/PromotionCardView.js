@@ -2,7 +2,7 @@
 * @Author: dingxizheng
 * @Date:   2016-02-01 14:14:30
 * @Last Modified by:   dingxizheng
-* @Last Modified time: 2016-02-16 15:33:41
+* @Last Modified time: 2016-02-22 16:47:17
 */
 
 'use strict';
@@ -16,6 +16,7 @@ var ImageGroup                  = require('./ImagesView');
 var TagsView                    = require('./TagsView');
 var {BottomActions, BottomItem} = require('./BottomActionsView');
 var {StatusView, StatusItem}    = require('./StatusView');
+var {Promotion, Comment, Resource, Feeds} = require('../apis');
 
 var {
 	View, 
@@ -25,76 +26,164 @@ var {
 	Image
 } = React;
 
-var image = 'https://lh3.googleusercontent.com/-ZadaXoUTBfs/AAAAAAAAAAI/AAAAAAAAAAA/3rh5IMTHOzg/photo.jpg';
-var image1 = 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRjK0tZBJHXOlqL1qkw0pqqek8Vtgh0s7RGCfm4IxA3nwNx3WDboQ';
-var image2 = 'https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcTvpcNgqJn5wwr6iy_m5IrOBdzRLfXDtDB1Lxr0wOLoT8we-pq5';
-var image3 = 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQiWGXo4U6CCvNItlDYFgEQz4d3T-YjLj13nqUZ-crpAr3qMPx-';
-var image4 = 'https://upload.wikimedia.org/wikipedia/commons/e/e0/Long_March_2D_launching_VRSS-1.jpg';
-
-var images = [image1, image4, image3, image2];
-
 var htmlContent = 'Suppose we had a custom tab bar called, we would inject it into our ScrollableTabView like this: <a href="good to go">http://google.com</a>'
 
+// <Text style={styles.contentTitle}> repromoted </Text> 
+// 						xiaoding
+// 						<Text style={styles.contentTitle}>{"'s"} post </Text>
+// 						</Text>
+
 var PromotionCard = React.createClass({
+
+	getInitialState: function() {
+		var {liked} = this.props.promotion.data;
+		return {
+		    liked: liked,
+		};
+	},
+
+	_likePromotion: async function() {
+		try {
+			var result = await this.props.promotion.like();
+			this.setState({
+				liked: (result.operation == 1 ? true : false)
+			});
+			Actions.toast({ msg: `You just ${ result.operation == 1 ? 'liked' : 'unliked'} this promotion!`, view_type: 'info', time: 1000});
+		} catch(e) {
+			console.log(e);
+		}
+	},
+
+	_repostPromotion: async function(text) {
+		try {
+			
+			var repost = new Promotion({
+				body: text,
+				parent_id: this.props.promotion.data.id
+			});	
+			var result = await repost.save();		
+			Actions.toast({ msg: 'You just reposted this promotion!', view_type: 'info', time: 1000});
+		} catch(e) {
+			console.log(e);
+		}
+	},
+
+	_commentPromotion: async function(text) {
+		try {
+			
+			var comment = new Comment({
+				body: text,
+				promotion_id: this.props.promotion.data.id
+			});	
+			var result = await comment.save();		
+			Actions.toast({ msg: 'You just commented this promotion!', view_type: 'info', time: 1000});
+		} catch(e) {
+			console.log(e);
+		}
+	},
+
+	_writeRepost: function() {
+		Actions.simpleInput({title: "Repost", placeholder: this.props.promotion.data.body, onDone: this._repostPromotion });
+	},
+
+	_writeComment: function() {
+		Actions.simpleInput({title: "Comment", placeholder: this.props.promotion.data.body, onDone: this._commentPromotion });
+	},
+
+	_renderRoot: function() {
+		if (this.props.promotion.data.root){
+			var {body, photos, tags, created_at} = this.props.promotion.data.root;
+			var {avatar, name} = this.props.promotion.data.root.user;
+			
+			return (
+				<QuotedView style={{ marginTop: 5, marginLeft: 0, marginRight:0, paddingHorizontal: 10 }}>
+					<TouchableOpacity onPress={()=> Actions.promotion({ title: body, promotion: new Promotion(this.props.promotion.data.root)})}>
+					<View style={[styles.profileBox, { paddingLeft: 0}]}>
+						<Image
+							source={{ uri: avatar.thumb_url }} 
+							style={styles.avatar}/>
+					
+						<View style={styles.cardTitle}>
+							<Text style={styles.profileName}>{name}</Text>
+							<Text style={styles.cardTime}>{moment(created_at).fromNow()}</Text>
+						</View>
+					</View>
+
+					<HTMLView 
+						style={styles.promotionText} 
+						value={body} 
+						stylesheet={{a:styles.a}}
+						onLinkPress={url => console.log(url)}/>
+					
+					<ImageGroup columns={ photos.length == 1 ? 2 : 3 } square={true} imageHeight={120} images={photos}/>
+
+					<TagsView style={{marginTop: 10, marginBottom: 10}}
+						onPress={(tag, i) => console.log(tag, i)}
+						onMore={() => console.log("more")}
+						tags={tags}/>
+				</TouchableOpacity>
+				</QuotedView>
+			);
+		}
+		else
+			return null;
+	},
+
 	render: function() {
-		var {avatar, body, name, time} = this.props.promotion;
+		var {user, body, created_at, root, parent, distance, photos, tags, likes, comments, reposts} = this.props.promotion.data;
+		var {avatar, name} = user;
+
+		distance = 400;
 
 		return (
-			<View style={styles.container}>
+			<TouchableOpacity style={styles.container} onPress={()=> Actions.promotion({ title: body, promotion: new Promotion(this.props.promotion.data)})}>
 				<View style={styles.profileBox}>
 					<Image
-						source={{ uri: avatar }} 
+						source={{ uri: avatar.thumb_url }} 
 						style={styles.avatar}/>
 					
 					<View style={styles.cardTitle}>
-						<Text style={styles.profileName}>{name}
-						<Text style={styles.contentTitle}> repromoted </Text> 
-						xiaoding
-						<Text style={styles.contentTitle}>{"'s"} post </Text>
-						</Text>
-						<Text style={styles.cardTime}>{moment(time).fromNow()}・within 1000 km</Text>
+						<Text style={styles.profileName}>{name}</Text>
+						<Text style={styles.cardTime}>{moment(created_at).fromNow()}{ distance > 0 ? "・within " + distance.toFixed(0) + " km" : ''}</Text>
 					</View>
 				</View>
 				<View style={styles.promotionContainer}>
 					<View style={styles.promotionBody}>
+						
 						<HTMLView 
 							style={styles.promotionText} 
-							value={htmlContent} 
+							value={body} 
 							stylesheet={{a:styles.a}}
 							onLinkPress={url => console.log(url)}/>
 						
-						<ImageGroup columns={4} square={true} imageHeight={120} images={images}/>
+						<ImageGroup columns={ photos.length == 1 ? 2 : 3 } square={true} imageHeight={120} images={photos}/>
 
-						<TagsView style={{paddingTop: 4 }}
+						<TagsView style={{marginTop: 10, marginBottom: -2}}
 							onPress={(tag, i) => console.log(tag, i)}
 							onMore={() => console.log("more")}
-							tags={['good', 'oliver', 'dingxizheng', 'promotionContainer', 'ImageGroup', 'StatusView']}/>
+							tags={tags}/>
+
+						{this._renderRoot()}
 
 						<StatusView>
-							<StatusItem text="25" name="comments"/>
-							<StatusItem text="19" name="repremotes"/>
-							<StatusItem text="134" name="likes"/>
+							<StatusItem text={comments.count + ''} onPress={()=> Actions.promotion({ initialPage: 1, title: body, promotion: new Promotion(this.props.promotion.data)})} name="comments"/>
+							<StatusItem text={reposts.count + ''} name="reposts"/>
+							<StatusItem text={likes.count + ''} name="likes"/>
 						</StatusView>
 					</View>
-					{/*<QuotedView style={{ marginLeft: 12, marginRight:12, padding: 0 }}>
-						<ImageGroup style={{marginLeft: 12, marginRight: 12}} columns={4} square={true} imageHeight={120} images={images}/>
-					
-						<StatusView style={{padding: 12}}>
-							<StatusItem text="25" name="comments"/>
-							<StatusItem text="19" name="repremotes"/>
-							<StatusItem text="134" name="likes"/>
-						</StatusView>
-					</QuotedView>*/}
-
-					<BottomActions style={{ height: 40 }}>
-						<BottomItem icon="chat-bubble-outline" text="comment" type="icon-only"/>
-						<BottomItem type="icon-only" icon="repeat" text="repromote"/>
-						<BottomItem type="icon-only" icon="favorite-border" text="like"/>
+					<BottomActions style={{ height: 35 }}>
+						<BottomItem onPress={this._writeComment} icon="chat-bubble-outline" text="comment" type="icon-only"/>
+						<BottomItem onPress={this._writeRepost} type="icon-only" icon="repeat" text="repromote"/>
+						<BottomItem onPress={this._likePromotion} 
+							type="icon-only" 
+							icon={this.state.liked ? "favorite" : "favorite-border"} 
+							iconStyle={this.state.liked ? {color: '#C64A4A'} : null} 
+							text="like"/>
 						<BottomItem type="icon-only" icon="more-horiz" text="more"/>
 					</BottomActions>
 					
 				</View>
-			</View>
+			</TouchableOpacity>
 		);
 	},
 
@@ -149,6 +238,7 @@ var styles = StyleSheet.create({
 	},
 	promotionContainer: {
 		flexDirection: 'column',
+		// marginLeft: 30
 	},
 	promotionBody: {
 		marginLeft: 12,

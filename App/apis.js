@@ -2,18 +2,21 @@
 * @Author: dingxizheng
 * @Date:   2016-02-05 16:30:38
 * @Last Modified by:   dingxizheng
-* @Last Modified time: 2016-02-20 22:33:33
+* @Last Modified time: 2016-02-22 19:39:04
 */
 
 'use strict';
 
+
 var {Resource, ResourceConfig, uploadFile} = require('./Resource');
-var BASE_URL                   = "http://localhost:3000";
-var User                       = new Resource(BASE_URL + "/v1/users");
-var Promotion                  = new Resource(BASE_URL + "/v1/promotions");
-var Comment                    = new Resource(BASE_URL + "/v1/comments");
-var Account                    = new Resource(BASE_URL + "/v1/accounts");
-var Feeds                      = new Resource(BASE_URL + "/v1/feeds");
+
+var BASE_URL  = "http://localhost:3000";
+var User      = new Resource(BASE_URL + "/v1/users");
+var Promotion = new Resource(BASE_URL + "/v1/promotions");
+var Comment   = new Resource(BASE_URL + "/v1/comments");
+var Account   = new Resource(BASE_URL + "/v1/accounts");
+var Feeds     = new Resource(BASE_URL + "/v1/feeds");
+var Tag       = new Resource(BASE_URL + "/v1/tags"); 
 
 var likeMethod = {
 	name: 'like',
@@ -27,37 +30,38 @@ var unlikeMethod = {
 	method: 'POST'
 };
 
+var likers = {
+	name: 'likers',
+	path: 'likers',
+	method: 'GET',
+};
+
+var dislikers = {
+	name: 'dislikers',
+	path: 'dislikers',
+	method: 'GET',
+};
+
 User.method(likeMethod);
 User.method(unlikeMethod);
+User.method(likers);
+User.method(dislikers);
 
 Promotion.method(likeMethod);
 Promotion.method(unlikeMethod);
+Promotion.method(likers);
+Promotion.method(dislikers);
 
 Comment.method(likeMethod);
 Comment.method(unlikeMethod);
+Comment.method(likers);
+Comment.method(dislikers);
 
 Account.staticMethod({name: 'signin', path: 'signin', method: 'POST'});
 Account.staticMethod({name: 'signup', path: 'signup', method: 'POST'});
 Account.staticMethod({name: 'facebook', path: 'facebooklogin', method: 'POST'});
 
 Feeds.staticMethod({name: 'signup', path: 'signup', method: 'POST'});
-// var uploadFile = function(endpoint, options) {
-// 	var obj = Object.assign(options, {
-// 		uploadUrl: endpoint
-// 	}, options.file);
-
-// 	var p = new Promise(function(resolve, rej) {	
-// 		NativeModules.FileTransfer.upload(obj, function(err, res) {
-// 			if (err) {
-// 				rej(err);
-// 			} else {
-// 				resolve(res);
-// 			}
-// 		});
-// 	});
-
-// 	return p;
-// };
 
 var uploadImage = async function(uri) {
 	try {
@@ -67,10 +71,10 @@ var uploadImage = async function(uri) {
 				uri: uri,
 				fileName: 'photo.png',
 			}
-		})
+		});
 	} catch(e) {
 		throw e;
 	}
 };
 
-module.exports = {User, Promotion, Comment, Account, Resource, uploadFile, uploadImage, Feeds};
+module.exports = {User, Promotion, Comment, Account, Resource, uploadFile, uploadImage, Feeds, Tag};

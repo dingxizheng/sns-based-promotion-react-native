@@ -2,13 +2,15 @@
 * @Author: dingxizheng
 * @Date:   2016-02-03 20:18:48
 * @Last Modified by:   dingxizheng
-* @Last Modified time: 2016-02-03 21:49:31
+* @Last Modified time: 2016-02-22 14:39:44
 */
 
 'use strict';
 
 var React        = require('react-native');
+var TimerMixin = require('react-timer-mixin');
 var ScrollableTabView = require('react-native-scrollable-tab-view');
+var BusyBox = require('./BusyBox');
 
 var {
 	View,
@@ -17,6 +19,8 @@ var {
 
 
 var LazyTabView = React.createClass({
+
+	mixins: [TimerMixin],
 
 	getInitialState: function() {
 		var state = {};
@@ -36,18 +40,25 @@ var LazyTabView = React.createClass({
 		this.loadTimer && clearTimeout(this.loadTimer);
 		if(this.props.onChangeTab)
 			this.props.onChangeTab(e);
-		this.loadTimer = setTimeout(function() {
+		
+		if(e.i !== this.props.initialPage) {
+			this.loadTimer = this.setTimeout(function() {
+				this.setState({
+					['tab_' + e.i]: true
+				});
+			}, 800);
+		} else {
 			this.setState({
 				['tab_' + e.i]: true
 			});
-		}.bind(this), 800);
+		}
 	},
 
 	_renderChild: function(child, i) {
 		if (this.state['tab_' + i]) {
 			return child;
 		} 
-		return <View tabLabel={child.props.tabLabel}/>;
+		return <BusyBox style={{ backgroundColor: 'white' }} tabLabel={child.props.tabLabel}/>;
 	},
 
 	render: function(){

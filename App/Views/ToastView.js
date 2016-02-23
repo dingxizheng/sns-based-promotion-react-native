@@ -2,7 +2,7 @@
 * @Author: dingxizheng
 * @Date:   2016-01-25 18:17:47
 * @Last Modified by:   dingxizheng
-* @Last Modified time: 2016-02-19 19:59:23
+* @Last Modified time: 2016-02-22 19:41:15
 */
 
 'use strict';
@@ -11,6 +11,7 @@ var React       = require('react-native');
 var Icon        = require('react-native-vector-icons/MaterialIcons');
 var Actions     = require('react-native-router-flux').Actions;
 var theme   = require('../theme');
+var TimerMixin = require('react-timer-mixin');
 
 var {
   View,
@@ -18,16 +19,17 @@ var {
   StyleSheet,
   TouchableOpacity,
   Text,
-  Animated
+  LayoutAnimation
 } = React;
 
 
 var ToastView = React.createClass({
 
+	mixins: [TimerMixin],
+
 	getInitialState: function() {
 		return { 
-			view_type: 'info',
-			opacity: new Animated.Value(0)
+			view_type: 'info'
 		};
 	},
 
@@ -37,39 +39,32 @@ var ToastView = React.createClass({
 	},
 
 	componentWillMount: function() {
-		var nextProps = this.props;
-	  if (nextProps.type === 'error') {
+   	  LayoutAnimation.configureNext(LayoutAnimation.Presets.spring);
+	  var nextProps = this.props;
+	  if (nextProps.view_type === 'error') {
 			this._showError(nextProps.msg, nextProps.onPress);
 		}
 
-		if (nextProps.type === 'info') {
+		if (nextProps.view_type === 'info') {
 			this._showInfo(nextProps.msg, nextProps.onPress);
 		}
 
-		if (nextProps.type === 'view') {
+		if (nextProps.view_type === 'view') {
 			this._showView(nextProps.view);
 		}
 	},
 
 	componentDidMount: function() {
-		var i = 0;
-		var interval = setInterval(function(){
-			i ++;
-			this.state.opacity.setValue(0 + (1 / 30) * i);
-			(i === 30) && clearInterval(interval);
-		}.bind(this), 5);
+		LayoutAnimation.configureNext(LayoutAnimation.Presets.spring);
+		this.setTimeout(this._onClose, this.props.time || 3000);
+	},
 
-		this.timeout = setTimeout(this._onClose, 5000);
+	componentWillUnmount: function() {
+		LayoutAnimation.configureNext(LayoutAnimation.Presets.spring);
 	},
 
 	_onClose: function() {
-		var i = 0;
-		var interval = setInterval(function(){
-			i ++;
-			this.state.opacity.setValue(1 - (1 / 10) * i);
-			(i === 10) && clearInterval(interval);
-			(i === 10) && Actions.dismiss();
-		}.bind(this), 5);
+		Actions.dismiss();
 	},
 
 	_showInfo: function(msg, onPress) {
@@ -119,10 +114,10 @@ var ToastView = React.createClass({
 	},
 
 	render: function() {
-		var opacity = this.state.opacity;
+		// var opacity = this.state.opacity;
 		var backgroundColor = this.state.view_type === 'info' ? theme.colors.MAIN : 'pink';
 		return (
-			<Animated.View style={[styles.top, {opacity}, {backgroundColor}]}>
+			<View style={[styles.top, {backgroundColor}]}>
 				
 				<View style={[styles.content, {backgroundColor}]}>
 				{function(){
@@ -136,10 +131,10 @@ var ToastView = React.createClass({
 			    }.call(this)}
 				</View>
 				
-				<TouchableOpacity onPress={this.onDismiss} style={[styles.dismissWrapper, {backgroundColor}]}>
+				{/*<TouchableOpacity onPress={this.onDismiss} style={[styles.dismissWrapper, {backgroundColor}]}>
 		            <Icon name="close" style={styles.dismissButton} />
-		        </TouchableOpacity>
-			</Animated.View>
+		        </TouchableOpacity>*/}
+			</View>
 		);
 	}
 });
@@ -160,7 +155,7 @@ var styles = StyleSheet.create({
     shadowOpacity: 0.2,
   },
   content: {
-    flex: .9,
+    flex: 1,
   },
   dismissWrapper: {
   	flex: .1,

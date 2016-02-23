@@ -2,7 +2,7 @@
 * @Author: dingxizheng
 * @Date:   2016-02-02 15:51:37
 * @Last Modified by:   dingxizheng
-* @Last Modified time: 2016-02-11 21:15:21
+* @Last Modified time: 2016-02-21 20:52:48
 */
 
 'use strict';
@@ -64,17 +64,17 @@ var styles = StyleSheet.create({
 	statusItemIcon: {
 		color: theme.colors.DARK_GREY_FONT,
 	    fontSize: 17,
-	    padding: 2
+	    paddingHorizontal: 2
 	},
 	statusItemName: {
 		color: theme.colors.DARK_GREY_FONT,
 	    fontSize: 10,
-	    padding: 2
+	    paddingHorizontal: 2
 	},
 	statusItemText: {
 		color: theme.colors.DARK_GREY_FONT,
 	    fontSize: 10,
-	    padding: 2
+	    paddingHorizontal: 2
 	}
 });
 
