@@ -2,7 +2,7 @@
 * @Author: dingxizheng
 * @Date:   2016-02-04 10:47:54
 * @Last Modified by:   dingxizheng
-* @Last Modified time: 2016-02-23 18:24:30
+* @Last Modified time: 2016-02-23 20:43:57
 */
 
 'use strict';
@@ -68,14 +68,14 @@ var Resource = function(endpoint, options) {
 			this.data.id = params;
 			this.notFetched = true;
 		} else if(typeof params === 'object') {
-			this.data = Object.assign(this.data, params);
+			this.data = Object.assign({}, this.data, params);
 		}
 
 		var self = this;
 
 		this.set = function(object) {
-				self.data = Object.assign(self.data, object);
-				self.updateData = Object.assign(self.updateData, object);
+				self.data = Object.assign({}, self.data, object);
+				self.updateData = Object.assign({}, self.updateData, object);
 				return this;
 		};
 

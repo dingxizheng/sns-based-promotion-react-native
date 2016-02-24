@@ -2,7 +2,7 @@
 * @Author: dingxizheng
 * @Date:   2016-02-17 17:31:43
 * @Last Modified by:   dingxizheng
-* @Last Modified time: 2016-02-23 18:53:20
+* @Last Modified time: 2016-02-23 21:14:03
 */
 
 /* @flow */
@@ -12,6 +12,7 @@ var React              = require('react-native');
 var Actions            = require('react-native-router-flux').Actions;
 var Icon               = require('react-native-vector-icons/MaterialIcons');
 var CustomButtonsMixin = require('../CustomButtonsMixin');
+var TimerMixin         = require('react-timer-mixin');
 var theme              = require('../theme');
 
 var {
@@ -24,7 +25,7 @@ var {
 
 var AutoComplete = React.createClass({
 
-    mixins: [CustomButtonsMixin],
+    mixins: [CustomButtonsMixin, TimerMixin],
 
     getInitialState: function() {
         return {
@@ -91,19 +92,34 @@ var AutoComplete = React.createClass({
 
     onChangeText: function(e) {
         this.inputText = e;
-        if (e && e.length > 0) {
-            this.setState({
-                enabled: true,
-                inputText: e
-            });
-        } else {
-            this.setState({
-                enabled: false,
-                inputText: e
-            });
+        
+        if (!this.lastTimeTyped) {
+            this.lastTimeTyped = new Date().getTime();
         }
-        this.props.onChangeText && this.props.onChangeText(e);
-        this.contentOnChangeText && this.contentOnChangeText(e);
+        
+        if(this.lastTimeTyped && (new Date().getTime() - this.lastTimeTyped) > 400){
+            this.lastTimeTyped = new Date().getTime();
+         
+            if (e && e.length > 0) {
+                this.setState({
+                    enabled: true,
+                    inputText: e
+                });
+            } else {
+                this.setState({
+                    enabled: false,
+                    inputText: e
+                });
+            }
+            this.props.onChangeText && this.props.onChangeText(e);
+            this.contentOnChangeText && this.contentOnChangeText(e);
+            clearTimeout(this.toPerformQuery);
+        } else {
+            clearTimeout(this.toPerformQuery);
+            this.toPerformQuery = this.setTimeout(function() {
+                this.onChangeText(e);
+            }.bind(this), 800);
+        }
     },
 
     submitCallback: function(callback) {

@@ -2,7 +2,7 @@
 * @Author: dingxizheng
 * @Date:   2016-01-28 20:26:18
 * @Last Modified by:   dingxizheng
-* @Last Modified time: 2016-02-22 19:18:58
+* @Last Modified time: 2016-02-23 20:45:34
 */
 
 'use strict';
@@ -117,7 +117,7 @@ var PromotionView = React.createClass({
 
 					<ImageGroup 
 						style={{marginTop: 5}}
-						columns={1}
+						columns={2}
 						square={false}
 						imageHeight={150}
 						images={photos}/>

@@ -2,7 +2,7 @@
 * @Author: dingxizheng
 * @Date:   2016-02-01 14:14:30
 * @Last Modified by:   dingxizheng
-* @Last Modified time: 2016-02-22 16:47:17
+* @Last Modified time: 2016-02-23 20:35:00
 */
 
 'use strict';
@@ -115,7 +115,7 @@ var PromotionCard = React.createClass({
 						stylesheet={{a:styles.a}}
 						onLinkPress={url => console.log(url)}/>
 					
-					<ImageGroup columns={ photos.length == 1 ? 2 : 3 } square={true} imageHeight={120} images={photos}/>
+					<ImageGroup columns={ photos.length == 1 ? 2 : 4 } square={true} imageHeight={120} images={photos}/>
 
 					<TagsView style={{marginTop: 10, marginBottom: 10}}
 						onPress={(tag, i) => console.log(tag, i)}
@@ -156,7 +156,7 @@ var PromotionCard = React.createClass({
 							stylesheet={{a:styles.a}}
 							onLinkPress={url => console.log(url)}/>
 						
-						<ImageGroup columns={ photos.length == 1 ? 2 : 3 } square={true} imageHeight={120} images={photos}/>
+						<ImageGroup columns={ photos.length == 1 ? 2 : 4 } square={true} imageHeight={120} images={photos}/>
 
 						<TagsView style={{marginTop: 10, marginBottom: -2}}
 							onPress={(tag, i) => console.log(tag, i)}

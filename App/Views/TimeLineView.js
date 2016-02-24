@@ -2,7 +2,7 @@
 * @Author: dingxizheng
 * @Date:   2016-02-01 02:59:09
 * @Last Modified by:   dingxizheng
-* @Last Modified time: 2016-02-23 15:53:31
+* @Last Modified time: 2016-02-24 14:37:57
 */
 
 'use strict';
@@ -13,7 +13,7 @@ var Icon               = require('react-native-vector-icons/MaterialIcons');
 var theme              = require('../theme');
 var CustomButtonsMixin = require('../CustomButtonsMixin');
 var TimerMixin         = require('react-timer-mixin');
-var RCTRefreshControl  = require('react-refresh-control');
+var RNRefreshControl   = require('react-refresh-control');
 var PromotionCard      = require('./PromotionCardView');
 var UserCard           = require('./UserCardView');
 var BusyBox            = require('./BusyBox');
@@ -29,7 +29,7 @@ var {
 	LayoutAnimation
 } = React;
 
-var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
+var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1.data.result.id !== r1.data.result.id});
 
 var TimeLine = React.createClass({
 
@@ -41,7 +41,7 @@ var TimeLine = React.createClass({
 	leftButtonsDidMount: function() {
 		this.setRightButtons([
 			{
-				icon: 'edit',
+				icon: 'search',
 				onPress: () => Actions.autoComplete({ 
 					rightButton: 'Add',
 					content: require('../AutoComplete/Tags'),
@@ -66,9 +66,11 @@ var TimeLine = React.createClass({
 	},
 
 	componentDidMount: async function() {
-	    RCTRefreshControl.configure({
+	    RNRefreshControl.configure({
 	      node: this.refs["cards"]
 	    }, this._reload);
+
+	    console.log("this._fetchCurrentLocation", this._fetchCurrentLocation);
 
 	    await this._fetchCurrentLocation();
 	    
@@ -85,7 +87,7 @@ var TimeLine = React.createClass({
 		} catch(e) {
 			console.err(e);
 		}
-		RCTRefreshControl.endRefreshing(this.refs["cards"]);
+		RNRefreshControl.endRefreshing(this.refs["cards"]);
 	},
 
 	_fetchCurrentLocation: function() {

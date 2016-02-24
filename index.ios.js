@@ -2,7 +2,7 @@
 * @Author: dingxizheng
 * @Date:   2016-01-23 13:24:54
 * @Last Modified by:   dingxizheng
-* @Last Modified time: 2016-02-23 20:09:18
+* @Last Modified time: 2016-02-23 21:24:55
 */
 
 'use strict';
@@ -35,16 +35,15 @@ var RecorderView     = require('./App/Views/RecorderView.ios');
 var LoginView        = require('./App/Views/LoginView');
 var SignUpView       = require('./App/Views/SignUpView');
 var ToastView        = require('./App/Views/ToastView');
-var RightButtons     = require('./App/Views/RightActionButtons');
-var LeftButtons      = require('./App/Views/LeftActionButtons');
-var BarTitleView     = require('./App/Views/BarTitleView');
+var RightButtons     = require('./App/NavBarParts/RightActionButtons');
+var LeftButtons      = require('./App/NavBarParts/LeftActionButtons');
+var BarTitleView     = require('./App/NavBarParts/BarTitleView');
 var PromotionView    = require('./App/Views/PromotionView');
 var GlobalEvent      = require('./App/GlobalEvent');
 var SimpleInput      = require('./App/Views/SimpleInput');
 var CommentsView     = require('./App/Views/CommentsView');
 var TimeLineView     = require('./App/Views/TimeLineView');
 var StreetView       = require('./App/Views/StreetView');
-var LikesAndComments = require('./App/Views/CommentsAndLikes');
 var NewPromotion     = require('./App/Views/NewPromotion');
 var AutoComplete     = require('./App/AutoComplete/AutoCompleteView');
 
@@ -113,7 +112,6 @@ var App = React.createClass({
 	                <Route name="comments" component={CommentsView} title="Comments"/>
 	                <Route name="timeline" component={TimeLineView} initial={true} title="Home"/>
 	                <Route name="streetview" component={StreetView} initial={false} title="StreetView"/>
-	                <Route name="comments_and_likes" component={LikesAndComments} initial={false} title="Likes"/>
 	                
 	                <Route name="newPromotion" component={NewPromotion} title="New Promtion" schema="modal"/>
 	                <Route name="autoComplete" component={AutoComplete} title="AutoComplete" schema="none"/>

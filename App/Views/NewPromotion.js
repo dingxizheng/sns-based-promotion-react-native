@@ -2,7 +2,7 @@
 * @Author: dingxizheng
 * @Date:   2016-02-17 16:00:47
 * @Last Modified by:   dingxizheng
-* @Last Modified time: 2016-02-23 20:20:16
+* @Last Modified time: 2016-02-23 20:31:42
 */
 
 'use strict';
@@ -101,8 +101,8 @@ var NewPromotion = React.createClass({
     },
 
     _onKeyPress: function(e) {
-        if (e.nativeEvent.key === 'Enter')
-            this._postPromotion();
+        // if (e.nativeEvent.key === 'Enter')
+            // this._postPromotion();
     },
 
     _onChangeText: function(e) {
@@ -128,6 +128,7 @@ var NewPromotion = React.createClass({
     render: function() {
         return (
             <View style={styles.container}>
+            <LoadingView isVisible={this.state.loading}/>
             <TableView
                style={{flex: 1}}
                allowsToggle={true}
@@ -144,7 +145,6 @@ var NewPromotion = React.createClass({
                             style={styles.contentInput}
                             autoCorrect={false}
                             autoCapitalize="none"
-                            returnKeyType="send"
                             maxLength={400}
                             multiline={true} 
                             autoFocus={true} 
