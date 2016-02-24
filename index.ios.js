@@ -2,7 +2,7 @@
 * @Author: dingxizheng
 * @Date:   2016-01-23 13:24:54
 * @Last Modified by:   dingxizheng
-* @Last Modified time: 2016-02-23 18:27:57
+* @Last Modified time: 2016-02-23 20:09:18
 */
 
 'use strict';
@@ -45,7 +45,6 @@ var CommentsView     = require('./App/Views/CommentsView');
 var TimeLineView     = require('./App/Views/TimeLineView');
 var StreetView       = require('./App/Views/StreetView');
 var LikesAndComments = require('./App/Views/CommentsAndLikes');
-var EditTags         = require('./App/Views/EditTagsView');
 var NewPromotion     = require('./App/Views/NewPromotion');
 var AutoComplete     = require('./App/AutoComplete/AutoCompleteView');
 

@@ -2,7 +2,7 @@
 * @Author: dingxizheng
 * @Date:   2016-02-17 16:00:47
 * @Last Modified by:   dingxizheng
-* @Last Modified time: 2016-02-23 19:56:26
+* @Last Modified time: 2016-02-23 20:20:16
 */
 
 'use strict';
@@ -91,6 +91,9 @@ var NewPromotion = React.createClass({
 
     _tagsChange: function(tags) {
         this.tags = tags;
+        this.setState({
+            tags: tags
+        });
     },
 
     _imagesChange: function(images) {
@@ -115,59 +118,14 @@ var NewPromotion = React.createClass({
                     rightButton: 'Add',
                     content: require('../AutoComplete/Tags'),
                     contentProps: { 
-                        initialTags: this.state.tags, 
+                        initialTags: this.state.tags,
+                        onTagsChange: this._tagsChange
                     }
                 });
 
     },
-    
-//     render: function() {
-//         return (
-//             <ScrollView style={styles.container}>
-//                 <LoadingView isVisible={this.state.loading} />
-//                 <View style={styles.content}>
-//                     <View style={styles.promotionBody}>
-//                         <TextInput
-//                             onKeyPress={this._onKeyPress}
-//                             onChangeText={this._onChangeText} 
-//                             style={styles.contentInput}
-//                             autoCorrect={false}
-//                             autoCapitalize="none"
-//                             returnKeyType="send"
-//                             maxLength={400}
-//                             multiline={true} 
-//                             autoFocus={true} 
-//                             placeholder={ "promote what you have..." }/>
-                        
-//                         <TextInput onChangeText={ this._onChangePirce } 
-//                             style={styles.priceInput} 
-//                             multiline={false}
-//                             keyboardType={"number-pad"}
-//                             placeholder={ "price..." }/>
-                        
-//                         <EditImages style={{backgroundColor: 'white', margin: 10}} columns={3} square={false} imageHeight={100} imagesChange={this._imagesChange}/>
-//                     </View>
-//                 </View>
-//                 <TableView
-//                    style={{flex: 1, height: 100}}
-//                    allowsToggle={true}
-//                    allowsMultipleSelection={false}
-//                    tableViewStyle={TableView.Consts.Style.Grouped}
-//                    tableViewCellStyle={TableView.Consts.CellStyle.Subtitle}
-//                    onPress={this._addTag}>
-
-//                     <Section label="Tags" arrow={true}>
-//                         <Cell><Text>Nihao</Text></Cell>
-//                     </Section>
-
-//                 </TableView>
-//             </ScrollView>
-//         );
-//     }
-// });
 
     render: function() {
-        console.log(TableView.Consts);
         return (
             <View style={styles.container}>
             <TableView
@@ -179,7 +137,7 @@ var NewPromotion = React.createClass({
                separatorStyle={TableView.Consts.SeparatorStyle.None}>
 
                 <Section label="">
-                    <Cell>
+                    <Cell disable={true}>
                         <TextInput
                             onKeyPress={this._onKeyPress}
                             onChangeText={this._onChangeText} 
@@ -193,21 +151,21 @@ var NewPromotion = React.createClass({
                             placeholder={ "promote what you have..." }/>
                     </Cell>
 
-                    <Cell>
+                    <Cell disable={true}>
                         <Text style={styles.label}>Photos</Text>
                     </Cell>
                     <Cell arrow={false} disable={true}>
                         <View style={[styles.cell]}>
                             <EditImages 
                                 style={{backgroundColor: 'white', margin: 10, marginTop: 6}} 
-                                columns={3} 
-                                square={false} 
+                                columns={4}
+                                square={true} 
                                 imageHeight={100} 
                                 imagesChange={this._imagesChange}/>
                         </View>
                     </Cell>
 
-                    <Cell>
+                    <Cell disable={true}>
                         <Text style={styles.label}>Price</Text>
                     </Cell>
                     <Cell arrow={false}>
@@ -215,12 +173,11 @@ var NewPromotion = React.createClass({
                             <TextInput onChangeText={ this._onChangePirce } 
                                 style={styles.priceInput} 
                                 multiline={false}
-                                keyboardType={"number-pad"}
                                 placeholder={ "price..." }/>
                         </View>
                     </Cell>
 
-                    <Cell>
+                    <Cell disable={true}>
                         <Text style={styles.label}>Tags</Text>
                     </Cell>
                     <Cell arrow={true} onPress={this._editTags}>

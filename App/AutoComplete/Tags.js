@@ -2,14 +2,14 @@
 * @Author: dingxizheng
 * @Date:   2016-02-23 15:00:05
 * @Last Modified by:   dingxizheng
-* @Last Modified time: 2016-02-23 19:04:10
+* @Last Modified time: 2016-02-23 20:14:58
 */
 
 /* @flow */
 'use strict';
 
 var React     = require('react-native');
-var Tags      = require('../Views/EditTagsView');
+var Tags      = require('./EditTagsView');
 var TableView = require('react-native-tableview');
 var {Tag}     = require('../apis');
 var Section   = TableView.Section;
@@ -78,7 +78,7 @@ var AddTags = React.createClass({
 		return (
 		   <View style={{flex: 1,}}>
 		   	   
-		   	   <Tags tags={this.state.initialTags} style={{padding: 10}}/>
+		   	   <Tags tags={this.state.initialTags} style={{padding: 10}} tagsChange={this.props.onTagsChange}/>
 		       
 		       <TableView style={styles.container}
 		                   allowsToggle={true}
