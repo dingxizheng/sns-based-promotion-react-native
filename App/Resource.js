@@ -2,7 +2,7 @@
 * @Author: dingxizheng
 * @Date:   2016-02-04 10:47:54
 * @Last Modified by:   dingxizheng
-* @Last Modified time: 2016-02-21 21:47:39
+* @Last Modified time: 2016-02-23 18:24:30
 */
 
 'use strict';
@@ -40,6 +40,8 @@ var defaultHttpOptions = {
 	    'Content-Type': 'application/json',
 	}
 };
+
+Object.freeze(defaultHttpOptions);
 
 // global actions;
 var globalBeforeActions = [];
@@ -124,7 +126,7 @@ var Resource = function(endpoint, options) {
 			// convert query params into a query string
 			request = convertQueryParams(request);
 
-			var result = await fetch(request.url, Object.assign(defaultHttpOptions, request.options));
+			var result = await fetch(request.url, Object.assign({}, defaultHttpOptions, request.options));
 
 			result = await globalAfterActions.concat(resourceType.afterActions).reduce(async function(res, current){
 				return await current.action(request, await res);
@@ -142,7 +144,7 @@ var Resource = function(endpoint, options) {
 
 	TypedResource.fetchAll = async function(query, options) {
 		try {
-			var list = await Resource.fetch(resourceType.url, Object.assign({query: query}, options));
+			var list = await Resource.fetch(resourceType.url, Object.assign({query: query}, options, {method: 'GET'}));
 			return (await list.json()).map(function(rawData){
 				return new TypedResource(rawData);
 			});
@@ -165,7 +167,9 @@ Resource.fetch = async function(url, options) {
 		// convert query params into a query string
 		request = convertQueryParams(request);
 
-		var response = await fetch(request.url, Object.assign(defaultHttpOptions, request.options));
+		// console.log("final Options", Object.assign({}, defaultHttpOptions, request.options));
+
+		var response = await fetch(request.url, Object.assign({}, defaultHttpOptions, request.options));
 		
 		response = await globalAfterActions.reduce(async function(res, current){
 			return await current.action(request, await res);

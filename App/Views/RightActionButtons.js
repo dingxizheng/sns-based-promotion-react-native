@@ -2,14 +2,14 @@
 * @Author: dingxizheng
 * @Date:   2016-01-27 19:50:46
 * @Last Modified by:   dingxizheng
-* @Last Modified time: 2016-01-28 17:45:50
+* @Last Modified time: 2016-02-23 14:06:22
 */
 
 'use strict';
 
 var React       = require('react-native');
 var GlobalEvent = require('../GlobalEvent');
-var Icon        = require('react-native-vector-icons/FontAwesome');
+var Icon        = require('react-native-vector-icons/MaterialIcons');
 
 var {
   View,
@@ -36,8 +36,9 @@ var ActionButtons = React.createClass({
 		var self = this;
 		GlobalEvent.trigger('right_buttons_mounted', 
 			this.setButtons, 
-			function(callback) { 
+			function(callback, layoutCallback) { 
 				self.onMounted = callback;
+				self.onLayout = layoutCallback;
 			}.bind(this)
 		);
 	},
@@ -54,7 +55,7 @@ var ActionButtons = React.createClass({
 
 	render: function() {
 		return (
-			<View style={styles.barRightButton}>
+			<View style={styles.barRightButton} onLayout={this.onLayout}>
 			{this.state.buttons.map(function(b, i) {
 
 				return (

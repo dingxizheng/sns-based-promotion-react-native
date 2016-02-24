@@ -29,6 +29,7 @@
     "react-native-spinkit": "0.0.7",
     "react-native-storage": "0.0.12",
     "react-native-swiper": "^1.4.3",
+    "react-native-tableview": "^1.4.7",
     "react-native-vector-icons": "^1.1.0",
     "react-native-video": "^0.6.1",
     "react-refresh-control": "^2.0.5",

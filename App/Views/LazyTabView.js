@@ -2,7 +2,7 @@
 * @Author: dingxizheng
 * @Date:   2016-02-03 20:18:48
 * @Last Modified by:   dingxizheng
-* @Last Modified time: 2016-02-22 14:39:44
+* @Last Modified time: 2016-02-22 22:26:02
 */
 
 'use strict';
@@ -58,7 +58,7 @@ var LazyTabView = React.createClass({
 		if (this.state['tab_' + i]) {
 			return child;
 		} 
-		return <BusyBox style={{ backgroundColor: 'white' }} tabLabel={child.props.tabLabel}/>;
+		return <BusyBox key={i} style={{ backgroundColor: 'white' }} tabLabel={child.props.tabLabel}/>;
 	},
 
 	render: function(){

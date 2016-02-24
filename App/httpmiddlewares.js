@@ -2,7 +2,7 @@
 * @Author: dingxizheng
 * @Date:   2016-02-19 18:13:28
 * @Last Modified by:   dingxizheng
-* @Last Modified time: 2016-02-22 15:38:35
+* @Last Modified time: 2016-02-23 18:32:25
 */
 
 'use strict';
@@ -10,6 +10,7 @@ var {Resource, ResourceConfig} = require('./Resource');
 var Actions = require('react-native-router-flux').Actions;
 
 Resource.addBeforeAction(async function(request) {
+	console.log("request options", request.url, request.options);
 	try {
 		var session = await storage.load({ key: 'loginState' });
 		request.options.query = request.options.query || {};
@@ -24,7 +25,7 @@ Resource.addBeforeAction(function(request) {
 	if(request.options && request.options.body && typeof request.options.body !== 'string') {
 		request.options.body = JSON.stringify(request.options.body)
 	}
-	// console.log(request.options.body);
+	console.log("request body", request.options.body);
 	return request;
 });
 
@@ -42,7 +43,7 @@ Resource.addAfterAction(async function(request, response) {
 			var error = await response.json();
 			var msg = ""
 			Object.keys(error.fields).forEach(function(key) {
-				msg += key + ' ' + error.fields[key] + '  ';
+				msg += key + ' ' + error.fields[key][0];
 			});
 
 			Actions.toast({
@@ -59,8 +60,6 @@ Resource.addAfterAction(async function(request, response) {
 			});
 			setTimeout(()=>{ Actions.login() }, 1000);
 		}
-
-		console.log(response);
 
 		if (response.status === 500) {
 			Actions.toast({

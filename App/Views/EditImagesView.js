@@ -2,7 +2,7 @@
 * @Author: dingxizheng
 * @Date:   2016-02-18 17:30:00
 * @Last Modified by:   dingxizheng
-* @Last Modified time: 2016-02-20 18:01:42
+* @Last Modified time: 2016-02-23 16:17:34
 */
 
 'use strict';
@@ -148,7 +148,7 @@ var Images = React.createClass({
 		return images.map(function(img, i) {
 			if (img !== 'add_photo') {
 				return <Lightbox key={i} navigator={this.props.navigator} swipeToDismiss={true} renderContent={() => this.renderCarousel(img)}>
-							<View style={this._getImageItemWrapperStyle(i)}>
+							<View key={i} style={this._getImageItemWrapperStyle(i)}>
 								<View style={this._getImageItemStyle()}>
 									 <Image
 										source={img} 
@@ -159,9 +159,9 @@ var Images = React.createClass({
 						   </View>
 						</Lightbox>
 			} else {
-				return <TouchableOpacity onPress={this.selectPhoto} style={[this._getImageItemWrapperStyle(i), { alignItems: 'center'}]}>
+				return <TouchableOpacity key={i} onPress={this.selectPhoto} style={[this._getImageItemWrapperStyle(i), { alignItems: 'center'}]}>
 							<View style={[this._getImageItemStyle(), styles.iconWrapper]}>
-								<Icon name="camera-alt" style={styles.addPhotoButton}/>
+								<Icon name="add-a-photo" style={styles.addPhotoButton}/>
 							</View>
 					   </TouchableOpacity>
 			}

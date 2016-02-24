@@ -2,7 +2,7 @@
 * @Author: dingxizheng
 * @Date:   2016-01-28 16:03:30
 * @Last Modified by:   dingxizheng
-* @Last Modified time: 2016-02-09 14:22:55
+* @Last Modified time: 2016-02-23 14:08:39
 */
 
 'use strict';
@@ -27,14 +27,14 @@ module.exports = {
 	onRightButtonsMounted: function(onReciveButtons, callBack) {
 		this.view_key =  new Date().getUTCMilliseconds();
 		this.setRightButtons = onReciveButtons;
-		callBack(this.rightButtonsDidMount || function(){});
+		callBack(this.rightButtonsDidMount || function(){}, this.onRightButtonLayout || function() {});
 		GlobalEvent.off("right_buttons_mounted", this.onRightButtonsMounted);
 	},
 
 	onLeftButtonsMounted: function(onReciveButtons, callBack) {
 		this.view_key =  new Date().getUTCMilliseconds();
 		this.setLeftButtons = onReciveButtons;
-		callBack(this.leftButtonsDidMount || function(){});
+		callBack(this.leftButtonsDidMount || function(){}, this.onLeftButtonLayout || function() {});
 		GlobalEvent.off("left_buttons_mounted", this.onLeftButtonsMounted);
 	}
 }

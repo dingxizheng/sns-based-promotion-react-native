@@ -2,13 +2,13 @@
 * @Author: dingxizheng
 * @Date:   2016-01-27 19:50:46
 * @Last Modified by:   dingxizheng
-* @Last Modified time: 2016-02-09 14:45:42
+* @Last Modified time: 2016-02-23 14:09:46
 */
 
 'use strict';
 
 var React       = require('react-native');
-var Icon        = require('react-native-vector-icons/FontAwesome');
+var Icon        = require('react-native-vector-icons/MaterialIcons');
 var GlobalEvent = require('../GlobalEvent');
 var { BackIcon } = require('@exponent/react-native-navigator/ExNavigatorIcons');
 import ExNavigatorStyles from '@exponent/react-native-navigator/ExNavigatorStyles';
@@ -33,9 +33,12 @@ var ActionButtons = React.createClass({
 	},
 
 	componentWillMount: function() {
-		GlobalEvent.trigger('left_buttons_mounted', this.setButtons, function(callback) {
-			this.onMounted = callback;
-		}.bind(this));
+		GlobalEvent.trigger('left_buttons_mounted', this.setButtons, 
+			function(callback, layoutCallback) { 
+				this.onMounted = callback;
+				this.onLayout = layoutCallback;
+			}.bind(this)
+		);
 	},
 
 	componentDidMount: function() {
@@ -74,7 +77,7 @@ var ActionButtons = React.createClass({
 	        <TouchableOpacity
 	            pressRetentionOffset={ExNavigatorStyles.barButtonPressRetentionOffset}
 	            onPress={() => Actions.pop()}
-	            style={[ExNavigatorStyles.barBackButton]}>
+	            style={[ExNavigatorStyles.barBackButton]} onLayout={this.onLayout}>
 	            <BackIcon
 	                style={[
 			            ExNavigatorStyles.barButtonIcon,
@@ -90,7 +93,7 @@ var ActionButtons = React.createClass({
 
 		if (this.state.buttons.length > 0)
 			return (
-				<View style={styles.barLeftButton}>
+				<View style={styles.barLeftButton} onLayout={this.onLayout}>
 				{this.state.buttons.map(function(b, i) {
 
 					return (

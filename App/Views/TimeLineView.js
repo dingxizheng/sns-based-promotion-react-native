@@ -2,7 +2,7 @@
 * @Author: dingxizheng
 * @Date:   2016-02-01 02:59:09
 * @Last Modified by:   dingxizheng
-* @Last Modified time: 2016-02-22 19:23:13
+* @Last Modified time: 2016-02-23 15:53:31
 */
 
 'use strict';
@@ -42,13 +42,13 @@ var TimeLine = React.createClass({
 		this.setRightButtons([
 			{
 				icon: 'edit',
-				onPress: () => Actions.simpleInput({
-									title: 'New Promotion',
-									onDone: function() {}
-								})
+				onPress: () => Actions.autoComplete({ 
+					rightButton: 'Add',
+					content: require('../AutoComplete/Tags'),
+					contentProps: { initialTags: ["oneeee"] }})
 			},
 			{
-				icon: 'camera',
+				icon: 'add',
 				onPress: () => Actions.newPromotion({ title: 'New Promotion'})
 			},
 		]);

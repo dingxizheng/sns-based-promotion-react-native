@@ -2,7 +2,7 @@
 * @Author: dingxizheng
 * @Date:   2016-01-25 18:17:47
 * @Last Modified by:   dingxizheng
-* @Last Modified time: 2016-02-22 19:41:15
+* @Last Modified time: 2016-02-23 18:34:47
 */
 
 'use strict';
@@ -56,7 +56,7 @@ var ToastView = React.createClass({
 
 	componentDidMount: function() {
 		LayoutAnimation.configureNext(LayoutAnimation.Presets.spring);
-		this.setTimeout(this._onClose, this.props.time || 3000);
+		this.setTimeout(this._onClose, this.props.time || 2000);
 	},
 
 	componentWillUnmount: function() {
@@ -147,12 +147,13 @@ var styles = StyleSheet.create({
     top: 64,
     left: 0,
     right: 0,
-    shadowOffset:{
-        width: 0,
-        height: 0.3,
-    },
-    shadowColor: 'black',
-    shadowOpacity: 0.2,
+
+    // shadowOffset:{
+    //     width: 0,
+    //     height: 0.3,
+    // },
+    // shadowColor: 'black',
+    // shadowOpacity: 0.2,
   },
   content: {
     flex: 1,
@@ -173,18 +174,18 @@ var styles = StyleSheet.create({
   	justifyContent: 'center',
   	alignItems: 'flex-start',
   	padding: 10,
-  	paddingVertical: 15
+  	paddingVertical: 8
   },
   infoToastText: {
   	alignSelf: 'stretch',
     color: 'white',
-    fontSize: 17,
+    fontSize: 15,
     textAlign: 'left',
   },
   errorToastText: {
     alignSelf: 'stretch',
     color: 'white',
-    fontSize: 17,
+    fontSize: 15,
     textAlign: 'left',
 
   }

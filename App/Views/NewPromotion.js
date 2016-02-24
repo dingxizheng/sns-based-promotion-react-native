@@ -2,19 +2,24 @@
 * @Author: dingxizheng
 * @Date:   2016-02-17 16:00:47
 * @Last Modified by:   dingxizheng
-* @Last Modified time: 2016-02-21 21:00:42
+* @Last Modified time: 2016-02-23 19:56:26
 */
 
 'use strict';
 
-var React                = require('react-native');
-var Icon                 = require('react-native-vector-icons/MaterialIcons');
-var theme                = require('../theme');
-var KeyboardSpacer       = require('react-native-keyboard-spacer');
-var CustomButtonsMixin   = require('../CustomButtonsMixin');
-var EditTags             = require('./EditTagsView');
-var EditImages           = require('./EditImagesView');
-var LoadingView          = require('./LoadingView');
+var React              = require('react-native');
+var Icon               = require('react-native-vector-icons/MaterialIcons');
+var theme              = require('../theme');
+// var KeyboardSpacer     = require('react-native-keyboard-spacer');
+var CustomButtonsMixin = require('../CustomButtonsMixin');
+var TagsView           = require('./TagsView');
+var EditImages         = require('./EditImagesView');
+var LoadingView        = require('./LoadingView');
+var Actions            = require('react-native-router-flux').Actions;
+var TableView          = require('react-native-tableview');
+var Section            = TableView.Section;
+var Item               = TableView.Item;
+var Cell               = TableView.Cell;
 
 var {
     View, 
@@ -32,7 +37,8 @@ var NewPromotion = React.createClass({
 
     getInitialState: function() {
         return {
-            loading: false 
+            loading: false,
+            tags: ["promotion"],
         };
     },
 
@@ -41,6 +47,15 @@ var NewPromotion = React.createClass({
             {
                 text: 'Post',
                 onPress: this._postPromotion
+            }
+        ]);
+    },
+
+    leftButtonsDidMount: function() {
+        this.setLeftButtons([
+            {
+                icon: 'close',
+                onPress: Actions.pop
             }
         ]);
     },
@@ -94,13 +109,77 @@ var NewPromotion = React.createClass({
     _onChangePirce: function(e) {
         this.price = e;
     },
+
+    _editTags: function() {
+        Actions.autoComplete({ 
+                    rightButton: 'Add',
+                    content: require('../AutoComplete/Tags'),
+                    contentProps: { 
+                        initialTags: this.state.tags, 
+                    }
+                });
+
+    },
     
+//     render: function() {
+//         return (
+//             <ScrollView style={styles.container}>
+//                 <LoadingView isVisible={this.state.loading} />
+//                 <View style={styles.content}>
+//                     <View style={styles.promotionBody}>
+//                         <TextInput
+//                             onKeyPress={this._onKeyPress}
+//                             onChangeText={this._onChangeText} 
+//                             style={styles.contentInput}
+//                             autoCorrect={false}
+//                             autoCapitalize="none"
+//                             returnKeyType="send"
+//                             maxLength={400}
+//                             multiline={true} 
+//                             autoFocus={true} 
+//                             placeholder={ "promote what you have..." }/>
+                        
+//                         <TextInput onChangeText={ this._onChangePirce } 
+//                             style={styles.priceInput} 
+//                             multiline={false}
+//                             keyboardType={"number-pad"}
+//                             placeholder={ "price..." }/>
+                        
+//                         <EditImages style={{backgroundColor: 'white', margin: 10}} columns={3} square={false} imageHeight={100} imagesChange={this._imagesChange}/>
+//                     </View>
+//                 </View>
+//                 <TableView
+//                    style={{flex: 1, height: 100}}
+//                    allowsToggle={true}
+//                    allowsMultipleSelection={false}
+//                    tableViewStyle={TableView.Consts.Style.Grouped}
+//                    tableViewCellStyle={TableView.Consts.CellStyle.Subtitle}
+//                    onPress={this._addTag}>
+
+//                     <Section label="Tags" arrow={true}>
+//                         <Cell><Text>Nihao</Text></Cell>
+//                     </Section>
+
+//                 </TableView>
+//             </ScrollView>
+//         );
+//     }
+// });
+
     render: function() {
+        console.log(TableView.Consts);
         return (
-            <ScrollView style={styles.container}>
-                <LoadingView isVisible={this.state.loading} />
-                <View style={styles.content}>
-                    <View style={styles.promotionBody}>
+            <View style={styles.container}>
+            <TableView
+               style={{flex: 1}}
+               allowsToggle={true}
+               allowsMultipleSelection={false}
+               tableViewStyle={TableView.Consts.Style.Grouped}
+               tableViewCellStyle={TableView.Consts.CellStyle.Subtitle}
+               separatorStyle={TableView.Consts.SeparatorStyle.None}>
+
+                <Section label="">
+                    <Cell>
                         <TextInput
                             onKeyPress={this._onKeyPress}
                             onChangeText={this._onChangeText} 
@@ -111,19 +190,58 @@ var NewPromotion = React.createClass({
                             maxLength={400}
                             multiline={true} 
                             autoFocus={true} 
-                            placeholder={ this.props.placeholder || "promote what you have..." }/>
-                        
-                        <TextInput onChangeText={ this._onChangePirce } 
-                            style={styles.priceInput} 
-                            multiline={false}
-                            keyboardType={"number-pad"}
-                            placeholder={ this.props.placeholder || "price.." }/>
-                        
-                        <EditImages style={{backgroundColor: 'white', margin: 10}} columns={3} square={false} imageHeight={100} imagesChange={this._imagesChange}/>
-                    </View>
-                    <EditTags style={{marginBottom: 5, backgroundColor: 'white', padding: 10, paddingBottom: 6}} tags={["promotion"]} tagsChange={this._tagsChange}/>
-                </View>
-            </ScrollView>
+                            placeholder={ "promote what you have..." }/>
+                    </Cell>
+
+                    <Cell>
+                        <Text style={styles.label}>Photos</Text>
+                    </Cell>
+                    <Cell arrow={false} disable={true}>
+                        <View style={[styles.cell]}>
+                            <EditImages 
+                                style={{backgroundColor: 'white', margin: 10, marginTop: 6}} 
+                                columns={3} 
+                                square={false} 
+                                imageHeight={100} 
+                                imagesChange={this._imagesChange}/>
+                        </View>
+                    </Cell>
+
+                    <Cell>
+                        <Text style={styles.label}>Price</Text>
+                    </Cell>
+                    <Cell arrow={false}>
+                        <View style={[styles.cell]}>
+                            <TextInput onChangeText={ this._onChangePirce } 
+                                style={styles.priceInput} 
+                                multiline={false}
+                                keyboardType={"number-pad"}
+                                placeholder={ "price..." }/>
+                        </View>
+                    </Cell>
+
+                    <Cell>
+                        <Text style={styles.label}>Tags</Text>
+                    </Cell>
+                    <Cell arrow={true} onPress={this._editTags}>
+                        <View style={[styles.cell]}>
+                            {function () {
+                                if (this.state.tags.length > 0)
+                                    return <TagsView
+                                            style={{ margin:10, marginBottom: 8 }}
+                                            onPress={(tag, i) => console.log(tag, i)}
+                                            onMore={() => console.log("more")}
+                                            tags={this.state.tags}/>
+                                else
+                                    return <Text style={styles.cellText}>Add tags...</Text>
+                            }.bind(this).call()}
+                        </View>
+                    </Cell>
+
+                </Section>
+
+            </TableView>
+            </View>
         );
     }
 });
@@ -131,9 +249,30 @@ var NewPromotion = React.createClass({
 
 var styles = StyleSheet.create({
     container: {
-        flex: 1,
-        marginTop: 64,
-        backgroundColor: '#eee'
+        position: 'absolute',
+        backgroundColor: '#EdEdEd',
+        left: 0,
+        right: 0,
+        bottom: 0,
+        top: 64,
+        paddingTop: 8,
+    },
+    label: {
+        height: 40,
+        fontSize: 15,
+        padding: 10,
+        paddingTop: 15,
+        paddingBottom: 6,
+        color: theme.colors.GREY_FONT,
+        // backgroundColor: '#eee'
+    },
+    cell: {
+        backgroundColor: 'white',
+    },
+    cellText: {
+        fontSize: 15,
+        padding: 10,
+        color: theme.colors.GREY_FONT,
     },
     content: {
         flex: 1,
@@ -149,18 +288,14 @@ var styles = StyleSheet.create({
         height: 100,
         fontSize: 17,
         padding: 10,
-        marginVertical: 5,
         color: theme.colors.DARK_GREY_FONT,
     },
     priceInput: {
-        margin: 10,
-        marginBottom: 0,
         flex: 1,
         height: 40,
         fontSize: 17,
         padding: 10,
         color: theme.colors.DARK_GREY_FONT,
-        backgroundColor: '#eee'
     },
     footer: {
         height: 45,
@@ -187,6 +322,5 @@ var styles = StyleSheet.create({
         paddingRight: 10,
     },
 });
-
 
 module.exports = NewPromotion;

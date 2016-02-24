@@ -2,7 +2,7 @@
 * @Author: dingxizheng
 * @Date:   2016-01-23 13:24:54
 * @Last Modified by:   dingxizheng
-* @Last Modified time: 2016-02-22 22:19:33
+* @Last Modified time: 2016-02-23 18:27:57
 */
 
 'use strict';
@@ -47,7 +47,7 @@ var StreetView       = require('./App/Views/StreetView');
 var LikesAndComments = require('./App/Views/CommentsAndLikes');
 var EditTags         = require('./App/Views/EditTagsView');
 var NewPromotion     = require('./App/Views/NewPromotion');
-var AutoComplete     = require('./App/Views/AutoCompleteView');
+var AutoComplete     = require('./App/AutoComplete/AutoCompleteView');
 
 // set status bar style
 StatusBarIOS.setStyle('light-content');
@@ -83,7 +83,7 @@ var App = React.createClass({
     },
 
 	render: function () {
-		
+			
 		return <Router  hideNavBar={false}
 						navigationBarStyle={{
 							backgroundColor: '#1E90FF'
@@ -101,8 +101,9 @@ var App = React.createClass({
 						renderLeftButton={ this.renderLeftButton }
 						renderRightButton={ this.renderRightButton }>
 					
-					<Schema hideNavBar={false} name="modal" sceneConfig={Navigator.SceneConfigs.FloatFromRight}/>
+					<Schema hideNavBar={false} name="modal" sceneConfig={Navigator.SceneConfigs.FloatFromBottom}/>
 	                <Schema hideNavBar={false} name="default" sceneConfig={Navigator.SceneConfigs.FloatFromRight}/>
+	                <Schema hideNavBar={false} name="none" sceneConfig={Navigator.SceneConfigs.FloatFromBottom}/>
 	                
 	                <Route name="recorder" component={RecorderView} title="Record"/>
 	                
@@ -114,7 +115,9 @@ var App = React.createClass({
 	                <Route name="timeline" component={TimeLineView} initial={true} title="Home"/>
 	                <Route name="streetview" component={StreetView} initial={false} title="StreetView"/>
 	                <Route name="comments_and_likes" component={LikesAndComments} initial={false} title="Likes"/>
-	                <Route name="newPromotion" component={NewPromotion} title="New Promtion"/>
+	                
+	                <Route name="newPromotion" component={NewPromotion} title="New Promtion" schema="modal"/>
+	                <Route name="autoComplete" component={AutoComplete} title="AutoComplete" schema="none"/>
 
 	                <Route name="simpleInput" component={SimpleInput} type="modal" title="SimpleInput"/>                
 	                <Route name="toast" component={ToastView} type="modal" title="ToastView"/>

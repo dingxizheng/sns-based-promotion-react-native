@@ -2,7 +2,7 @@
 * @Author: dingxizheng
 * @Date:   2016-02-09 13:43:52
 * @Last Modified by:   dingxizheng
-* @Last Modified time: 2016-02-21 23:42:40
+* @Last Modified time: 2016-02-23 14:36:18
 */
 
 'use strict';
@@ -24,6 +24,7 @@ var BarTitleView = React.createClass({
         let title = currentReoute.getTitle(navigator, index, state);
 		return {
 			title: title,
+			titleView: null,
 			view_key: new Date().getUTCMilliseconds()
 		};
 	},
@@ -49,10 +50,10 @@ var BarTitleView = React.createClass({
 				title: titleView
 			});
 		} else {
-			this.titleView = titleView;
 			this.setState({
 				view_key: new Date().getUTCMilliseconds(),
-				title: null
+				title: null,
+				titleView: titleView
 			});
 		}
 	},
@@ -71,13 +72,23 @@ var BarTitleView = React.createClass({
 
 	render: function() {
 		if (this.state.title === null)
-			return <View key={this.state.view_key}>{this.titleView}</View>
-		else 
-			return this._renderOriginalTitle();
+			return <View style={styles.customTitle}>{this.state.titleView}</View>
+		
+		return this._renderOriginalTitle();
 	}
 });
 
 var styles = StyleSheet.create({
+	customTitle:{
+		position: 'absolute',
+		left: 0,
+		right: 0,
+		top: 0,
+		bottom: 0,
+		// flexDirection:'row', 
+		justifyContent: 'center', 
+		alignItems: 'center'
+	},
 	barTitleTextWrapper: {
 		flex: 1,
 		justifyContent: 'center',
