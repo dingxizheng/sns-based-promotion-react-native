@@ -2,7 +2,7 @@
 * @Author: dingxizheng
 * @Date:   2016-01-28 20:26:18
 * @Last Modified by:   dingxizheng
-* @Last Modified time: 2016-02-22 16:10:13
+* @Last Modified time: 2016-02-24 20:48:28
 */
 
 'use strict';
@@ -32,10 +32,25 @@ var PromotionView = React.createClass({
 	
 	mixins: [CustomButtonsMixin],
 
+	getInitialState: function() {
+	  return {};
+	},
+
+	componentDidMount: function() {
+		this.props.setNavBarStyle({
+			backgroundColor: '#000000',
+			// height: 0
+		});
+	},
+
 	rightButtonsDidMount: function() {
 	},
 
 	leftButtonsDidMount: function() {
+	},
+
+	componentDidFocus: function() {
+		console.log("I am here");
 	},
 
 	makeComment: function(text) {
@@ -92,6 +107,7 @@ var styles = StyleSheet.create({
 		flex: 1,
 		marginTop: 64,
 		flexDirection: 'column',
+		backgroundColor: 'white'
 	},
 	content: {
 		flex: 1,

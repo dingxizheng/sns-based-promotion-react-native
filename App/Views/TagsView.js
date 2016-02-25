@@ -2,7 +2,7 @@
 * @Author: dingxizheng
 * @Date:   2016-02-08 17:22:39
 * @Last Modified by:   dingxizheng
-* @Last Modified time: 2016-02-22 19:36:19
+* @Last Modified time: 2016-02-25 00:55:03
 */
 
 'use strict';
@@ -64,21 +64,21 @@ var styles = StyleSheet.create({
 		paddingBottom: -2
 	},
 	tagItem: {
-		// borderWidth: .5,
-		// borderColor: theme.colors.MAIN,
-		borderRadius: 2,
-		backgroundColor: '#eeeeee',
+		height: 18,
+		borderWidth: 1,
+		borderColor:  '#aaa',
+		borderRadius: 9,
+		// backgroundColor: '#eeeeee',
 		justifyContent: 'center',
 		alignItems: 'center',
-		marginRight: 2,
-		marginBottom: 2
+		marginRight: 3,
+		marginBottom: 2,
+		paddingLeft: 10,
+		paddingRight: 10
 	},
 	tagItemText: {
 		color: theme.colors.MAIN,
 	    fontSize: 11,
-	    padding: 2,
-	    paddingLeft: 4,
-	    paddingRight: 4
 	}
 });
 

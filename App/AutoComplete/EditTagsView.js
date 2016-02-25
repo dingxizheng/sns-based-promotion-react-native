@@ -2,7 +2,7 @@
 * @Author: dingxizheng
 * @Date:   2016-02-16 16:19:13
 * @Last Modified by:   dingxizheng
-* @Last Modified time: 2016-02-23 15:51:49
+* @Last Modified time: 2016-02-25 00:58:45
 */
 
 /* @flow */
@@ -90,21 +90,22 @@ var tagsStyles = StyleSheet.create({
 		flexWrap: 'wrap',
 	},
 	tagItem: {
-		// borderWidth: .5,
-		// borderColor: theme.colors.MAIN,
-		borderRadius: 2,
-		backgroundColor: '#eeeeee',
+		borderWidth: 1,
+		height: 26,
+		borderRadius: 13,
+		borderColor:  '#aaa',
+
 		justifyContent: 'center',
 		alignItems: 'center',
 		marginRight: 4,
-		marginBottom: 4
+		marginBottom: 4,
+
+		paddingLeft: 12,
+		paddingRight: 12
 	},
 	tagItemText: {
 		color: theme.colors.MAIN,
 	    fontSize: 15,
-	    padding: 2,
-	    paddingLeft: 4,
-	    paddingRight: 4
 	},
 	closeTagIcon: {
 		// alignSelf: 'stretch',

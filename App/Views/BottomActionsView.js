@@ -2,7 +2,7 @@
 * @Author: dingxizheng
 * @Date:   2016-02-02 13:19:21
 * @Last Modified by:   dingxizheng
-* @Last Modified time: 2016-02-09 18:58:28
+* @Last Modified time: 2016-02-25 01:49:33
 */
 
 'use strict';
@@ -47,6 +47,11 @@ var BottomActions = React.createClass({
 			   </TouchableOpacity>;
 	},
 
+	_renderSeparator: function(props, i) {
+		var height = this.props.separatorHeight;
+		return <View key={i} style={[styles.separator, {height}]}></View>
+	},
+
 	_itemWrapperStyle: function(direction) {
 		return {
 			flex: 1 / (this.props.children.length || 1),
@@ -61,15 +66,27 @@ var BottomActions = React.createClass({
 		if (!Array.isArray(this.props.children)) {
 			items = [this.props.children];
 		}
+		var itemsToAdd = [];
+		
+		items.forEach(function(item, i) {
+			itemsToAdd.push(item);
+			if (i !== items.length - 1)
+				itemsToAdd.push({
+					props: { type: 'separator' }
+				});
+		});
+
 		return (
 			<View style={[styles.footer, this.props.style]}>
-				{items.map(function(item, i){
+				{itemsToAdd.map(function(item, i){
 					if(item.props.type == "text-only")
 						return this._renderTextOnly(item.props, i);
 					else if(item.props.type == "icon-only")
 						return this._renderIconOnly(item.props, i);
 					else if(item.props.type == "vertical")
 						return this._renderVertically(item.props, i);
+					else if(item.props.type == "separator")
+						return this._renderSeparator(item.props, i);
 					else
 						return this._renderHorizontally(item.props, i);
 				}.bind(this))}
@@ -92,6 +109,8 @@ var styles = StyleSheet.create({
 		height: 45,
 		flexDirection: 'row',
 		borderTopColor: '#eeeeee',
+		justifyContent: 'center',
+		alignItems: 'center',
 		borderTopWidth: 1
 	},
 	itemIcon: {
@@ -104,6 +123,11 @@ var styles = StyleSheet.create({
 	    fontSize: 10,
 	    padding: 2
 	},
+	separator: {
+		height: 0,
+		width: 1,
+		backgroundColor: '#ddd'
+	}
 });
 
 module.exports = {BottomActions, BottomItem};

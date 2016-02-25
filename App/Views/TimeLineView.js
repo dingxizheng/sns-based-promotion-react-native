@@ -2,7 +2,7 @@
 * @Author: dingxizheng
 * @Date:   2016-02-01 02:59:09
 * @Last Modified by:   dingxizheng
-* @Last Modified time: 2016-02-24 14:37:57
+* @Last Modified time: 2016-02-25 01:21:10
 */
 
 'use strict';
@@ -49,7 +49,7 @@ var TimeLine = React.createClass({
 			},
 			{
 				icon: 'add',
-				onPress: () => Actions.newPromotion({ title: 'New Promotion'})
+				onPress: () => Actions.user()
 			},
 		]);
 	},
@@ -61,21 +61,16 @@ var TimeLine = React.createClass({
 		};
 	},
 
-	componentWillMount: function() {
-		LayoutAnimation.configureNext(LayoutAnimation.Presets.spring);
-	},
+	componentDidMount: function() {
 
-	componentDidMount: async function() {
 	    RNRefreshControl.configure({
 	      node: this.refs["cards"]
 	    }, this._reload);
 
-	    console.log("this._fetchCurrentLocation", this._fetchCurrentLocation);
-
-	    await this._fetchCurrentLocation();
+	    // this._fetchCurrentLocation();
 	    
 	    // fetch feeds
-	    await this._fetchTimeline();
+	    this._fetchTimeline();
 	},
 
 	_reload: async function() {
