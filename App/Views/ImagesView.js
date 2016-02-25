@@ -2,7 +2,7 @@
 * @Author: dingxizheng
 * @Date:   2016-02-01 20:01:51
 * @Last Modified by:   dingxizheng
-* @Last Modified time: 2016-02-21 21:14:42
+* @Last Modified time: 2016-02-25 15:10:07
 */
 
 'use strict';
@@ -101,6 +101,7 @@ var Images = React.createClass({
 		var images = this.props.images || [];
 
 		return images.map(function(img, i) {
+			console.log(img.thumb_url);
 			return <Lightbox key={i} navigator={this.props.navigator} swipeToDismiss={false} renderContent={() => this.renderCarousel(img)}>
 						<View key={i} style={this._getImageItemWrapperStyle(i)}>
 							<Image

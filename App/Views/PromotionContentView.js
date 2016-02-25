@@ -2,7 +2,7 @@
 * @Author: dingxizheng
 * @Date:   2016-01-28 20:26:18
 * @Last Modified by:   dingxizheng
-* @Last Modified time: 2016-02-23 20:45:34
+* @Last Modified time: 2016-02-25 18:14:00
 */
 
 'use strict';
@@ -21,6 +21,7 @@ var LocationImage = require('./LocationImage');
 var QuotedView = require('./QuotedView');
 var moment   = require('moment');
 var HTMLView = require('react-native-htmlview');
+var {User} = require('../apis');
 
 var {
 	View,
@@ -42,6 +43,7 @@ var PromotionView = React.createClass({
 		if (this.props.promotion.data.root){
 			var {body, photos, tags, created_at} = this.props.promotion.data.root;
 			var {avatar, name} = this.props.promotion.data.root.user;
+			avatar = avatar || {};
 			
 			return (
 				<QuotedView style={{ marginTop: 2, marginLeft: 0, marginRight:0, paddingHorizontal: 10 }}>
@@ -77,6 +79,7 @@ var PromotionView = React.createClass({
 						coordinates={[48.425893, -89.243557]}/>
 
 					</TouchableOpacity>
+					
 				</QuotedView>
 			);
 		}
@@ -87,10 +90,11 @@ var PromotionView = React.createClass({
 	render: function() {
 		var {user, body, created_at, root, parent, distance, photos, tags, likes, comments, reposts} = this.props.promotion.data;
 		var {avatar, name} = user;
+		avatar = avatar || {};
 
 		return (
 			<ScrollView style={styles.container}>
-				<View style={styles.profileBox}>
+				<TouchableOpacity style={styles.profileBox} onPress={()=> Actions.user({ user: new User(user)})}>
 					<Image
 						source={{ uri: avatar.thumb_url }} 
 						style={styles.avatar}/>
@@ -99,7 +103,7 @@ var PromotionView = React.createClass({
 						<Text style={styles.profileName}>{name}</Text>
 						<Text style={styles.profileTime}>{moment(created_at).fromNow()}{ distance > 0 ? "・within " + distance.toFixed(0) + " km" : ''}</Text>
 					</View>
-				</View>
+				</TouchableOpacity>
 				<View style={styles.promotionContent}>
 					
 					<HTMLView 
@@ -121,10 +125,17 @@ var PromotionView = React.createClass({
 						square={false}
 						imageHeight={150}
 						images={photos}/>
+
+					{(()=>{
+						if (false) 
+							return <LocationImage style={{marginTop: 10}} 
+										address="472 Ruper St, Thunder Bay, Ontario"
+										coordinates={[48.425893, -89.243557]}/>
+						else 
+							return null;
+					})()}
 					
-					<LocationImage style={{marginTop: 10}} 
-						address="472 Ruper St, Thunder Bay, Ontario"
-						coordinates={[48.425893, -89.243557]}/>
+					
 				</View>
 			</ScrollView>
 		);

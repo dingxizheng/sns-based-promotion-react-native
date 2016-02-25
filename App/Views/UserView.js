@@ -2,7 +2,7 @@
 * @Author: dingxizheng
 * @Date:   2016-02-23 21:25:31
 * @Last Modified by:   dingxizheng
-* @Last Modified time: 2016-02-25 02:23:17
+* @Last Modified time: 2016-02-25 14:51:47
 */
 
 'use strict';
@@ -38,6 +38,8 @@ var UserView = React.createClass({
 
 	getInitialState: function() {
 	    return {
+	    	user: this.props.user,
+	    	fullIntro: false
 	    };
 	},
 
@@ -46,17 +48,18 @@ var UserView = React.createClass({
     },
 
 	componentDidFocus: function() {
-		var i = 9;
-		var interval = this.setInterval(() =>{
-			i --;
-			this.props.setNavBarStyle({
-				backgroundColor: this.previousNavbarStyle.backgroundColor + i + '' + i,
-				// height: 0
-			});
-			if (i === 0) {
-				clearInterval(interval);
-			}
-		}, 4);
+		this.props.setNavBarStyle({
+			backgroundColor: this.previousNavbarStyle.backgroundColor + '00',
+			// height: 0
+		});
+	},
+
+	componentWillMount: function() {
+		// console.log("part", this.props.user.data);
+		this.props.user.fetch().then(function(e) {
+			console.log("full", e);
+			this.setState({ user: this.props.user });
+		}.bind(this));
 	},
 
 	_onChangeHeaderVisibility: function(e) {
@@ -68,11 +71,14 @@ var UserView = React.createClass({
 	},
 
 	_renderForeground: function() {
+		var {avatar, name} = this.state.user.data;
+		avatar = avatar || {};
 		return (
 			<View style={styles.foreground}>
-				<Image style={styles.avatar} 
+				<Image style={styles.avatar}
+					source={{ uri: avatar.thumb_url }}
 					defaultSource={require('../../images/default_profile.jpg')}/>
-				<Text style={styles.userName}>{"Dingxizheng"}</Text>
+				<Text style={styles.userName}>{name}</Text>
 				<View style={{ height: 40}}>
 					<StatusView>
 						<StatusItem text="Follow" name="125" textStyle={{ fontSize: 15, color: 'white' }}/>
@@ -85,26 +91,50 @@ var UserView = React.createClass({
 	},
 
 	_renderBackground: function() {
+		var {background} = this.state.user.data;
+		background = background || {};
 		return (
 			<View style={styles.background}>
 				<Image style={{flex:1, resizeMode: 'cover'}} 
-					defaultSource={require('../../images/bg2.jpg')}/>
+					source={{ uri: background.image_url }}
+					defaultSource={require('../../images/wood.jpg')}/>
 				<View style={styles.viewMask}/>
 		 	</View>
 		);
 	},
 
 	_renderStickyHeader: function() {
+		var {name} = this.state.user.data;
 		return (
 			<View style={styles.stickyHeader}>
-				<Text style={styles.stickrHeaderName}>{"Dingxizheng"}</Text>
+				<Text style={styles.stickrHeaderName}>{name}</Text>
 		 	</View>
 		);
+	},
+
+	_renderIntro: function (argument) {
+		var {description} = this.state.user.data;
+		if(!this.state.fullIntro && description && description.length > 100) {
+			description = description.substring(0, 97);
+			return <Text style={styles.cellText}>{description}<Text style={{color: theme.colors.MAIN}}> ...more</Text></Text>;
+		}
+		return <Text style={styles.cellText}>{description || 'none'}</Text>;
+	},
+
+	_showMore: function () {
+		this.setState({ fullIntro: !this.state.fullIntro });
 	},
 	
 	render: function() {
 		
-		// var {avatar, name} = this.props.user;
+		var {avatar, name, background, 
+			tags, description, address,
+			photos_count, promotions_count,
+			likers_count, comments_count, opinions_count
+		} = this.state.user.data;
+
+		avatar = avatar || {};
+		background = background || {};
 
 		return (
 			<View style={styles.container}>
@@ -120,32 +150,38 @@ var UserView = React.createClass({
 		      	renderForeground={this._renderForeground}>
 			      
 			   <TableView>
-	            	<Section>
+			   		{/*NIHAO*/}
+	            	<Section hideSeparator={true}>
 		              	<CustomCell cellHeight={200}>
 			              <Text style={styles.cellLabel}>Tags</Text>
 			              <View style={styles.cellContent}>
-			              		<TagsView tags={["promotion", "cellContent", "good", "boy", "hello"]}/>
+			              {(()=>{
+			              	if (tags && tags[1])
+			              		return <TagsView tags={ tags || [] }/>
+			              	else
+			              		return <Text style={[styles.cellText]}>{ 'none' }</Text>
+			              })()}	
 			              </View>
 			            </CustomCell>
 			            <CustomCell cellHeight={60}>
 			              <Text style={styles.cellLabel}>Location</Text>
 			              <View style={styles.cellContent}>
-			              	<Text style={[styles.cellText, {color: theme.colors.MAIN}]}>472 Rupert Street. Ontario, Canada</Text>
+			              	<Text style={[styles.cellText, {color: theme.colors.MAIN}]}>{ address || 'none' }</Text>
 			              </View>
 			            </CustomCell>
-			            <CustomCell cellHeight={60}>
+			            <CustomCell cellHeight={60} onPress={this._showMore}>
 			              <Text style={styles.cellLabel}>Intro</Text>
 			              <View style={styles.cellContent}>
-			              	<Text style={styles.cellText}>Configure all of your screens ("routes") once (define animations, nav bars, etc.), at one place and then just use short actions commands. For example if you</Text>
+			              	{this._renderIntro()}
 			              </View>
 			            </CustomCell>
 	            	</Section>
 
-	            	<Section>
-			            <Cell cellstyle="RightDetail" titleTintColor={'#999'} accessory="DisclosureIndicator" title="Promotions" detail="124" />
-			            <Cell cellstyle="RightDetail" titleTintColor={'#999'} accessory="DisclosureIndicator" title="Photos" detail="12" />
-			            <Cell cellstyle="RightDetail" titleTintColor={'#999'} accessory="DisclosureIndicator" title="Comments" detail="1234" />
-			            <Cell cellstyle="RightDetail" titleTintColor={'#999'} accessory="DisclosureIndicator" title="Who liked him?" detail="12" />
+	            	<Section hideSeparator={true}>
+			            <Cell cellstyle="RightDetail" titleTintColor={'#999'} accessory="DisclosureIndicator" title="Promotions" detail={promotions_count} />
+			            <Cell cellstyle="RightDetail" titleTintColor={'#999'} accessory="DisclosureIndicator" title="Photos" detail={photos_count} />
+			            <Cell cellstyle="RightDetail" titleTintColor={'#999'} accessory="DisclosureIndicator" title="Commented" detail={opinions_count} />
+			            <Cell cellstyle="RightDetail" titleTintColor={'#999'} accessory="DisclosureIndicator" title="Liked" detail={likers_count} />
 		          </Section>
 	         	</TableView>
 		    </ParallaxScrollView>

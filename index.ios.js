@@ -2,7 +2,7 @@
 * @Author: dingxizheng
 * @Date:   2016-01-23 13:24:54
 * @Last Modified by:   dingxizheng
-* @Last Modified time: 2016-02-25 01:47:28
+* @Last Modified time: 2016-02-25 15:59:13
 */
 
 'use strict';
@@ -49,6 +49,7 @@ var StreetView    = require('./App/Views/StreetView');
 var NewPromotion  = require('./App/Views/NewPromotion');
 var AutoComplete  = require('./App/AutoComplete/AutoCompleteView');
 var UserView      = require('./App/Views/UserView');
+var UserEditing   = require('./App/Views/UserEditingView');
 var theme         = require('./App/theme');
 
 var NavBar        = require('./App/NavBarParts/NavBar');
@@ -177,7 +178,7 @@ var App = React.createClass({
 	                <Route name="login" component={LoginView} initial={false} title="Login"/>
 	                <Route name="signup" component={SignUpView} initial={false} title="Create Account"/>
 	                
-	                <Route name="user" component={UserView} initial={false} title="Profile" schema="nonarbar"/>
+	                <Route name="user" component={UserEditing} initial={false} title="Profile" schema="nonarbar"/>
 
 	                <Route name="promotion" component={PromotionView} initial={false}  title="Promotion"/>
 	                <Route name="comments" component={CommentsView} title="Comments"/>

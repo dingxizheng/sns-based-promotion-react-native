@@ -2,7 +2,7 @@
 * @Author: dingxizheng
 * @Date:   2016-01-23 14:54:12
 * @Last Modified by:   dingxizheng
-* @Last Modified time: 2016-02-24 16:19:45
+* @Last Modified time: 2016-02-25 17:55:23
 */
 
 'use strict';
@@ -22,7 +22,7 @@ module.exports = Object.freeze({
 	},
 
 	colors: {
-		MAIN: '#1E90FF',
+		MAIN: '#385970',
 		GREY_FONT: '#888888',
 		DARK_GREY_FONT: '#555555',
 		TEXT: '#333333',

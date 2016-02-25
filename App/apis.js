@@ -2,7 +2,7 @@
 * @Author: dingxizheng
 * @Date:   2016-02-05 16:30:38
 * @Last Modified by:   dingxizheng
-* @Last Modified time: 2016-02-22 19:39:04
+* @Last Modified time: 2016-02-25 14:33:53
 */
 
 'use strict';
@@ -10,7 +10,7 @@
 
 var {Resource, ResourceConfig, uploadFile} = require('./Resource');
 
-var BASE_URL  = "http://localhost:3000";
+var BASE_URL  = "http://10.100.61.167:3000";
 var User      = new Resource(BASE_URL + "/v1/users");
 var Promotion = new Resource(BASE_URL + "/v1/promotions");
 var Comment   = new Resource(BASE_URL + "/v1/comments");

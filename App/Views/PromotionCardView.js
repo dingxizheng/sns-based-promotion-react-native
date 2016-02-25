@@ -2,7 +2,7 @@
 * @Author: dingxizheng
 * @Date:   2016-02-01 14:14:30
 * @Last Modified by:   dingxizheng
-* @Last Modified time: 2016-02-23 20:35:00
+* @Last Modified time: 2016-02-25 11:59:43
 */
 
 'use strict';
@@ -56,7 +56,6 @@ var PromotionCard = React.createClass({
 
 	_repostPromotion: async function(text) {
 		try {
-			
 			var repost = new Promotion({
 				body: text,
 				parent_id: this.props.promotion.data.id
@@ -70,7 +69,6 @@ var PromotionCard = React.createClass({
 
 	_commentPromotion: async function(text) {
 		try {
-			
 			var comment = new Comment({
 				body: text,
 				promotion_id: this.props.promotion.data.id
@@ -94,12 +92,14 @@ var PromotionCard = React.createClass({
 		if (this.props.promotion.data.root){
 			var {body, photos, tags, created_at} = this.props.promotion.data.root;
 			var {avatar, name} = this.props.promotion.data.root.user;
+			avatar = avatar || {};
 			
 			return (
 				<QuotedView style={{ marginTop: 5, marginLeft: 0, marginRight:0, paddingHorizontal: 10 }}>
 					<TouchableOpacity onPress={()=> Actions.promotion({ title: body, promotion: new Promotion(this.props.promotion.data.root)})}>
 					<View style={[styles.profileBox, { paddingLeft: 0}]}>
 						<Image
+							defaultSource={require('../../images/default_profile.jpg')}
 							source={{ uri: avatar.thumb_url }} 
 							style={styles.avatar}/>
 					
@@ -132,6 +132,7 @@ var PromotionCard = React.createClass({
 	render: function() {
 		var {user, body, created_at, root, parent, distance, photos, tags, likes, comments, reposts} = this.props.promotion.data;
 		var {avatar, name} = user;
+		avatar = avatar || {};
 
 		distance = 400;
 
@@ -139,6 +140,7 @@ var PromotionCard = React.createClass({
 			<TouchableOpacity style={styles.container} onPress={()=> Actions.promotion({ title: body, promotion: new Promotion(this.props.promotion.data)})}>
 				<View style={styles.profileBox}>
 					<Image
+						defaultSource={require('../../images/default_profile.jpg')}
 						source={{ uri: avatar.thumb_url }} 
 						style={styles.avatar}/>
 					

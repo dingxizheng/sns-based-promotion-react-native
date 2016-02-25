@@ -2,7 +2,7 @@
 * @Author: dingxizheng
 * @Date:   2016-02-01 02:59:09
 * @Last Modified by:   dingxizheng
-* @Last Modified time: 2016-02-25 01:21:10
+* @Last Modified time: 2016-02-25 12:01:12
 */
 
 'use strict';
@@ -103,7 +103,7 @@ var TimeLine = React.createClass({
 				loadingNext: false
 			});
 		} catch(e) {
-			console.log(e);
+			console.error(e);
 			this.setState({loadingNext: false});
 		}
 	},

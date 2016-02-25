@@ -2,7 +2,7 @@
 * @Author: dingxizheng
 * @Date:   2016-01-31 17:23:24
 * @Last Modified by:   dingxizheng
-* @Last Modified time: 2016-02-22 17:26:41
+* @Last Modified time: 2016-02-25 17:28:16
 */
 
 'use strict';
@@ -19,7 +19,6 @@ var {
 	StyleSheet, 
 	TouchableOpacity, 
 	TextInput, 
-	LayoutAnimation
 } = React;
 
 var MakePromotion = React.createClass({
@@ -30,14 +29,6 @@ var MakePromotion = React.createClass({
 			transparent: true,
 			visible: true
 		};
-	},
-
-	componentWillMount: function() {
-    	LayoutAnimation.configureNext(LayoutAnimation.Presets.spring);
-	},
-
-	componentDidMount: function() {
-		// LayoutAnimation.configureNext(LayoutAnimation.Presets.spring);
 	},
 
 	onChangeText: function(text) {
@@ -73,7 +64,15 @@ var MakePromotion = React.createClass({
 					</View>
 					
 					<View style={styles.content}>
-						<TextInput onChangeText={this.onChangeText} style={styles.contentInput} multiline={true} autoFocus={true} placeholder={	this.props.placeholder || "put your comment here..." }/>
+						<TextInput 
+							value={this.props.initialValue || ''} 
+							onChangeText={this.onChangeText} 
+							style={[styles.contentInput, { height: this.props.textInputHeight || 100 }]} 
+							multiline={true} 
+							autoFocus={true}
+							autoCorrect={false}
+                            autoCapitalize="none" 
+							placeholder={this.props.placeholder || "put your comment here..." }/>
 					</View>
 					
 					<View style={styles.footer}>
@@ -93,12 +92,13 @@ var styles = StyleSheet.create({
 	container: {
 		// flex: 1,
 		// flexDirection: 'column',
-		// justifyContent: 'flex-end'
+		justifyContent: 'flex-end',
         position: 'absolute',
-        // top:0,
+        top:0,
         bottom:0,
         left:0,
         right:0,
+        backgroundColor: '#FFFFFF44'
         // justifyContent: 'center',
         // alignItems: 'center',
     },

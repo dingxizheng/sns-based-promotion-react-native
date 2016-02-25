@@ -2,7 +2,7 @@
 * @Author: dingxizheng
 * @Date:   2016-01-28 20:26:18
 * @Last Modified by:   dingxizheng
-* @Last Modified time: 2016-02-24 20:48:28
+* @Last Modified time: 2016-02-25 15:35:03
 */
 
 'use strict';
@@ -82,18 +82,26 @@ var PromotionView = React.createClass({
 					<CommentsView tabLabel="favorite-border|101"/>
 		    	</LazyTabView>
 
-				<BottomActions style={{ height: 45 }}>
+				<BottomActions style={{ height: 45 }} separatorHeight={26}>
 					<BottomItem
+						type="vertical"
 						icon="chat-bubble-outline"
 						text="comment"
+						textStyle={{ fontSize: 12}}
 						onPress={this.commentThis}/>
 					<BottomItem
+						type="vertical"
 						icon="repeat"
+						textStyle={{ fontSize: 12}}
 						text="repromote"/>
 					<BottomItem
+						type="vertical"
 						icon="favorite-border"
+						textStyle={{ fontSize: 12}}
 						text="like"/>
 					<BottomItem
+						type="vertical"
+						textStyle={{ fontSize: 12}}
 						icon="more-horiz"
 						text="more"/>
 				</BottomActions>
