@@ -2,7 +2,7 @@
 * @Author: dingxizheng
 * @Date:   2016-02-04 10:47:54
 * @Last Modified by:   dingxizheng
-* @Last Modified time: 2016-02-23 20:43:57
+* @Last Modified time: 2016-02-28 16:46:54
 */
 
 'use strict';
@@ -167,9 +167,9 @@ Resource.fetch = async function(url, options) {
 		// convert query params into a query string
 		request = convertQueryParams(request);
 
-		// console.log("final Options", Object.assign({}, defaultHttpOptions, request.options));
+		// console.log("final Options", Object.assign({}, request.options, { headers: Object.assign({}, defaultHttpOptions.headers, request.options.headers) }));
 
-		var response = await fetch(request.url, Object.assign({}, defaultHttpOptions, request.options));
+		var response = await fetch(request.url, Object.assign({}, request.options, { headers: Object.assign({}, defaultHttpOptions.headers, request.options.headers) }));
 		
 		response = await globalAfterActions.reduce(async function(res, current){
 			return await current.action(request, await res);

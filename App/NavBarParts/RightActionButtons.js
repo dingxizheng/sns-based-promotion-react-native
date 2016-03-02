@@ -2,13 +2,14 @@
 * @Author: dingxizheng
 * @Date:   2016-01-27 19:50:46
 * @Last Modified by:   dingxizheng
-* @Last Modified time: 2016-02-23 14:06:22
+* @Last Modified time: 2016-02-25 22:56:15
 */
 
 'use strict';
 
 var React       = require('react-native');
 var GlobalEvent = require('../GlobalEvent');
+var theme       = require('../theme');
 var Icon        = require('react-native-vector-icons/MaterialIcons');
 
 var {
@@ -92,11 +93,11 @@ var styles = StyleSheet.create({
 		paddingLeft: 8,
 	},
 	barButtonIcon: {
-	    color: 'white',
+	    color: theme.colors.BAR_TEXT,
 	    fontSize: 22
 	},
 	barButtonText: {
-	    color: 'white',
+	    color: theme.colors.BAR_TEXT,
 	    fontSize: 17
 	}
 });

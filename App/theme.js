@@ -2,7 +2,7 @@
 * @Author: dingxizheng
 * @Date:   2016-01-23 14:54:12
 * @Last Modified by:   dingxizheng
-* @Last Modified time: 2016-02-25 17:55:23
+* @Last Modified time: 2016-03-01 22:59:06
 */
 
 'use strict';
@@ -26,5 +26,6 @@ module.exports = Object.freeze({
 		GREY_FONT: '#888888',
 		DARK_GREY_FONT: '#555555',
 		TEXT: '#333333',
+		BAR_TEXT: 'white'
 	}
 });

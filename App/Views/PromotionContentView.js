@@ -2,26 +2,27 @@
 * @Author: dingxizheng
 * @Date:   2016-01-28 20:26:18
 * @Last Modified by:   dingxizheng
-* @Last Modified time: 2016-02-25 18:14:00
+* @Last Modified time: 2016-03-01 21:48:33
 */
 
 'use strict';
 
 
-var React = require('react-native');
-var formStyles = require('../formStyles');
-var theme = require('../theme');
-var Icon = require('react-native-vector-icons/MaterialIcons');
-var Actions = require('react-native-router-flux').Actions;
-var ImageGroup = require('./ImagesView');
-var TagsView = require('./TagsView');
+var React                       = require('react-native');
+var formStyles                  = require('../formStyles');
+var theme                       = require('../theme');
+var Icon                        = require('react-native-vector-icons/MaterialIcons');
+var Actions                     = require('react-native-router-flux').Actions;
+var ImageGroup                  = require('./ImagesView');
+var TagsView                    = require('./TagsView');
 var {BottomActions, BottomItem} = require('./BottomActionsView');
-var {StatusView, StatusItem} = require('./StatusView');
-var LocationImage = require('./LocationImage');
-var QuotedView = require('./QuotedView');
-var moment   = require('moment');
-var HTMLView = require('react-native-htmlview');
-var {User} = require('../apis');
+var {StatusView, StatusItem}    = require('./StatusView');
+var LocationImage               = require('./LocationImage');
+var LocationView                = require('../Parts/LocationView');
+var QuotedView                  = require('./QuotedView');
+var moment                      = require('moment');
+var HTMLView                    = require('react-native-htmlview');
+var {User}                      = require('../apis');
 
 var {
 	View,
@@ -35,14 +36,25 @@ var {
 
 var PromotionView = React.createClass({
 
+	getInitialState: function() {
+		return {
+			promotion: this.props.promotion.data 
+		};
+	},
+
 	componentWillMount: function() {
 		LayoutAnimation.configureNext(LayoutAnimation.Presets.spring);
 	},
 
+	_goToUser: function() {
+		var {user} = this.state.promotion;
+		Actions.user({ user: new User(user)});
+	},
+
 	_renderRoot: function() {
-		if (this.props.promotion.data.root){
-			var {body, photos, tags, created_at} = this.props.promotion.data.root;
-			var {avatar, name} = this.props.promotion.data.root.user;
+		if (this.state.promotion.root){
+			var {body, photos, tags, created_at} = this.state.promotion.root;
+			var {avatar, name} = this.state.promotion.root.user;
 			avatar = avatar || {};
 			
 			return (
@@ -59,6 +71,8 @@ var PromotionView = React.createClass({
 							<Text style={styles.profileTime}>{moment(created_at).fromNow()}</Text>
 						</View>
 					</View>
+
+					{this._renderPrice(price)}
 
 					<HTMLView 
 						style={styles.promotionText} 
@@ -87,14 +101,26 @@ var PromotionView = React.createClass({
 			return null;
 	},
 
+	_renderPrice: function(price) {
+		if (!price || price < 0)
+			return null;
+
+		return  <View style={styles.infoTextWrapper}>
+					<Text style={styles.infoText}><Icon name="attach-money"/>{parseFloat(price.toFixed(2))}</Text>
+				</View>
+	},
+
 	render: function() {
-		var {user, body, created_at, root, parent, distance, photos, tags, likes, comments, reposts} = this.props.promotion.data;
+		var {user, body, created_at, root, parent, distance, 
+			photos, tags, likes, comments, reposts,
+			address, coordinates, price,
+		} = this.state.promotion;
 		var {avatar, name} = user;
 		avatar = avatar || {};
 
 		return (
 			<ScrollView style={styles.container}>
-				<TouchableOpacity style={styles.profileBox} onPress={()=> Actions.user({ user: new User(user)})}>
+				<TouchableOpacity style={styles.profileBox} onPress={this._goToUser}>
 					<Image
 						source={{ uri: avatar.thumb_url }} 
 						style={styles.avatar}/>
@@ -106,6 +132,8 @@ var PromotionView = React.createClass({
 				</TouchableOpacity>
 				<View style={styles.promotionContent}>
 					
+					{this._renderPrice(price)}
+
 					<HTMLView 
 							style={styles.promotionText} 
 							value={body} 
@@ -113,7 +141,7 @@ var PromotionView = React.createClass({
 							onLinkPress={url => console.log(url)}/>
 					
 					{this._renderRoot()}
-
+					
 					<TagsView style={{paddingTop: 10 }}
 						onPress={(tag, i) => console.log(tag, i)}
 						onMore={() => console.log("more")}
@@ -127,10 +155,10 @@ var PromotionView = React.createClass({
 						images={photos}/>
 
 					{(()=>{
-						if (false) 
-							return <LocationImage style={{marginTop: 10}} 
-										address="472 Ruper St, Thunder Bay, Ontario"
-										coordinates={[48.425893, -89.243557]}/>
+						if (!root) 
+							return <LocationView style={{marginTop: 10}} 
+										address={ address || "472 Ruper St, Thunder Bay, Ontario"}
+										coordinates={coordinates || [48.425893, -89.243557]}/>
 						else 
 							return null;
 					})()}
@@ -151,7 +179,20 @@ var styles = StyleSheet.create({
 		// height: 20,
 		padding: 12,
 		paddingTop: 12,
-		flexDirection: 'row'
+		flexDirection: 'row',
+		borderBottomColor: '#eee',
+		borderBottomWidth: 1,
+	},
+	infoTextWrapper: {
+		marginBottom: 8,
+		alignSelf: 'flex-end'
+		// justifyContent: 'flex-start',
+	},
+	infoText: {
+		textAlign: 'left',
+		color: theme.colors.MAIN,
+		fontSize: 25,
+		fontWeight: theme.fonts.FONT_WEIGHT,
 	},
 	avatar: {
 		borderWidth: 1,
@@ -185,7 +226,7 @@ var styles = StyleSheet.create({
 	},
 	promotionContent: {
 		padding: 12,
-		paddingTop: 0,
+		paddingTop: 8,
 		flexDirection: 'column'
 	},
 	promotionText: {

@@ -2,7 +2,7 @@
 * @Author: dingxizheng
 * @Date:   2016-02-19 18:13:28
 * @Last Modified by:   dingxizheng
-* @Last Modified time: 2016-02-23 18:32:25
+* @Last Modified time: 2016-02-25 19:03:49
 */
 
 'use strict';
@@ -13,8 +13,11 @@ Resource.addBeforeAction(async function(request) {
 	console.log("request options", request.url, request.options);
 	try {
 		var session = await storage.load({ key: 'loginState' });
+		global.loginSession = session;
+		
 		request.options.query = request.options.query || {};
 		request.options.query.access_token = session.access_token;
+
 	} catch(e) {
 		console.error(e);
 	}

@@ -2,7 +2,7 @@
 * @Author: dingxizheng
 * @Date:   2016-02-23 21:25:31
 * @Last Modified by:   dingxizheng
-* @Last Modified time: 2016-02-25 14:51:47
+* @Last Modified time: 2016-02-28 18:00:23
 */
 
 'use strict';
@@ -17,11 +17,13 @@ var TagsView           = require('./TagsView');
 var ParallaxScrollView = require('react-native-parallax-scroll-view');
 var CustomButtonsMixin = require('../CustomButtonsMixin');
 var TimerMixin         = require('react-timer-mixin');
+var BusyBox              = require('../Parts/BusyBox');
 
 var {TableView, Section, Cell, CustomCell} = require('react-native-tableview-simple');
 var {BottomActions, BottomItem} = require('./BottomActionsView');
 var {StatusView, StatusItem}    = require('./StatusView');
 // var {StatusView, StatusItem}    = require('./StatusView');
+// 
 
 var {
 	View, 
@@ -29,8 +31,13 @@ var {
 	StyleSheet, 
 	TouchableOpacity, 
 	Image,
-	TextInput
+	TextInput,
+	Dimensions,
+	InteractionManager,
+	LayoutAnimation
 } = React;
+
+var {height, width} = Dimensions.get('window');
 
 var UserView = React.createClass({
 
@@ -39,36 +46,53 @@ var UserView = React.createClass({
 	getInitialState: function() {
 	    return {
 	    	user: this.props.user,
-	    	fullIntro: false
+	    	loaded: false,
+	    	fullIntro: false,
+	    	renderPlaceHolderOnly: true,
 	    };
 	},
 
 	titleViewDidMount: function() {
-        this.setTitleView(<View/>);
+        // this.setTitleView(<View/>);
+    },
+
+    rightButtonsDidMount: function() {
     },
 
 	componentDidFocus: function() {
-		this.props.setNavBarStyle({
-			backgroundColor: this.previousNavbarStyle.backgroundColor + '00',
-			// height: 0
-		});
+		this.props.user.data.id === loginSession.user.id && 
+	    	this.setRightButtons([
+	    		{
+	    			icon: 'settings',
+	    			onPress: () =>  Actions.editUser({ user: this.props.user })
+	    		}
+	    	]);
 	},
 
-	componentWillMount: function() {
-		// console.log("part", this.props.user.data);
-		this.props.user.fetch().then(function(e) {
-			console.log("full", e);
+	componentDidMount: function() {
+		InteractionManager.runAfterInteractions(() => {
+			LayoutAnimation.configureNext(LayoutAnimation.Presets.spring);
+			this.setState({ user: this.props.user, renderPlaceHolderOnly: false });
+	      	this._fetchInitial();
+	    });
+	},
+
+	_fetchInitial: function() {
+		this.state.loaded || this.props.user.fetch().then(function(e) {
+			LayoutAnimation.configureNext(LayoutAnimation.Presets.spring);
 			this.setState({ user: this.props.user });
 		}.bind(this));
 	},
 
-	_onChangeHeaderVisibility: function(e) {
-		// if (!e) {
-		// 	this.setTitleView("Dingxizheng");
-		// } else {
-		// 	this.setTitleView(<View/>);
-		// }
-	},
+	// componentDidMount: function() {
+	// 	this.props.user.data.id === loginSession.user.id && 
+	//     	this.setRightButtons([
+	//     		{
+	//     			text: 'Edit',
+	//     			onPress: () =>  Actions.editUser({ user: this.props.user })
+	//     		}
+	//     	]);
+	// },
 
 	_renderForeground: function() {
 		var {avatar, name} = this.state.user.data;
@@ -96,8 +120,7 @@ var UserView = React.createClass({
 		return (
 			<View style={styles.background}>
 				<Image style={{flex:1, resizeMode: 'cover'}} 
-					source={{ uri: background.image_url }}
-					defaultSource={require('../../images/wood.jpg')}/>
+					source={{ uri: background.image_url }}/>
 				<View style={styles.viewMask}/>
 		 	</View>
 		);
@@ -126,6 +149,10 @@ var UserView = React.createClass({
 	},
 	
 	render: function() {
+
+		if (this.state.renderPlaceHolderOnly) {
+			return <View style={{flex: 1, marginTop: 64, backgroundColor: '#FFFF'}}><BusyBox size={20}/></View>
+		}
 		
 		var {avatar, name, background, 
 			tags, description, address,
@@ -142,7 +169,7 @@ var UserView = React.createClass({
 				style={{flex: 1}}
 		      	backgroundColor="#EFEFF4"
 		      	contentBackgroundColor="#EFEFF4"
-		      	parallaxHeaderHeight={300}
+		      	parallaxHeaderHeight={height - 50}
 		      	stickyHeaderHeight={64}
 		      	onChangeHeaderVisibility={this._onChangeHeaderVisibility}
 		      	renderStickyHeader={this._renderStickyHeader}
@@ -151,7 +178,7 @@ var UserView = React.createClass({
 			      
 			   <TableView>
 			   		{/*NIHAO*/}
-	            	<Section hideSeparator={true}>
+	            	<Section hideSeparator={false}>
 		              	<CustomCell cellHeight={200}>
 			              <Text style={styles.cellLabel}>Tags</Text>
 			              <View style={styles.cellContent}>
@@ -177,7 +204,7 @@ var UserView = React.createClass({
 			            </CustomCell>
 	            	</Section>
 
-	            	<Section hideSeparator={true}>
+	            	<Section hideSeparator={false}>
 			            <Cell cellstyle="RightDetail" titleTintColor={'#999'} accessory="DisclosureIndicator" title="Promotions" detail={promotions_count} />
 			            <Cell cellstyle="RightDetail" titleTintColor={'#999'} accessory="DisclosureIndicator" title="Photos" detail={photos_count} />
 			            <Cell cellstyle="RightDetail" titleTintColor={'#999'} accessory="DisclosureIndicator" title="Commented" detail={opinions_count} />
@@ -202,11 +229,12 @@ var styles = StyleSheet.create({
 		marginTop: 0,
 	},
 	background: {
-		height: 300,
+		height: height - 50,
 		flex: 1
 	},
 	foreground: {
-		height: 300,
+		paddingBottom: 100,
+		height: height - 50,
 		flex: 1,
 		alignItems: 'center',
 		justifyContent: 'flex-end',
@@ -218,7 +246,7 @@ var styles = StyleSheet.create({
 		bottom: 0,
 		left: 0,
 		right: 0,
-		backgroundColor: '#22222244'
+		backgroundColor: '#22222266'
 	},
 	stickyHeader: {
 		paddingTop: 20,
@@ -268,7 +296,7 @@ var styles = StyleSheet.create({
     	flex: 0.75,
     },
     cellText: {
-    	fontSize: 13,
+    	fontSize: 15,
         color: theme.colors.DARK_GREY_FONT
     }
 });

@@ -2,7 +2,7 @@
 * @Author: dingxizheng
 * @Date:   2016-02-06 20:15:00
 * @Last Modified by:   dingxizheng
-* @Last Modified time: 2016-02-21 22:31:53
+* @Last Modified time: 2016-02-29 17:12:58
 */
 
 'use strict';
@@ -29,7 +29,7 @@ var QuotedView = React.createClass({
 
 var styles = StyleSheet.create({
 	container: {
-		borderLeftColor: theme.colors.MAIN,
+		borderLeftColor: '#ddd',
 		borderLeftWidth: 2,
 		paddingTop: 0,
 		paddingBottom: 0,

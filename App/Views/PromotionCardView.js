@@ -2,7 +2,7 @@
 * @Author: dingxizheng
 * @Date:   2016-02-01 14:14:30
 * @Last Modified by:   dingxizheng
-* @Last Modified time: 2016-02-25 11:59:43
+* @Last Modified time: 2016-03-01 21:47:06
 */
 
 'use strict';
@@ -14,6 +14,11 @@ var moment                      = require('moment');
 var HTMLView                    = require('react-native-htmlview');
 var ImageGroup                  = require('./ImagesView');
 var TagsView                    = require('./TagsView');
+var Utiliites                   = require('../Utilities');
+var CustomTag                   = require('../Parts/CustomTag');
+var Icon                        = require('react-native-vector-icons/MaterialIcons');
+
+
 var {BottomActions, BottomItem} = require('./BottomActionsView');
 var {StatusView, StatusItem}    = require('./StatusView');
 var {Promotion, Comment, Resource, Feeds} = require('../apis');
@@ -28,10 +33,6 @@ var {
 
 var htmlContent = 'Suppose we had a custom tab bar called, we would inject it into our ScrollableTabView like this: <a href="good to go">http://google.com</a>'
 
-// <Text style={styles.contentTitle}> repromoted </Text> 
-// 						xiaoding
-// 						<Text style={styles.contentTitle}>{"'s"} post </Text>
-// 						</Text>
 
 var PromotionCard = React.createClass({
 
@@ -39,6 +40,7 @@ var PromotionCard = React.createClass({
 		var {liked} = this.props.promotion.data;
 		return {
 		    liked: liked,
+		    promotion: this.props.promotion.data
 		};
 	},
 
@@ -80,6 +82,10 @@ var PromotionCard = React.createClass({
 		}
 	},
 
+	_goToDetails: function(initialPage) {
+		Actions.promotion({ promotion: new Promotion(this.props.promotion.data), initialPage: initialPage || 0 })
+	},
+
 	_writeRepost: function() {
 		Actions.simpleInput({title: "Repost", placeholder: this.props.promotion.data.body, onDone: this._repostPromotion });
 	},
@@ -90,7 +96,7 @@ var PromotionCard = React.createClass({
 
 	_renderRoot: function() {
 		if (this.props.promotion.data.root){
-			var {body, photos, tags, created_at} = this.props.promotion.data.root;
+			var {body, photos, tags, created_at, price} = this.state.promotion.root;
 			var {avatar, name} = this.props.promotion.data.root.user;
 			avatar = avatar || {};
 			
@@ -109,6 +115,8 @@ var PromotionCard = React.createClass({
 						</View>
 					</View>
 
+					{this._renderPrice(price)}
+
 					<HTMLView 
 						style={styles.promotionText} 
 						value={body} 
@@ -118,9 +126,10 @@ var PromotionCard = React.createClass({
 					<ImageGroup columns={ photos.length == 1 ? 2 : 4 } square={true} imageHeight={120} images={photos}/>
 
 					<TagsView style={{marginTop: 10, marginBottom: 10}}
-						onPress={(tag, i) => console.log(tag, i)}
+						onPress={(tag) => Actions.tag({tag: tag})}
 						onMore={() => console.log("more")}
 						tags={tags}/>
+
 				</TouchableOpacity>
 				</QuotedView>
 			);
@@ -129,15 +138,28 @@ var PromotionCard = React.createClass({
 			return null;
 	},
 
+	_renderPrice: function(price) {
+		if (price < 0)
+			return null;
+
+		return  <View style={styles.infoTextWrapper}>
+					<Text style={styles.infoText}><Icon name="attach-money"/>{parseFloat(price.toFixed(2))}</Text>
+				</View>
+	},
+
 	render: function() {
-		var {user, body, created_at, root, parent, distance, photos, tags, likes, comments, reposts} = this.props.promotion.data;
+		var {user, body, created_at, root, parent, distance, 
+			photos, tags, likes, comments, reposts, price,
+		} = this.state.promotion;
 		var {avatar, name} = user;
 		avatar = avatar || {};
 
 		distance = 400;
 
+		console.log(distance);
+
 		return (
-			<TouchableOpacity style={styles.container} onPress={()=> Actions.promotion({ title: body, promotion: new Promotion(this.props.promotion.data)})}>
+			<View overflow="hidden" style={[styles.container, this.props.style]}>
 				<View style={styles.profileBox}>
 					<Image
 						defaultSource={require('../../images/default_profile.jpg')}
@@ -149,9 +171,11 @@ var PromotionCard = React.createClass({
 						<Text style={styles.cardTime}>{moment(created_at).fromNow()}{ distance > 0 ? "・within " + distance.toFixed(0) + " km" : ''}</Text>
 					</View>
 				</View>
-				<View style={styles.promotionContainer}>
+				<TouchableOpacity style={styles.promotionContainer} onPress={()=> this._goToDetails(0) }>
 					<View style={styles.promotionBody}>
 						
+						{this._renderPrice(price)}
+
 						<HTMLView 
 							style={styles.promotionText} 
 							value={body} 
@@ -161,31 +185,33 @@ var PromotionCard = React.createClass({
 						<ImageGroup columns={ photos.length == 1 ? 2 : 4 } square={true} imageHeight={120} images={photos}/>
 
 						<TagsView style={{marginTop: 10, marginBottom: -2}}
-							onPress={(tag, i) => console.log(tag, i)}
+							onPress={(tag) => Actions.tag({tag: tag })}
 							onMore={() => console.log("more")}
 							tags={tags}/>
 
 						{this._renderRoot()}
 
-						<StatusView>
-							<StatusItem text={comments.count + ''} onPress={()=> Actions.promotion({ initialPage: 1, title: body, promotion: new Promotion(this.props.promotion.data)})} name="comments"/>
-							<StatusItem text={reposts.count + ''} name="reposts"/>
-							<StatusItem text={likes.count + ''} name="likes"/>
-						</StatusView>
-					</View>
-					<BottomActions style={{ height: 35 }}>
-						<BottomItem onPress={this._writeComment} icon="chat-bubble-outline" text="comment" type="icon-only"/>
-						<BottomItem onPress={this._writeRepost} type="icon-only" icon="repeat" text="repromote"/>
+					</View>					
+				</TouchableOpacity>
+				<BottomActions style={{ height: 35, marginTop: 10 }}>
+						<BottomItem
+						 	type={ comments.count < 1 ? "icon-only" : "nihao" }
+							onPress={ comments.count < 1 ? this._writeComment : () => this._goToDetails(1) } 
+							icon="chat-bubble-outline" 
+							text={Utiliites.abbrNum(comments.count, 1) + ''}/>
+						<BottomItem
+							type={ reposts.count < 1 ? "icon-only" : "nihao" }
+							onPress={this._writeRepost} 
+							icon="repeat" 
+							text={Utiliites.abbrNum(reposts.count, 1) + ''}/>
 						<BottomItem onPress={this._likePromotion} 
-							type="icon-only" 
 							icon={this.state.liked ? "favorite" : "favorite-border"} 
 							iconStyle={this.state.liked ? {color: '#C64A4A'} : null} 
-							text="like"/>
-						<BottomItem type="icon-only" icon="more-horiz" text="more"/>
-					</BottomActions>
-					
-				</View>
-			</TouchableOpacity>
+							type={ likes.count < 1 ? "icon-only" : "nihao" }
+							text={ Utiliites.abbrNum(likes.count, 1) + ''}/>
+						<BottomItem icon="more-horiz" type="icon-only" text="more"/>
+				</BottomActions>
+			</View>
 		);
 	},
 
@@ -197,6 +223,17 @@ var styles = StyleSheet.create({
 		flexDirection: 'column',
 		backgroundColor: 'white',
 		marginTop: 8,
+	},
+	infoTextWrapper: {
+		marginBottom: 5,
+		alignSelf: 'flex-end'
+		// alignItems: 'center'
+	},
+	infoText: {
+		textAlign: 'left',
+		color: theme.colors.MAIN,
+		fontSize: 22,
+		fontWeight: theme.fonts.FONT_WEIGHT,
 	},
 	profileBox: {
 		// height: 20,
@@ -240,7 +277,7 @@ var styles = StyleSheet.create({
 	},
 	promotionContainer: {
 		flexDirection: 'column',
-		// marginLeft: 30
+		marginLeft: 40
 	},
 	promotionBody: {
 		marginLeft: 12,
@@ -249,7 +286,7 @@ var styles = StyleSheet.create({
 	promotionText: {
 		paddingTop: 4,
 		paddingBottom: 2,
-		color: theme.colors.DARK_GREY_FONT,
+		color: theme.colors.TEXT,
 		fontWeight: theme.fonts.FONT_WEIGHT,
 		fontSize: theme.fonts.FONT_SIZE_SMALL
 	},

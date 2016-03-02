@@ -2,7 +2,7 @@
 * @Author: dingxizheng
 * @Date:   2016-02-19 20:27:31
 * @Last Modified by:   dingxizheng
-* @Last Modified time: 2016-02-21 01:01:38
+* @Last Modified time: 2016-02-29 16:03:57
 */
 
 'use strict';
@@ -54,24 +54,17 @@ var styles = StyleSheet.create({
 		backgroundColor: '#55555555'
 	},
 	header: {
-        height: 64,
-        flexDirection: 'row',
-        backgroundColor: '#eeeeee',
-        justifyContent: 'center',
-        alignItems: 'center',
-        // paddingLeft: 20,
-        shadowOffset:{
-	        width: 0,
-	        height: 0.1,
-	    },
-	    shadowColor: 'black',
-	    shadowOpacity: 0.2,
-    },
-    text: {
-    	color: '#bbbbbb',
-        fontSize: 17,
-        paddingLeft: 14,
-    }
+      height: 64,
+      flexDirection: 'row',
+      backgroundColor: '#eeeeee',
+      justifyContent: 'center',
+      alignItems: 'center',
+  },
+  text: {
+  	color: '#bbbbbb',
+    fontSize: 17,
+    paddingLeft: 14,
+  }
 });
 
 

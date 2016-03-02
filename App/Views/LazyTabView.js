@@ -2,7 +2,7 @@
 * @Author: dingxizheng
 * @Date:   2016-02-03 20:18:48
 * @Last Modified by:   dingxizheng
-* @Last Modified time: 2016-02-22 22:26:02
+* @Last Modified time: 2016-03-01 23:10:23
 */
 
 'use strict';
@@ -10,7 +10,7 @@
 var React        = require('react-native');
 var TimerMixin = require('react-timer-mixin');
 var ScrollableTabView = require('react-native-scrollable-tab-view');
-var BusyBox = require('./BusyBox');
+var BusyBox = require('../Parts/BusyBox');
 
 var {
 	View,
@@ -46,7 +46,7 @@ var LazyTabView = React.createClass({
 				this.setState({
 					['tab_' + e.i]: true
 				});
-			}, 800);
+			}, this.props.delay || 800);
 		} else {
 			this.setState({
 				['tab_' + e.i]: true

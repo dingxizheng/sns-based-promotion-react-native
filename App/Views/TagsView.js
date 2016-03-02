@@ -2,7 +2,7 @@
 * @Author: dingxizheng
 * @Date:   2016-02-08 17:22:39
 * @Last Modified by:   dingxizheng
-* @Last Modified time: 2016-02-25 00:55:03
+* @Last Modified time: 2016-03-01 16:03:52
 */
 
 'use strict';
@@ -28,11 +28,15 @@ var TagsView = React.createClass({
 		if (tag === ' ... ' && this.props.onMore) {
 			this.props.onMore(tag, i);
 		}
+
+		if (tag === `  ${ this.props.lastButton }  ` && this.props.onLastButton) {
+			this.props.onLastButton(tag, i);
+		}
 	},
 
 	_renderTagItem: function(tag, i) {
 		return <TouchableOpacity key={i} style={styles.tagItem} onPress={() => this._handleOnPress(tag, i)}>
-					<Text style={[styles.tagItemText, this.props.tagStyle]}>{tag === ' ... ' ? '' : '#'}{tag}</Text>
+					<Text style={[styles.tagItemText, this.props.tagStyle]}>{tag === ' ... ' ? '' : ''}{tag}</Text>
 			   </TouchableOpacity>;
 	},
 
@@ -43,6 +47,12 @@ var TagsView = React.createClass({
 			tags = tags.slice(0, maxNumber);
 			tags.push(' ... ');
 		}
+
+		if (this.props.lastButton) {
+			tags = tags.slice(0, maxNumber);
+			tags.push(`  ${ this.props.lastButton }  `);
+		}
+
 		if (this.props.tags && this.props.tags.length > 0)
 			return (
 				<View style={[styles.container, this.props.style]}>
@@ -61,20 +71,20 @@ var styles = StyleSheet.create({
 		flex: 1,
 		flexDirection: 'row',
 		flexWrap: 'wrap',
-		paddingBottom: -2
+		paddingBottom: -3
 	},
 	tagItem: {
-		height: 18,
+		height: 20,
 		borderWidth: 1,
 		borderColor:  '#aaa',
-		borderRadius: 9,
+		borderRadius: 10,
 		// backgroundColor: '#eeeeee',
 		justifyContent: 'center',
 		alignItems: 'center',
 		marginRight: 3,
-		marginBottom: 2,
-		paddingLeft: 10,
-		paddingRight: 10
+		marginBottom: 3,
+		paddingLeft: 8,
+		paddingRight: 8
 	},
 	tagItemText: {
 		color: theme.colors.MAIN,

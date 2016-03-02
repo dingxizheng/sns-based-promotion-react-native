@@ -2,16 +2,16 @@
 * @Author: dingxizheng
 * @Date:   2016-02-01 20:01:51
 * @Last Modified by:   dingxizheng
-* @Last Modified time: 2016-02-25 15:10:07
+* @Last Modified time: 2016-03-01 22:56:28
 */
 
 'use strict';
 
-var React      = require('react-native');
-var formStyles = require('../formStyles');
-var theme      = require('../theme');
-var Swiper     = require('react-native-swiper');
-var Lightbox   = require('react-native-lightbox');
+var React        = require('react-native');
+var formStyles   = require('../formStyles');
+var theme        = require('../theme');
+var Swiper       = require('react-native-swiper');
+var Lightbox     = require('react-native-lightbox');
 
 var {
 	View,
@@ -36,13 +36,13 @@ var Images = React.createClass({
 		var index = images.indexOf(imgItem);
 		return (
 			<Swiper bounces={true} loop={false} autoplay={true} autoplayTimeout={5} index={index} style={{flex:1}} showsPagination={false} showsButtons={true}>	
-					{images.map(function(image, i){
-						return <Image
-								key={i}
-								source={{ uri: image.image_url }} 
-								resizeMode="contain"
-								style={{flex: 1}}/>
-					}.bind(this))}
+				{images.map(function(image, i){
+					return <Image
+							key={i}
+							source={{ uri: image.image_url }} 
+							resizeMode="contain"
+							style={{flex: 1}}/>
+				}.bind(this))}
 		    </Swiper>
 		);
 	},
@@ -101,7 +101,6 @@ var Images = React.createClass({
 		var images = this.props.images || [];
 
 		return images.map(function(img, i) {
-			console.log(img.thumb_url);
 			return <Lightbox key={i} navigator={this.props.navigator} swipeToDismiss={false} renderContent={() => this.renderCarousel(img)}>
 						<View key={i} style={this._getImageItemWrapperStyle(i)}>
 							<Image

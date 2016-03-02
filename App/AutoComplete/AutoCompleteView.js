@@ -2,7 +2,7 @@
 * @Author: dingxizheng
 * @Date:   2016-02-17 17:31:43
 * @Last Modified by:   dingxizheng
-* @Last Modified time: 2016-02-23 21:14:03
+* @Last Modified time: 2016-03-01 18:40:01
 */
 
 /* @flow */
@@ -42,6 +42,7 @@ var AutoComplete = React.createClass({
                         marginRight: this.rightPadding,
                         marginLeft: this.leftPadding
                     }]} 
+                    value={this.props.initialValue || ''}
                     multiline={false} 
                     autoFocus={true}
                     autoCorrect={false}
@@ -85,8 +86,9 @@ var AutoComplete = React.createClass({
     _onDone: function() {
         var ondone = this.props.onDone || function() {};
         if (this.inputText && this.inputText.length > 0) {
+            Actions.pop();
             this.onSubmit && this.onSubmit(this.inputText);
-            ondone(this.inputText) && Actions.pop();
+            ondone(this.inputText);
         }
     },
 

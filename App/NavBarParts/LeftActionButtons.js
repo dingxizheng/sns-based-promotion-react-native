@@ -2,7 +2,7 @@
 * @Author: dingxizheng
 * @Date:   2016-01-27 19:50:46
 * @Last Modified by:   dingxizheng
-* @Last Modified time: 2016-02-23 14:09:46
+* @Last Modified time: 2016-02-26 00:46:24
 */
 
 'use strict';
@@ -11,6 +11,7 @@ var React       = require('react-native');
 var Icon        = require('react-native-vector-icons/MaterialIcons');
 var GlobalEvent = require('../GlobalEvent');
 var { BackIcon } = require('@exponent/react-native-navigator/ExNavigatorIcons');
+var theme                       = require('../theme');
 import ExNavigatorStyles from '@exponent/react-native-navigator/ExNavigatorStyles';
 
 var {
@@ -74,18 +75,25 @@ var ActionButtons = React.createClass({
 	    }
 
 	    return (
-	        <TouchableOpacity
-	            pressRetentionOffset={ExNavigatorStyles.barButtonPressRetentionOffset}
-	            onPress={() => Actions.pop()}
-	            style={[ExNavigatorStyles.barBackButton]} onLayout={this.onLayout}>
-	            <BackIcon
-	                style={[
-			            ExNavigatorStyles.barButtonIcon,
-			            navigator.props.barButtonIconStyle,
-			          ]}
-	            />
-	            {buttonText}
-	        </TouchableOpacity>
+	        // <TouchableOpacity
+	        //     pressRetentionOffset={ExNavigatorStyles.barButtonPressRetentionOffset}
+	        //     onPress={() => Actions.pop()}
+	        //     style={[ExNavigatorStyles.barBackButton]} onLayout={this.onLayout}>
+	        //     <BackIcon
+	        //         style={[
+			      //       ExNavigatorStyles.barButtonIcon,
+			      //       navigator.props.barButtonIconStyle,
+			      //     ]}
+	        //     />
+	        //     {buttonText}
+	        // </TouchableOpacity>
+			<View style={styles.barLeftButton} onLayout={this.onLayout}>
+				<TouchableOpacity onPress={Actions.pop} style={styles.barButtonIconWrapper}>
+			        
+			        <Icon name="arrow-back" style={styles.barButtonIcon} />
+
+			       </TouchableOpacity>
+			</View>
 	    );
 	},
 
@@ -132,11 +140,11 @@ var styles = StyleSheet.create({
 		paddingLeft: 8,
 	},
 	barButtonIcon: {
-	    color: 'white',
+	    color: theme.colors.BAR_TEXT,
 	    fontSize: 22
 	},
 	barButtonText: {
-	    color: 'white',
+	    color: theme.colors.BAR_TEXT,
 	    fontSize: 17
 	}
 });

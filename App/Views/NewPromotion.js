@@ -2,7 +2,7 @@
 * @Author: dingxizheng
 * @Date:   2016-02-17 16:00:47
 * @Last Modified by:   dingxizheng
-* @Last Modified time: 2016-02-23 20:31:42
+* @Last Modified time: 2016-03-01 20:49:12
 */
 
 'use strict';
@@ -10,16 +10,18 @@
 var React              = require('react-native');
 var Icon               = require('react-native-vector-icons/MaterialIcons');
 var theme              = require('../theme');
-// var KeyboardSpacer     = require('react-native-keyboard-spacer');
+var Utilities          = require('../Utilities');
+var KeyboardSpacer     = require('react-native-keyboard-spacer');
 var CustomButtonsMixin = require('../CustomButtonsMixin');
 var TagsView           = require('./TagsView');
 var EditImages         = require('./EditImagesView');
 var LoadingView        = require('./LoadingView');
 var Actions            = require('react-native-router-flux').Actions;
 var TableView          = require('react-native-tableview');
-var Section            = TableView.Section;
-var Item               = TableView.Item;
-var Cell               = TableView.Cell;
+var dismissKeyboard    = require('dismissKeyboard');
+var CustomTag          = require('../Parts/CustomTag');
+
+var {BottomActions, BottomItem} = require('./BottomActionsView');
 
 var {
     View, 
@@ -27,19 +29,48 @@ var {
     StyleSheet, 
     TouchableOpacity, 
     TextInput, 
-    ScrollView
+    ScrollView,
+    DeviceEventEmitter,
+    InteractionManager,
+    ActionSheetIOS
 } = React;
 
 var {Promotion, Resource, uploadImage, Feeds} = require('../apis');
 
 var NewPromotion = React.createClass({
+    
     mixins: [CustomButtonsMixin],
 
     getInitialState: function() {
         return {
             loading: false,
+            keyboard: false,
             tags: ["promotion"],
+            images: [],
+            price: null,
+            address: null,
         };
+    },
+
+    componentDidMount: function() {
+        this._keyboardWillShowFunc = DeviceEventEmitter.addListener('keyboardWillShow', this._keyboardWillShow);
+        this._keyboardWillHideFunc = DeviceEventEmitter.addListener('keyboardWillHide', this._keyboardWillHide);
+        InteractionManager.runAfterInteractions(() => {
+            this.refs.contentInput.focus();
+        });
+    }, 
+
+    componentWillUnmount: function() {
+        this._keyboardWillHideFunc.remove();
+        this._keyboardWillShowFunc.remove(); 
+    },
+
+    _keyboardWillShow: function() {
+        this.setState({ keyboard: true });
+    },
+
+    _keyboardWillHide: function() {
+        this.setState({ keyboard: false });
     },
 
     rightButtonsDidMount: function() {
@@ -60,13 +91,24 @@ var NewPromotion = React.createClass({
         ]);
     },
 
+    _addImage: function() {
+        Utilities.selectPhoto({}, function(image) {
+            this.state.images.push(image);
+            this.setState({
+                images: this.state.images
+            });
+        }.bind(this));
+    },
+
     _postPromotion: async function() {
         this.setState({loading: true});
         try {
             var promotion = new Promotion({
                 body: this.body,
                 tags: this.tags,
-                price: this.price
+                price: this.state.price,
+                coordinates: this.coordinates || [],
+                address: this.state.address
             });
 
             var result = await promotion.save();
@@ -125,79 +167,205 @@ var NewPromotion = React.createClass({
 
     },
 
+    _showPriceTagOptions: function() {
+        ActionSheetIOS.showActionSheetWithOptions({
+          options: [
+            "Edit Price",
+            "Delete Price",
+            "Cancel"
+          ],
+          cancelButtonIndex: 2,
+          destructiveButtonIndex: 1,
+        },
+        (buttonIndex) => {
+            if(buttonIndex === 1) 
+                this.setState({ price: null });
+
+            if(buttonIndex === 0)
+                this._addPriceTag();
+        });
+    },
+
+    _showLocationTagOptions: function() {
+        ActionSheetIOS.showActionSheetWithOptions({
+          options: [
+            "Edit Location",
+            "Delete Location",
+            "Cancel"
+          ],
+          cancelButtonIndex: 2,
+          destructiveButtonIndex: 1,
+        },
+        (buttonIndex) => {
+            if(buttonIndex === 1) 
+                this.setState({ address: null });
+
+            if(buttonIndex === 0)
+                this._addLocation();
+        });
+    },
+
+    _showAddLocationOptions: function() {
+        ActionSheetIOS.showActionSheetWithOptions({
+          options: [
+            "Current Location",
+            "Custom Location",
+            "Cancel"
+          ],
+          cancelButtonIndex: 2,
+        },
+        (buttonIndex) => {
+            if(buttonIndex === 0) 
+                this._fetchLocation();
+
+            if(buttonIndex === 1)
+                this._addLocation();
+        });
+    },
+
+    _fetchLocation: function() {
+        navigator.geolocation.getCurrentPosition(
+            (location)=> {
+
+                Utilities.geocodeReverse(location.coords.latitude, location.coords.longitude)
+                    .then((res) => {
+                        return res.json();
+                    })
+                    .then((data) => {
+                        return data.results.filter((addr)=> {return addr.types.indexOf("street_address") !== -1});
+                    })
+                    .then((data) => {
+                        
+                        if (data.length > 0) {
+
+                            this.coordinates = [location.coords.longitude, location.coords.latitude];
+                            this.setState({
+                                address: data[0].formatted_address
+                            });
+
+                        } else {
+                            Actions.toast({
+                                msg: 'Unable to fetch street address for current location!',
+                                view_type: 'error'
+                            });
+                        }
+
+                    });
+
+            }, 
+            (error)=> {
+                Actions.toast({
+                    msg: error.message,
+                    view_type: 'error'
+                });
+            }, 
+            { enableHighAccuracy: true, timeout: 20000, maximumAge: 0});
+    },
+
+    _addPriceTag: function() {
+        Actions.simpleInput({
+            title: "Price", 
+            placeholder: "price...",
+            initialValue: this.state.price || '',
+            textInputHeight: 50,
+            buttonName: 'Done',
+            onDone: (e) => {this.setState({ price: e }); return true; }
+        });
+    },
+
+    _addLocation: function() {
+        Actions.autoComplete({ 
+         rightButton: 'Done',
+         initialValue: this.state.address || '',
+         content: require('../AutoComplete/Address'),
+         contentProps: {
+            onDone: (e) => {this.setState({ address: e }); return true; }
+         }
+        });
+    },
+
     render: function() {
         return (
-            <View style={styles.container}>
-            <LoadingView isVisible={this.state.loading}/>
-            <TableView
-               style={{flex: 1}}
-               allowsToggle={true}
-               allowsMultipleSelection={false}
-               tableViewStyle={TableView.Consts.Style.Grouped}
-               tableViewCellStyle={TableView.Consts.CellStyle.Subtitle}
-               separatorStyle={TableView.Consts.SeparatorStyle.None}>
+            <View style={{ flex: 1, marginTop: 64, backgroundColor: 'white' }}>
+                <ScrollView style={styles.containerWrapper}>
+                    <LoadingView isVisible={this.state.loading}/>
 
-                <Section label="">
-                    <Cell disable={true}>
-                        <TextInput
-                            onKeyPress={this._onKeyPress}
-                            onChangeText={this._onChangeText} 
-                            style={styles.contentInput}
-                            autoCorrect={false}
-                            autoCapitalize="none"
-                            maxLength={400}
-                            multiline={true} 
-                            autoFocus={true} 
-                            placeholder={ "promote what you have..." }/>
-                    </Cell>
+                    <TextInput
+                        ref="contentInput"
+                        onKeyPress={this._onKeyPress}
+                        onChangeText={this._onChangeText} 
+                        style={styles.contentInput}
+                        autoCorrect={false}
+                        autoCapitalize="none"
+                        maxLength={400}
+                        multiline={true} 
+                        placeholder={ "promote what you have..." }/>
 
-                    <Cell disable={true}>
-                        <Text style={styles.label}>Photos</Text>
-                    </Cell>
-                    <Cell arrow={false} disable={true}>
-                        <View style={[styles.cell]}>
-                            <EditImages 
-                                style={{backgroundColor: 'white', margin: 10, marginTop: 6}} 
-                                columns={4}
-                                square={true} 
-                                imageHeight={100} 
-                                imagesChange={this._imagesChange}/>
-                        </View>
-                    </Cell>
+                    {(()=>{
+                        if (this.state.price)
+                            return <CustomTag style={{backgroundColor: 'white', margin: 10, marginBottom: 0, }}
+                                        onPress={this._showPriceTagOptions}
+                                        icon="attach-money" 
+                                        text={this.state.price + ''}/>
+                            return null
+                    })()}
 
-                    <Cell disable={true}>
-                        <Text style={styles.label}>Price</Text>
-                    </Cell>
-                    <Cell arrow={false}>
-                        <View style={[styles.cell]}>
-                            <TextInput onChangeText={ this._onChangePirce } 
-                                style={styles.priceInput} 
-                                multiline={false}
-                                placeholder={ "price..." }/>
-                        </View>
-                    </Cell>
+                    {(()=>{
+                        if (this.state.address)
+                            return <CustomTag style={{backgroundColor: 'white', margin: 10, marginBottom: 0, }}
+                                        onPress={this._showLocationTagOptions}
+                                        icon="place" 
+                                        text={this.state.address + ''}/>
+                        return null
+                    })()}
+                    
 
-                    <Cell disable={true}>
-                        <Text style={styles.label}>Tags</Text>
-                    </Cell>
-                    <Cell arrow={true} onPress={this._editTags}>
-                        <View style={[styles.cell]}>
-                            {function () {
-                                if (this.state.tags.length > 0)
-                                    return <TagsView
-                                            style={{ margin:10, marginBottom: 8 }}
-                                            onPress={(tag, i) => console.log(tag, i)}
-                                            onMore={() => console.log("more")}
-                                            tags={this.state.tags}/>
-                                else
-                                    return <Text style={styles.cellText}>Add tags...</Text>
-                            }.bind(this).call()}
-                        </View>
-                    </Cell>
+                    <TagsView
+                        maxNumber={100}
+                        lastButton="Edit Tags"
+                        onLastButton={this._editTags}
+                        style={{ margin:10, marginBottom: 8 }}
+                        tags={this.state.tags}/>
 
-                </Section>
+                     <EditImages 
+                        style={{backgroundColor: 'white', margin: 10, marginTop: 0}} 
+                        columns={4}
+                        square={true} 
+                        imageHeight={100} 
+                        images={this.state.images}
+                        imagesChange={this._imagesChange}/>
+                    
+                </ScrollView>
 
-            </TableView>
+                
+                <BottomActions style={{ height: 45, backgroundColor: 'white' }} separatorHeight={26}>
+                    <BottomItem
+                        type="icon-only"
+                        icon="attach-money"
+                        onPress={this._addPriceTag}
+                        iconStyle={{ fontSize: 20}}/>
+                    <BottomItem
+                        type="icon-only"
+                        icon={this.state.address ? "edit-location" : "add-location" }
+                        onPress={this.state.address ? this._addLocation : this._showAddLocationOptions}
+                        iconStyle={{ fontSize: 20}}/>
+                    <BottomItem
+                        type="icon-only"
+                        icon="add-a-photo"
+                        onPress={this._addImage}
+                        iconStyle={{ fontSize: 20}}/>
+                    <BottomItem
+                        type="icon-only"
+                        icon="link"
+                        iconStyle={{ fontSize: 20}}/>
+                    <BottomItem
+                        type="icon-only"
+                        iconStyle={{ fontSize: 20}}
+                        onPress={()=>{ dismissKeyboard() }}
+                        icon={ this.state.keyboard ? "keyboard-hide" : "keyboard-arrow-up" }/>
+                </BottomActions>
+
+                <KeyboardSpacer/>
             </View>
         );
     }
@@ -205,31 +373,15 @@ var NewPromotion = React.createClass({
 
 
 var styles = StyleSheet.create({
+    containerWrapper: {
+        flex: 1,
+    },
     container: {
-        position: 'absolute',
+        flex: 1,
         backgroundColor: '#EdEdEd',
-        left: 0,
-        right: 0,
-        bottom: 0,
-        top: 64,
         paddingTop: 8,
-    },
-    label: {
-        height: 40,
-        fontSize: 15,
-        padding: 10,
-        paddingTop: 15,
-        paddingBottom: 6,
-        color: theme.colors.GREY_FONT,
-        // backgroundColor: '#eee'
-    },
-    cell: {
-        backgroundColor: 'white',
-    },
-    cellText: {
-        fontSize: 15,
-        padding: 10,
-        color: theme.colors.GREY_FONT,
+        flexDirection: 'column',
+        justifyContent: 'flex-end'
     },
     content: {
         flex: 1,
@@ -241,8 +393,9 @@ var styles = StyleSheet.create({
         marginVertical: 5
     },
     contentInput: {
+        flex: 1,
+        height: 150,
         backgroundColor: '#fff',
-        height: 100,
         fontSize: 17,
         padding: 10,
         color: theme.colors.DARK_GREY_FONT,
@@ -253,30 +406,6 @@ var styles = StyleSheet.create({
         fontSize: 17,
         padding: 10,
         color: theme.colors.DARK_GREY_FONT,
-    },
-    footer: {
-        height: 45,
-        flexDirection: 'row',
-        justifyContent: 'flex-end',
-        backgroundColor: '#eeeeee',
-        borderTopColor: '#eeeeee',
-        borderTopWidth: .5
-    },
-    footerMenuItemWrapper: {
-        justifyContent: 'center',
-        alignItems: 'center',
-        flexDirection: 'row'
-    },
-    footerMenuItemIcon: {
-        color: theme.colors.GREY_FONT,
-        fontSize: 22,
-        padding: 3
-    },
-    footerMenuItemText: {
-        color: theme.colors.GREY_FONT,
-        fontSize: 13,
-        padding: 3,
-        paddingRight: 10,
     },
 });
 

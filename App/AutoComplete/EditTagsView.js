@@ -2,7 +2,7 @@
 * @Author: dingxizheng
 * @Date:   2016-02-16 16:19:13
 * @Last Modified by:   dingxizheng
-* @Last Modified time: 2016-02-25 00:58:45
+* @Last Modified time: 2016-02-29 14:28:37
 */
 
 /* @flow */
@@ -56,9 +56,9 @@ var TagsView = React.createClass({
 	_renderTagItem: function(tag, i) {
 		return <TouchableOpacity key={i} style={tagsStyles.tagItem} onPress={() => this._handleOnPress(tag, i)}>
 					<Text style={[tagsStyles.tagItemText, this.props.tagStyle]}>
-						{'#' + tag}
-						<Text style={[tagsStyles.closeTagIcon, this.props.tagStyle]}> X</Text>
+						{tag}
 					</Text>
+					<Icon name="close" style={[tagsStyles.closeTagIcon]}/>
 			   </TouchableOpacity>;
 	},
 
@@ -88,6 +88,7 @@ var tagsStyles = StyleSheet.create({
 	container: {
 		flexDirection: 'row',
 		flexWrap: 'wrap',
+		backgroundColor: 'white',
 	},
 	tagItem: {
 		borderWidth: 1,
@@ -95,20 +96,24 @@ var tagsStyles = StyleSheet.create({
 		borderRadius: 13,
 		borderColor:  '#aaa',
 
+		flexDirection: 'row',
+
 		justifyContent: 'center',
 		alignItems: 'center',
 		marginRight: 4,
 		marginBottom: 4,
 
-		paddingLeft: 12,
-		paddingRight: 12
+		paddingLeft: 8,
+		paddingRight: 8
 	},
 	tagItemText: {
 		color: theme.colors.MAIN,
 	    fontSize: 15,
 	},
 	closeTagIcon: {
+		paddingLeft: 5,
 		// alignSelf: 'stretch',
+		fontSize: 16,
 		color: 'red'
 	},
 });

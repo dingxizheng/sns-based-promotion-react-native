@@ -1,17 +1,18 @@
 'use strict';
 
-var React              = require('react-native');
-var Actions            = require('react-native-router-flux').Actions;
-var theme              = require('../theme');
-var moment             = require('moment');
-var HTMLView           = require('react-native-htmlview');
-var ImageGroup         = require('./ImagesView');
-var TagsView           = require('./TagsView');
-var ParallaxScrollView = require('react-native-parallax-scroll-view');
-var CustomButtonsMixin = require('../CustomButtonsMixin');
-var TimerMixin         = require('react-timer-mixin');
-var Icon               = require('react-native-vector-icons/MaterialIcons');
+var React                = require('react-native');
+var Actions              = require('react-native-router-flux').Actions;
+var theme                = require('../theme');
+var moment               = require('moment');
+var HTMLView             = require('react-native-htmlview');
+var ImageGroup           = require('./ImagesView');
+var TagsView             = require('./TagsView');
+var ParallaxScrollView   = require('react-native-parallax-scroll-view');
+var CustomButtonsMixin   = require('../CustomButtonsMixin');
+var TimerMixin           = require('react-timer-mixin');
+var Icon                 = require('react-native-vector-icons/MaterialIcons');
 var UIImagePickerManager = require('NativeModules').UIImagePickerManager;
+var BusyBox              = require('../Parts/BusyBox');
 
 var {TableView, Section, Cell, CustomCell} = require('react-native-tableview-simple');
 var {BottomActions, BottomItem} = require('./BottomActionsView');
@@ -24,7 +25,9 @@ var {
 	StyleSheet, 
 	TouchableOpacity, 
 	Image,
-	TextInput
+	TextInput,
+	InteractionManager,
+	LayoutAnimation
 } = React;
 
 var options = {
@@ -44,8 +47,9 @@ var UserEditingView = React.createClass({
 
 	getInitialState: function() {
 	    return {
-	    	user: this.props.user,
-	    	fullIntro: false
+	    	user: this.props.user.data,
+	    	fullIntro: false,
+	    	renderPlaceHolderOnly: true
 	    };
 	},
 
@@ -62,14 +66,19 @@ var UserEditingView = React.createClass({
     	]);
     },
 
-	componentDidFocus: function() {
+	componentDidMount: function() {
+		InteractionManager.runAfterInteractions(() => {
+			LayoutAnimation.configureNext(LayoutAnimation.Presets.spring);
+			this.setState({ user: this.props.user.data, renderPlaceHolderOnly: false });
+	      	this._fetchInitial();
+	    });
 	},
 
-	componentWillMount: function() {
+	_fetchInitial: function() {
 		// console.log("part", this.props.user.data);
 		this.props.user.fetch().then(function(e) {
-			console.log("full", e);
-			this.setState({ user: this.props.user });
+			LayoutAnimation.configureNext(LayoutAnimation.Presets.spring);
+			this.setState({ user: this.props.user.data });
 		}.bind(this));
 	},
 
@@ -96,7 +105,9 @@ var UserEditingView = React.createClass({
 			console.log(result);
 			this.new_background = null;
 			this.new_avatar = null;
-			this.setState({ user: this.state.user });
+			this.setState({ user: this.state.user.data });
+
+			Actions.toast({ msg: 'Profile updated successfully!', type: 'info' });
 		} catch (e) {
 			console.log(e);
 		}
@@ -120,7 +131,7 @@ var UserEditingView = React.createClass({
 		    this['new_' + field] = source;
 
 		    this.state.user.set({ [field]: { image_url: source.uri, thumb_url: source.uri } });
-		    this.setState({ user: this.state.user });
+		    this.setState({ user: this.state.user.data });
 		  }
 		});
 	},
@@ -129,7 +140,7 @@ var UserEditingView = React.createClass({
 	
 	_updateField: function (field, value) {
 		this.state.user.set({ [field]: value });
-		this.setState({ user: this.state.user });
+		this.setState({ user: this.state.user.data });
 		this.setRightButtons([
     		{
     			text: 'Save',
@@ -147,7 +158,7 @@ var UserEditingView = React.createClass({
 		Actions.simpleInput({
 			title: "Change Phone", 
 			placeholder: "phone number",
-			initialValue: this.state.user.data.phone || '',
+			initialValue: this.state.user.phone || '',
 			textInputHeight: 30,
 			buttonName: 'Done',
 			onDone: (e) => this._updateField('phone', e)  
@@ -158,7 +169,7 @@ var UserEditingView = React.createClass({
 		Actions.simpleInput({
 			title: "Change Name", 
 			placeholder: "profile name",
-			initialValue: this.state.user.data.name || '',
+			initialValue: this.state.user.name || '',
 			textInputHeight: 50,
 			buttonName: 'Done',
 			onDone: (e) => this._updateField('name', e) 
@@ -169,7 +180,7 @@ var UserEditingView = React.createClass({
 		Actions.simpleInput({
 			title: "Change Address", 
 			placeholder: "address",
-			initialValue: this.state.user.data.address || '',
+			initialValue: this.state.user.address || '',
 			textInputHeight: 100,
 			buttonName: 'Done',
 			onDone: (e) => this._updateField('address', e) 
@@ -180,8 +191,8 @@ var UserEditingView = React.createClass({
 		Actions.simpleInput({
 			title: "Change Description", 
 			placeholder: "description",
-			initialValue: this.state.user.data.description || '',
-			textInputHeight: 200,
+			initialValue: this.state.user.description || '',
+			textInputHeight: 180,
 			buttonName: 'Done',
 			onDone: (e) => this._updateField('description', e) 
 		});
@@ -192,11 +203,10 @@ var UserEditingView = React.createClass({
             rightButton: 'Add',
             content: require('../AutoComplete/Tags'),
             contentProps: { 
-                initialTags: this.state.user.data.tags,
+                initialTags: this.state.user.tags,
                 onTagsChange: this._tagsChange
             }
         });
-
     },
 
     _tagsChange: function(tags) {
@@ -204,7 +214,7 @@ var UserEditingView = React.createClass({
     },
 
 	_renderForeground: function() {
-		var {avatar, name} = this.state.user.data;
+		var {avatar, name} = this.state.user;
 		avatar = avatar || {};
 		return (
 			<View style={styles.foreground}>
@@ -220,20 +230,19 @@ var UserEditingView = React.createClass({
 	},
 
 	_renderBackground: function() {
-		var {background} = this.state.user.data;
+		var {background} = this.state.user;
 		background = background || {};
 		return (
 			<View style={styles.background}>
-				<Image style={{flex:1, resizeMode: 'cover'}} 
-					source={{ uri: background.image_url }}
-					defaultSource={require('../../images/wood.jpg')}/>
+				<Image style={{flex:1, resizeMode: 'cover', backgroundColor: '#eee'}} 
+					source={{ uri: background.image_url }}/>
 				<View style={styles.viewMask}/>
 		 	</View>
 		);
 	},
 
 	_renderStickyHeader: function() {
-		var {name} = this.state.user.data;
+		var {name} = this.state.user;
 		return (
 			<View style={styles.stickyHeader}>
 				<Text style={styles.stickrHeaderName}>{name}</Text>
@@ -242,17 +251,21 @@ var UserEditingView = React.createClass({
 	},
 
 	_renderIntro: function (argument) {
-		var {description} = this.state.user.data;
+		var {description} = this.state.user;
 		return <Text style={styles.cellText}>{description || 'none'}</Text>;
 	},
 	
 	render: function() {
+
+		if (this.state.renderPlaceHolderOnly) {
+			return <View style={{flex: 1, marginTop: 64, backgroundColor: '#FFFF'}}><BusyBox size={20}/></View>
+		}
 		
 		var {avatar, name, background, 
 			tags, description, address,
 			photos_count, promotions_count, phone,
 			likers_count, comments_count, opinions_count
-		} = this.state.user.data;
+		} = this.state.user;
 
 		avatar = avatar || {};
 		background = background || {};
@@ -445,7 +458,7 @@ var styles = StyleSheet.create({
     	justifyContent: 'flex-end'
     },
     cellText: {
-    	fontSize: 13,
+    	fontSize: 15,
         color: theme.colors.DARK_GREY_FONT
     }
 });

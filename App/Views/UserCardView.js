@@ -2,18 +2,19 @@
 * @Author: dingxizheng
 * @Date:   2016-02-11 16:11:14
 * @Last Modified by:   dingxizheng
-* @Last Modified time: 2016-02-12 15:41:10
+* @Last Modified time: 2016-02-29 00:56:37
 */
 
 'use strict';
 
-var React       = require('react-native');
-var Actions     = require('react-native-router-flux').Actions;
-var theme       = require('../theme');
-var moment   = require('moment');
-var HTMLView = require('react-native-htmlview');
-var ImageGroup  = require('./ImagesView');
-var TagsView = require('./TagsView');
+var React      = require('react-native');
+var Actions    = require('react-native-router-flux').Actions;
+var theme      = require('../theme');
+var moment     = require('moment');
+var HTMLView   = require('react-native-htmlview');
+var ImageGroup = require('./ImagesView');
+var TagsView   = require('./TagsView');
+
 var {BottomActions, BottomItem} = require('./BottomActionsView');
 var {StatusView, StatusItem}    = require('./StatusView');
 
@@ -26,15 +27,24 @@ var {
 } = React;
 
 var UserCardView = React.createClass({
+
+	getInitialState: function() {
+		return {
+			user: this.props.user.data 
+		};
+	},
+
 	render: function() {
-		var {avatar, name} = this.props.user;
+		var {avatar, name, tags} = this.state.user;
+		avatar = avatar || {};
 
 		return (
-			<View style={styles.container}>
+			<View style={[styles.container, this.props.style]}>
 				<Image style={styles.background} defaultSource={require('../../images/profile_bg.jpg')}>
-					<Image style={styles.avatar} source={{ uri: avatar }}>
+					<Image style={styles.avatar} source={{ uri: avatar.thumb_url }}>
 					</Image>
 				</Image>
+				
 				<View style={styles.userContent}>
 					<Text style={styles.userName}>{name}</Text>
 					{/*<ImageGroup columns={4} square={true} imageHeight={120} images={images}/>*/}
@@ -42,7 +52,7 @@ var UserCardView = React.createClass({
 					<TagsView style={{paddingTop: 4 }}
 						onPress={(tag, i) => console.log(tag, i)}
 						onMore={() => console.log("more")}
-						tags={['good', 'oliver', 'dingxizheng', 'promotionContainer', 'ImageGroup', 'StatusView']}/>
+						tags={tags}/>
 
 					<StatusView>
 						<StatusItem text="25" name="followers"/>
@@ -50,6 +60,7 @@ var UserCardView = React.createClass({
 						<StatusItem text="134" name="likes"/>
 					</StatusView>
 				</View>
+				
 				<BottomActions style={{ height: 40 }}>
 					<BottomItem text="comment" icon="add" type="icon-only"/>
 					<BottomItem type="icon-only" icon="favorite-border" text="like"/>

@@ -2,7 +2,7 @@
 * @Author: dingxizheng
 * @Date:   2016-02-09 18:16:12
 * @Last Modified by:   dingxizheng
-* @Last Modified time: 2016-02-22 03:01:56
+* @Last Modified time: 2016-02-29 17:29:08
 */
 'use strict';
 
@@ -22,13 +22,13 @@ var {
 var LocationImage = React.createClass({
 	render: function() {
 		var {address, coordinates} = this.props;
-		if (coordinates){
+		if (coordinates || address){
 			var title = address || 'Location';
 			var locationUrl = Utiliites.googleMapImage()
-									   .center(coordinates.join(","))
-									   .size(600, 400)
-									   .zoom(15)
-									   .markers('red', 'S', coordinates.join(","))
+									   .center(address || coordinates.join(","))
+									   .size(600, 300)
+									   .zoom(16)
+									   .markers('white', 'React', address || coordinates.join(","))
 									   .get();
 			return (
 				<TouchableOpacity style={[styles.container, this.props.style]}>

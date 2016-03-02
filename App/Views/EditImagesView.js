@@ -2,7 +2,7 @@
 * @Author: dingxizheng
 * @Date:   2016-02-18 17:30:00
 * @Last Modified by:   dingxizheng
-* @Last Modified time: 2016-02-23 16:17:34
+* @Last Modified time: 2016-03-01 17:41:02
 */
 
 'use strict';
@@ -12,7 +12,6 @@ var formStyles           = require('../formStyles');
 var theme                = require('../theme');
 var Lightbox             = require('react-native-lightbox');
 var Icon                 = require('react-native-vector-icons/MaterialIcons');
-var UIImagePickerManager = require('NativeModules').UIImagePickerManager;
 
 var {
 	View,
@@ -22,54 +21,23 @@ var {
 	TouchableOpacity
 } = React;
 
-var options = {
-  title: 'Select Photo', // specify null or empty string to remove the title
-  cancelButtonTitle: 'Cancel',
-  takePhotoButtonTitle: 'Take Photo...', // specify null or empty string to remove this button
-  chooseFromLibraryButtonTitle: 'Choose from Library...', // specify null or empty string to remove this button
-  cameraType: 'back', // 'front' or 'back'
-  mediaType: 'photo', // 'photo' or 'video'
-  allowsEditing: true, // Built in functionality to resize/reposition the image
-  noData: true, // photos only - disables the base64 `data` field from being generated (greatly improves performance on large photos)
-};
-
 var Images = React.createClass({
 
 	getInitialState: function() {
 		return {
 			parentLayouted: false,
 			currentWidth: 0,
-			images: []
+			images: this.props.images || []
 		};
 	},
 
-	selectPhoto: function() {
-		UIImagePickerManager.showImagePicker(options, (response) => {
-
-		  if (response.didCancel) {
-		    console.log('User cancelled image picker');
-		  }
-		  else if (response.error) {
-		    console.log('UIImagePickerManager Error: ', response.error);
-		  }
-		  else if (response.customButton) {
-		    console.log('User tapped custom button: ', response.customButton);
-		  }
-		  else {
-		    // // You can display the image using either data:
-		    // const source = {uri: 'data:image/jpeg;base64,' + response.data, isStatic: true};
-
-		    // uri (on iOS)
-		    const source = {uri: response.uri.replace('file://', ''), isStatic: true};
-
-		    this.state.images.push(source);
-		    this.setState({
-		      images: this.state.images
-		    });
-		    this.props.imagesChange(this.state.images);
-		  }
-		});
+	componentWillReceiveProps: function(nextProps) {
+	  	this.setState({
+	  		images: nextProps.images || []
+	  	});
 	},
+
+	selectPhoto: function() {},
 
 	removeImage: function(img, i) {
 		this.state.images.splice(i, 1);
@@ -170,8 +138,11 @@ var Images = React.createClass({
 
 	render: function() {
 		var images = this.state.images.slice(0);
-		images.push('add_photo');
+		// images.push('add_photo');
 		this.images = images;
+
+		if (this.images.length < 1) 
+			return null;
 
 		return (
 			<View style={[styles.imageGroup, this.props.style]} onLayout={this._onLayout}>
@@ -202,10 +173,10 @@ var styles = StyleSheet.create({
 		position: 'absolute',
 		top: 0,
 		right: 0,
-		color: 'red',
+		color: theme.colors.MAIN,
 	    fontSize: 20,
-	    backgroundColor: '#eee',
-	    padding: 6
+	    backgroundColor: '#EEEEEEDD',
+	    padding: 3
 	},
 	addPhotoButton: {
 		color: theme.colors.DARK_GREY_FONT,

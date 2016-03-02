@@ -2,13 +2,14 @@
 * @Author: dingxizheng
 * @Date:   2016-02-09 13:43:52
 * @Last Modified by:   dingxizheng
-* @Last Modified time: 2016-02-23 14:36:18
+* @Last Modified time: 2016-02-25 22:56:50
 */
 
 'use strict';
 
 var React       = require('react-native');
 var GlobalEvent = require('../GlobalEvent');
+var theme       = require('../theme');
 
 var {
   View,
@@ -97,7 +98,7 @@ var styles = StyleSheet.create({
 	barTitleText: {
 		fontFamily: '.HelveticaNeueInterface-MediumP4',
 		fontSize: 17,
-		color: 'white',
+		color: theme.colors.BAR_TEXT,
 		overflow: 'hidden'
 		// marginTop: 11 + Layout.pixel,
 	}

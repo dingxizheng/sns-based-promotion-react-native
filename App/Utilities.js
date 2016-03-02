@@ -2,12 +2,72 @@
 * @Author: dingxizheng
 * @Date:   2016-02-03 15:55:55
 * @Last Modified by:   dingxizheng
-* @Last Modified time: 2016-02-24 19:15:36
+* @Last Modified time: 2016-03-01 19:39:02
 */
 
 'use strict';
 
+var UIImagePickerManager = require('NativeModules').UIImagePickerManager;
+
+var imageOptions = {
+   title: 'Select Photo', 
+   cancelButtonTitle: 'Cancel',
+   takePhotoButtonTitle: 'Take Photo...', 
+   chooseFromLibraryButtonTitle: 'Choose from Library...', 
+   cameraType: 'back',
+   mediaType: 'photo', 
+   allowsEditing: true, 
+   noData: true,
+};
+
 var Utilities = {
+
+	selectPhoto: function(options, cbk, errcbk) {
+		UIImagePickerManager.showImagePicker(Object.assign({}, imageOptions, options), (response) => {
+		  if (response.didCancel) {
+		    console.log('User cancelled image picker');
+		    errcbk && errcbk();
+		  }
+		  else if (response.error) {
+		    console.log('UIImagePickerManager Error: ', response.error);
+		    errcbk && errcbk();
+		  }
+		  else if (response.customButton) {
+		    console.log('User tapped custom button: ', response.customButton);
+		    errcbk && errcbk();
+		  }
+		  else {
+		    const source = {uri: response.uri.replace('file://', ''), isStatic: true};
+		    cbk && cbk(source);
+		  }
+		});
+	},
+
+	abbrNum: function(number, decPlaces) {
+	    decPlaces = Math.pow(10,decPlaces);
+	    var abbrev = [ "k", "m", "b", "t" ];
+
+	    for (var i=abbrev.length-1; i>=0; i--) {
+
+	        var size = Math.pow(10,(i+1)*3);
+
+	        if(size <= number) {
+	             number = Math.round(number*decPlaces/size)/decPlaces;
+
+	             if((number == 1000) && (i < abbrev.length - 1)) {
+	                 number = 1;
+	                 i++;
+	             }
+
+	             number += abbrev[i];
+
+	             break;
+	        }
+	    }
+
+	    return number;
+	},
+
 	hexToRgb: function(hex) {
 	    var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
 	    var result = result ? {
@@ -61,7 +121,24 @@ var Utilities = {
             }
 		};
 		return img;
-	}
+	},
+
+	addressAutoComplete: function(input) {
+		return fetch(`https://maps.googleapis.com/maps/api/place/autocomplete/json?input=${ encodeURIComponent(input) }&types=geocode&key=AIzaSyDkFKVHqncBdg9-LRTke5aa0y4rGs1BfOA`);
+	},
+
+	geocodeReverse: function(lat, lng) {
+		return fetch(`https://maps.googleapis.com/maps/api/geocode/json?latlng=${ lat + '' },${lng + ''}&key=AIzaSyDkFKVHqncBdg9-LRTke5aa0y4rGs1BfOA`);
+	},
+
+	extractArticle: function(url) {
+		return  fetch(`https://api.aylien.com/api/v1/extract?url=${ encodeURIComponent(url) }&best_image=true`, { 
+					headers: {
+						'X-AYLIEN-TextAPI-Application-Key': '3416e4765a4a3818137f890e3be8e8f1',
+						'X-AYLIEN-TextAPI-Application-ID': '749cdf1a'
+					}
+				});
+	},
 };
 
 module.exports = Utilities;

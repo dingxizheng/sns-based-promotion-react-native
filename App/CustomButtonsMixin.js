@@ -2,7 +2,7 @@
 * @Author: dingxizheng
 * @Date:   2016-01-28 16:03:30
 * @Last Modified by:   dingxizheng
-* @Last Modified time: 2016-02-25 01:31:52
+* @Last Modified time: 2016-03-02 13:16:29
 */
 
 'use strict';
@@ -12,7 +12,11 @@ var GlobalEvent = require('./GlobalEvent');
 module.exports = {
 
 	componentWillMount: function() {
-		this.previousNavbarStyle = Object.assign({}, this.props.currentNarBarStyle());
+		if (this.props.nestedView)
+			return
+
+		this.props.setNavBarStyle({});
+		// this.previousNavbarStyle = Object.assign({}, this.props.currentNarBarStyle());
 		GlobalEvent.on("right_buttons_mounted", this.onRightButtonsMounted);
 		GlobalEvent.on("left_buttons_mounted",  this.onLeftButtonsMounted);
 		GlobalEvent.on("bar_title_mounted",  this.onBarTitleMounted);
@@ -44,14 +48,22 @@ module.exports = {
 	},
 
 	componentWillUnmount: function() {
+		if (this.props.nestedView)
+			return
 		GlobalEvent.off(this.props.name + "_willFocus", this._componentWillFocus);
 		GlobalEvent.off(this.props.name + "_didFocus", this.componentDidFocus);
 		GlobalEvent.off(this.props.name + "_willBlur", this.componentWillBlur);
 		GlobalEvent.off(this.props.name + "_didBlur", this.componentDidBlur);
 	},
 
-	_componentWillFocus: function(e) {
-		this.props.setNavBarStyle(this.previousNavbarStyle || {});
-		this.componentWillFocus && this.componentWillFocus(e);
+	_componentWillBlur: function(e) {
+		// this.props.setNavBarStyle(this.previousNavbarStyle || {});
+		// this.componentWillFocus && this.componentWillFocus(e);
+	},
+
+	_componnetWillFocus: function(e) {
+		if (this.props.nestedView)
+			return
+		this.props.setNavBarStyle({});
 	},
 }

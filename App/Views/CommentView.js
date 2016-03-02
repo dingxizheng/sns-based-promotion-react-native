@@ -2,17 +2,18 @@
 * @Author: dingxizheng
 * @Date:   2016-01-31 18:56:08
 * @Last Modified by:   dingxizheng
-* @Last Modified time: 2016-02-22 15:39:03
+* @Last Modified time: 2016-03-01 21:40:30
 */
 
 'use strict';
 
-var React    = require('react-native');
-var Actions  = require('react-native-router-flux').Actions;
-var BlurView = require('react-native-blur').BlurView;
-var Icon     = require('react-native-vector-icons/MaterialIcons');
-var moment   = require('moment');
-var theme    = require('../theme');
+var React      = require('react-native');
+var Actions    = require('react-native-router-flux').Actions;
+var BlurView   = require('react-native-blur').BlurView;
+var Icon       = require('react-native-vector-icons/MaterialIcons');
+var QuotedView = require('./QuotedView');
+var moment     = require('moment');
+var theme      = require('../theme');
 
 var {View, Text, StyleSheet, TouchableOpacity, Image} = React;
 var {Comment, Resource} = require('../apis');
@@ -30,6 +31,7 @@ var CommentView = React.createClass({
 			console.log(comment);
 			var result = await comment.save();		
 			Actions.toast({ msg: 'Commented successfully!', view_type: 'info', time: 1000});
+		
 		} catch(e) {
 			console.log(e);
 		}
@@ -46,15 +48,15 @@ var CommentView = React.createClass({
 			var {name, avatar, time} = commenteer;
 
 			return (
-				<View style={styles.parentComment}>
+				<QuotedView style={styles.parentComment}>
 					<TouchableOpacity style={styles.profileInfo}>
-					<Text style={styles.profileName}><Text style={{color: theme.colors.GREY_FONT}}>replied to </Text>{name}</Text>
+					<Text style={[styles.profileName, { fontSize: 13}]}><Text style={{color: theme.colors.GREY_FONT}}>replied to </Text>{name}</Text>
 					</TouchableOpacity>
 					
 					<View style={styles.commentContent}>
 						<Text style={styles.commentContentText}>{body}</Text>
 					</View>
-				</View>
+				</QuotedView>
 			);
 		}
 	},
@@ -105,7 +107,8 @@ var styles = StyleSheet.create({
 		flexDirection: 'row',
 		padding: 10,
 		borderBottomColor: '#eeeeee',
-		borderBottomWidth: .5
+		borderBottomWidth: .5,
+		backgroundColor: 'white'
 
 	},
 	avatarWrapper: {
@@ -126,7 +129,7 @@ var styles = StyleSheet.create({
 		
 	},
 	commentContentText: {
-		color: theme.colors.FONT,
+		color: theme.colors.TEXT,
 		fontWeight: theme.fonts.FONT_WEIGHT,
 		fontSize: theme.fonts.FONT_SIZE_SMALL
 	},
@@ -178,11 +181,9 @@ var styles = StyleSheet.create({
 	},
 	parentComment: {
 		marginTop: 4,
-		borderLeftColor: theme.colors.MAIN,
-		borderLeftWidth: 2,
-		flexDirection: 'column',
 		padding: 6,
-		backgroundColor: '#f5f5f5'
+		paddingTop: 6,
+		paddingBottom: 6,
 	}
 });
 
