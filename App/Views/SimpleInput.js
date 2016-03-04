@@ -2,16 +2,21 @@
 * @Author: dingxizheng
 * @Date:   2016-01-31 17:23:24
 * @Last Modified by:   dingxizheng
-* @Last Modified time: 2016-02-25 17:28:16
+* @Last Modified time: 2016-03-03 22:14:30
 */
 
 'use strict';
 
-var React   = require('react-native');
-var Actions = require('react-native-router-flux').Actions;
-var Icon    = require('react-native-vector-icons/MaterialIcons');
-var theme   = require('../theme');
-var KeyboardSpacer = require('react-native-keyboard-spacer');
+var React              = require('react-native');
+var Actions            = require('react-native-router-flux').Actions;
+var Icon               = require('react-native-vector-icons/MaterialIcons');
+var theme              = require('../theme');
+var CustomButtonsMixin = require('../CustomButtonsMixin');
+var TimerMixin         = require('react-timer-mixin');
+var KeyboardSpacer     = require('react-native-keyboard-spacer');
+var dismissKeyboard    = require('dismissKeyboard');
+
+var {BottomActions, BottomItem} = require('./BottomActionsView');
 
 var {
 	View, 
@@ -19,17 +24,65 @@ var {
 	StyleSheet, 
 	TouchableOpacity, 
 	TextInput, 
+	DeviceEventEmitter,
+	InteractionManager
 } = React;
 
 var MakePromotion = React.createClass({
+
+	mixins: [CustomButtonsMixin, TimerMixin],
 
 	getInitialState: function() {
 		return {
 			animated: true,
 			transparent: true,
-			visible: true
+			visible: true,
+			keyboard: false,
 		};
 	},
+
+	titleViewDidMount: function() {
+        this.setTitleView(this.props.title);
+    },
+
+	rightButtonsDidMount: function() {
+        this.setRightButtons([
+            {
+                text: this.props.buttonName || 'Done',
+                onPress: this.onDone
+            }
+        ]);
+    },
+
+    leftButtonsDidMount: function() {
+        this.setLeftButtons([
+            {
+                icon: 'close',
+                onPress: Actions.pop
+            }
+        ]);
+    },
+
+	componentDidMount: function() {
+        this._keyboardWillShowFunc = DeviceEventEmitter.addListener('keyboardWillShow', this._keyboardWillShow);
+        this._keyboardWillHideFunc = DeviceEventEmitter.addListener('keyboardWillHide', this._keyboardWillHide);
+        InteractionManager.runAfterInteractions(() => {
+            this.refs.contentInput.focus();
+        });
+    }, 
+
+    componentWillUnmount: function() {
+        this._keyboardWillHideFunc.remove();
+        this._keyboardWillShowFunc.remove(); 
+    },
+
+    _keyboardWillShow: function() {
+        this.setState({ keyboard: true });
+    },
+
+    _keyboardWillHide: function() {
+        this.setState({ keyboard: false });
+    },
 
 	onChangeText: function(text) {
 		this.inputText = text;
@@ -43,45 +96,51 @@ var MakePromotion = React.createClass({
 	},
 
 	_onClose: function() {
-		Actions.dismiss();
+		Actions.pop();
 	},
 
 	render: function() {
 
 		return (
 			<View style={[styles.container]} >
-				<View style={[styles.contentWrapper]}>
-					<View style={styles.header}>
-						
-						<TouchableOpacity style={styles.headerClose} onPress={this._onClose}>
-							<Icon name="close" style={styles.footerMenuItemIcon}/>
-						</TouchableOpacity>
-
-						<View style={styles.headerTitle}>
-							<Text style={styles.headerTitleText}>{ this.props.title || ""}</Text>
-						</View>
-						
-					</View>
 					
-					<View style={styles.content}>
-						<TextInput 
-							value={this.props.initialValue || ''} 
-							onChangeText={this.onChangeText} 
-							style={[styles.contentInput, { height: this.props.textInputHeight || 100 }]} 
-							multiline={true} 
-							autoFocus={true}
-							autoCorrect={false}
-                            autoCapitalize="none" 
-							placeholder={this.props.placeholder || "put your comment here..." }/>
-					</View>
-					
-					<View style={styles.footer}>
-						<TouchableOpacity style={styles.footerMenuItemWrapper} onPress={this.onDone}>
-							<Text style={styles.footerMenuItemText}>{this.props.buttonName || 'Send'}</Text>
-						</TouchableOpacity>
-					</View>
+				<View style={styles.content}>
+					<TextInput 
+						ref="contentInput"
+						value={this.props.initialValue || ''} 
+						onChangeText={this.onChangeText} 
+						style={[styles.contentInput, { height: this.props.textInputHeight || 100 }]} 
+						multiline={true} 
+						autoFocus={true}
+						autoCorrect={false}
+                        autoCapitalize="none" 
+						placeholder={this.props.placeholder || "put your comment here..." }/>
 				</View>
-				<KeyboardSpacer/>
+				<BottomActions style={{ height: 45, backgroundColor: 'white' }} separatorHeight={0}>
+	                    <BottomItem
+	                        type="icon-only"
+	                        icon="close"
+	                        onPress={this._onClose}
+	                        iconStyle={{ fontSize: 20}}/>
+	                    <BottomItem
+	                        type="text-only"
+	                        text=""
+	                        iconStyle={{ fontSize: 20}}/>
+	                    <BottomItem
+	                        type="text-only"
+	                        text=""
+	                        iconStyle={{ fontSize: 20}}/>
+	                    <BottomItem
+	                        type="text-only"
+	                        text=""
+	                        textStyle={{ fontSize: 17}}/>
+	                    <BottomItem
+	                        type="icon-only"
+	                        iconStyle={{ fontSize: 20}}
+	                        onPress={()=>{ dismissKeyboard() }}
+	                        icon={ this.state.keyboard ? "keyboard-hide" : "keyboard-arrow-up" }/>
+	                </BottomActions>
+                <KeyboardSpacer/>
 			</View>
 		);
 	}
@@ -90,83 +149,24 @@ var MakePromotion = React.createClass({
 
 var styles = StyleSheet.create({
 	container: {
-		// flex: 1,
-		// flexDirection: 'column',
-		justifyContent: 'flex-end',
-        position: 'absolute',
-        top:0,
-        bottom:0,
-        left:0,
-        right:0,
-        backgroundColor: '#FFFFFF44'
-        // justifyContent: 'center',
-        // alignItems: 'center',
-    },
-    contentWrapper: {
-    	borderWidth: 0.5,
-		borderColor: '#bbbbbb',
-		flexDirection: 'column',
+		flex: 1,
+		marginTop: 64,
 		backgroundColor: 'white',
-		shadowOffset:{
-            width: 1,
-            height: 2,
-        },
-        shadowColor: 'black',
-        shadowOpacity: 0.5,
-    },
-    header: {
-		height: 45,
-		flexDirection: 'row',
-		backgroundColor: '#eeeeee',
-		borderBottomColor: '#eeeeee',
-		borderBottomWidth: .5
-    },
-    headerTitle: {
-    	flex: .9,
-    	justifyContent: 'center',
-        paddingLeft: 10,
-    },
-    headerTitleText: {
-    	color: theme.colors.GREY_FONT,
-    },
-    headerClose: {
-    	flex: 0.1,
-    	justifyContent: 'center',
-        alignItems: 'center',
+		flexDirection: 'column',
+        justifyContent: 'flex-end'
     },
     content: {
-    	flexDirection: 'column',
+    	flex: 1,
     	padding: 10,
     },
     contentInput: {
-    	height: 100,
+    	flex: 1,
     	fontSize: 17,
     	color: theme.colors.GREY_FONT,
     },
-    footer: {
-		height: 45,
-		flexDirection: 'row',
-		justifyContent: 'flex-end',
-		backgroundColor: '#eeeeee',
-		borderTopColor: '#eeeeee',
-		borderTopWidth: .5
-	},
-	footerMenuItemWrapper: {
-		justifyContent: 'center',
-		alignItems: 'center',
-		flexDirection: 'row'
-	},
-	footerMenuItemIcon: {
-		color: theme.colors.GREY_FONT,
-	    fontSize: 22,
-	    padding: 3
-	},
-	footerMenuItemText: {
-		color: theme.colors.GREY_FONT,
-	    fontSize: 13,
-	    padding: 3,
-	    paddingRight: 10,
-	},
+    floatButton: {
+
+    },
 });
 
 module.exports = MakePromotion;

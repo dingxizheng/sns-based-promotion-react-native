@@ -2,7 +2,7 @@
 * @Author: dingxizheng
 * @Date:   2016-02-01 14:14:30
 * @Last Modified by:   dingxizheng
-* @Last Modified time: 2016-03-01 21:47:06
+* @Last Modified time: 2016-03-03 22:48:18
 */
 
 'use strict';
@@ -40,15 +40,15 @@ var PromotionCard = React.createClass({
 		var {liked} = this.props.promotion.data;
 		return {
 		    liked: liked,
-		    promotion: this.props.promotion.data
+		    promotion: this.props.promotion
 		};
 	},
 
 	_likePromotion: async function() {
 		try {
-			var result = await this.props.promotion.like();
+			var result = await this.state.promotion.like();
 			this.setState({
-				liked: (result.operation == 1 ? true : false)
+				liked: (result.operation == 1 ? true : false),
 			});
 			Actions.toast({ msg: `You just ${ result.operation == 1 ? 'liked' : 'unliked'} this promotion!`, view_type: 'info', time: 1000});
 		} catch(e) {
@@ -60,7 +60,7 @@ var PromotionCard = React.createClass({
 		try {
 			var repost = new Promotion({
 				body: text,
-				parent_id: this.props.promotion.data.id
+				parent_id: this.state.promotion.data.id
 			});	
 			var result = await repost.save();		
 			Actions.toast({ msg: 'You just reposted this promotion!', view_type: 'info', time: 1000});
@@ -73,7 +73,7 @@ var PromotionCard = React.createClass({
 		try {
 			var comment = new Comment({
 				body: text,
-				promotion_id: this.props.promotion.data.id
+				promotion_id: this.state.promotion.data.id
 			});	
 			var result = await comment.save();		
 			Actions.toast({ msg: 'You just commented this promotion!', view_type: 'info', time: 1000});
@@ -95,14 +95,14 @@ var PromotionCard = React.createClass({
 	},
 
 	_renderRoot: function() {
-		if (this.props.promotion.data.root){
-			var {body, photos, tags, created_at, price} = this.state.promotion.root;
-			var {avatar, name} = this.props.promotion.data.root.user;
+		if (this.state.promotion.data.root){
+			var {body, photos, tags, created_at, price} = this.state.promotion.data.root;
+			var {avatar, name} = this.state.promotion.data.root.user;
 			avatar = avatar || {};
 			
 			return (
 				<QuotedView style={{ marginTop: 5, marginLeft: 0, marginRight:0, paddingHorizontal: 10 }}>
-					<TouchableOpacity onPress={()=> Actions.promotion({ title: body, promotion: new Promotion(this.props.promotion.data.root)})}>
+					<TouchableOpacity onPress={()=> Actions.promotion({ promotion: new Promotion(this.props.promotion.data.root)})}>
 					<View style={[styles.profileBox, { paddingLeft: 0}]}>
 						<Image
 							defaultSource={require('../../images/default_profile.jpg')}
@@ -150,13 +150,11 @@ var PromotionCard = React.createClass({
 	render: function() {
 		var {user, body, created_at, root, parent, distance, 
 			photos, tags, likes, comments, reposts, price,
-		} = this.state.promotion;
+		} = this.state.promotion.data;
 		var {avatar, name} = user;
 		avatar = avatar || {};
 
 		distance = 400;
-
-		console.log(distance);
 
 		return (
 			<View overflow="hidden" style={[styles.container, this.props.style]}>

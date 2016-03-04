@@ -2,7 +2,7 @@
 * @Author: dingxizheng
 * @Date:   2016-02-29 17:32:47
 * @Last Modified by:   dingxizheng
-* @Last Modified time: 2016-02-29 19:04:26
+* @Last Modified time: 2016-03-02 19:09:59
 */
 
 'use strict';
@@ -42,7 +42,7 @@ var LocationView = React.createClass({
 				  <MapView.Marker
 				  	coordinate={{latitude, longitude}}>
 				  	<View style={styles.marker}>
-				  		<Text numberOfLines={1} style={styles.markerTitle}>{"React Native and myself"}</Text>
+				  		<Text numberOfLines={1} style={styles.markerTitle}>{this.props.title}</Text>
 				  		<View style={styles.triangleWrapper}>
 				  		<Triangle
 						  width={10}
@@ -61,7 +61,7 @@ var LocationView = React.createClass({
 
 var styles = StyleSheet.create({
 	container: {
-		height: 150,
+		height: 100,
 		flexDirection: 'column',
 	},
 	marker: {

@@ -2,7 +2,7 @@
 * @Author: dingxizheng
 * @Date:   2016-02-02 13:19:21
 * @Last Modified by:   dingxizheng
-* @Last Modified time: 2016-02-29 15:53:43
+* @Last Modified time: 2016-03-03 22:08:48
 */
 
 'use strict';
@@ -23,7 +23,7 @@ var BottomActions = React.createClass({
 
 	_renderTextOnly: function(props, key) {
 		return <TouchableOpacity key={key} style={this._itemWrapperStyle('column')} onPress={props.onPress}>
-					<Text style={[styles.itemText, props.textStyle]}>{props.text || 'button'}</Text>
+					<Text style={[styles.itemText, props.textStyle]}>{props.text}</Text>
 			   </TouchableOpacity>;
 	},
 
@@ -36,14 +36,14 @@ var BottomActions = React.createClass({
 	_renderVertically: function(props, key) {
 		return <TouchableOpacity key={key} style={this._itemWrapperStyle('column')} onPress={props.onPress}>
 					<Icon name={props.icon} style={[styles.itemIcon, props.iconStyle, {paddingBottom: 0}]} />
-					<Text style={[styles.itemText, props.textStyle]}>{props.text || 'button'}</Text>
+					<Text style={[styles.itemText, props.textStyle]}>{props.text}</Text>
 			   </TouchableOpacity>;
 	},
 
 	_renderHorizontally: function(props, key) {
 		return <TouchableOpacity key={key} style={this._itemWrapperStyle('row')} onPress={props.onPress}>
 					<Icon name={props.icon} style={[styles.itemIcon, props.iconStyle]} />
-					<Text style={[styles.itemText, props.textStyle]}>{props.text || 'button'}</Text>
+					<Text style={[styles.itemText, props.textStyle]}>{props.text}</Text>
 			   </TouchableOpacity>;
 	},
 

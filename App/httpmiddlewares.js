@@ -2,7 +2,7 @@
 * @Author: dingxizheng
 * @Date:   2016-02-19 18:13:28
 * @Last Modified by:   dingxizheng
-* @Last Modified time: 2016-02-25 19:03:49
+* @Last Modified time: 2016-03-03 15:51:37
 */
 
 'use strict';
@@ -19,7 +19,7 @@ Resource.addBeforeAction(async function(request) {
 		request.options.query.access_token = session.access_token;
 
 	} catch(e) {
-		console.error(e);
+		console.log(e);
 	}
 	return request;
 });
@@ -28,7 +28,7 @@ Resource.addBeforeAction(function(request) {
 	if(request.options && request.options.body && typeof request.options.body !== 'string') {
 		request.options.body = JSON.stringify(request.options.body)
 	}
-	console.log("request body", request.options.body);
+	console.log("request body", request.url, request.options.body);
 	return request;
 });
 

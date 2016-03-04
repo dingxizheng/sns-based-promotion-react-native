@@ -2,7 +2,7 @@
 * @Author: dingxizheng
 * @Date:   2016-02-02 18:59:43
 * @Last Modified by:   dingxizheng
-* @Last Modified time: 2016-03-01 22:50:04
+* @Last Modified time: 2016-03-03 15:52:39
 */
 
 'use strict';
@@ -66,43 +66,44 @@ var FacebookTabBar = React.createClass({
   renderTabOption(name, page) {
     var isTabActive = this.props.activeTab === page;
 
-    if (Math.abs(this.props.scrollValue._value - this.props.activeTab) >= 0.9){
-      isTabActive = this.activeTab === page;   
-    } else {
-      this.activeTab = this.props.activeTab;
-    }
+    //   isTabActive = this.activeTab === page;   
+    // } else {
+    //   this.activeTab = this.props.activeTab;
+    // }
     
-    this.tabColors[page] = new Animated.Value(isTabActive ? 0 : 1);
+    // this.tabColors[page] = new Animated.Value(isTabActive ? 0 : 1);
 
-    var color = this.tabColors[page].interpolate({
-        inputRange: [0, 1], outputRange: [Tools.hexToRgbStr(theme.colors.MAIN), Tools.hexToRgbStr(theme.colors.GREY_FONT)]
-    });
+    // var color = this.tabColors[page].interpolate({
+    //     inputRange: [0, 1], outputRange: [Tools.hexToRgbStr(theme.colors.MAIN), Tools.hexToRgbStr(theme.colors.GREY_FONT)]
+    // });
+
+    var color = isTabActive ? theme.colors.MAIN : theme.colors.GREY_FONT;
 
     if (this.props.type == "icon-only")
       return (
         <TouchableOpacity key={name} onPress={() => this.props.goToPage(page)} style={[styles.tab, {flex: 1 / this.props.tabs.length}]}>
-          <AnimatedIcon name={name} style={[styles.icon, this.props.iconStyle, {color}]}/>
+          <Icon name={name} style={[styles.icon, this.props.iconStyle, {color}]}/>
         </TouchableOpacity>
       );
     else if (this.props.type == "text-only")
       return (
         <TouchableOpacity key={name} onPress={() => this.props.goToPage(page)} style={[styles.tab, {flex: 1 / this.props.tabs.length}]}>
-          <AnimatedText style={[styles.text, {color}]}>{name}</AnimatedText>
+          <Text style={[styles.text, {color}]}>{name}</Text>
         </TouchableOpacity>
       );
     else
       return (
         <TouchableOpacity key={name} onPress={() => this.props.goToPage(page)} style={[styles.tab, {flex: 1 / this.props.tabs.length}]}>
-          <AnimatedIcon name={name.split('|')[0]} style={[styles.icon, this.props.iconStyle, {color}]}/>
-          <AnimatedText style={[styles.text, {color}]}>{name.split('|')[1]}</AnimatedText>
+          <Icon name={name.split('|')[0]} style={[styles.icon, this.props.iconStyle, {color}]}/>
+          <Text style={[styles.text, {color}]}>{name.split('|')[1]}</Text>
         </TouchableOpacity>
       );
 
   },
 
   componentDidMount() {
-    // this.setAnimationValue({value: this.props.activeTab});
-    this._listener = this.props.scrollValue.addListener(this.setAnimationValue);
+    this.setAnimationValue({value: this.props.activeTab});
+    // this._listener = this.props.scrollValue.addListener(this.setAnimationValue);
   },
 
   setAnimationValue({value}) {

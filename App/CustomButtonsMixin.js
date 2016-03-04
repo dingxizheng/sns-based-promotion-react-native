@@ -2,7 +2,7 @@
 * @Author: dingxizheng
 * @Date:   2016-01-28 16:03:30
 * @Last Modified by:   dingxizheng
-* @Last Modified time: 2016-03-02 13:16:29
+* @Last Modified time: 2016-03-02 16:19:00
 */
 
 'use strict';
@@ -12,8 +12,10 @@ var GlobalEvent = require('./GlobalEvent');
 module.exports = {
 
 	componentWillMount: function() {
-		if (this.props.nestedView)
+		if (this.props.nestedView) {
+			this._handleDelegates();
 			return
+		}
 
 		this.props.setNavBarStyle({});
 		// this.previousNavbarStyle = Object.assign({}, this.props.currentNarBarStyle());
@@ -47,9 +49,48 @@ module.exports = {
 		GlobalEvent.off("left_buttons_mounted", this.onLeftButtonsMounted);
 	},
 
+	_handleDelegates: function() {
+		this.props.eventDelegates && this.props.eventDelegates({
+
+			rightButtonsDidMount: this.rightButtonsDidMount,
+			leftButtonsDidMount: this.leftButtonsDidMount,
+			titleViewDidMount: this.titleViewDidMount,
+			index: this.props.nestedViewIndex
+
+		}, function(delegates) {
+			this.setLeftButtons = delegates.setLeftButtons;
+			this.setRightButtons = delegates.setRightButtons;
+			this.setTitleView = delegates.setTitleView;
+		}.bind(this));
+	},
+
+	_eventDelegates: function(delegates, callback) {
+		callback({
+			setLeftButtons: this.setLeftButtons,
+			setRightButtons: this.setRightButtons,
+			setTitleView: this.setTitleView
+		});
+		this.nestedChildren = this.nestedChildren || [];
+		this.nestedChildren[delegates.index] = {
+			rightButtonsDidMount: delegates.rightButtonsDidMount,
+			leftButtonsDidMount: delegates.leftButtonsDidMount,
+			titleViewDidMount: delegates.titleViewDidMount
+		};
+		this._refreshBar(delegates.index);
+	},
+
+	_refreshBar: function(i) {
+		this.nestedChildren[i].rightButtonsDidMount && this.nestedChildren[i].rightButtonsDidMount();
+		this.nestedChildren[i].leftButtonsDidMount && this.nestedChildren[i].leftButtonsDidMount();
+		this.nestedChildren[i].titleViewDidMount && this.nestedChildren[i].titleViewDidMount();
+
+		this._afterRefreshBar && this._afterRefreshBar(i);
+	},
+
 	componentWillUnmount: function() {
 		if (this.props.nestedView)
 			return
+
 		GlobalEvent.off(this.props.name + "_willFocus", this._componentWillFocus);
 		GlobalEvent.off(this.props.name + "_didFocus", this.componentDidFocus);
 		GlobalEvent.off(this.props.name + "_willBlur", this.componentWillBlur);

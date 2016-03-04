@@ -2,7 +2,7 @@
 * @Author: dingxizheng
 * @Date:   2016-02-25 10:17:49
 * @Last Modified by:   dingxizheng
-* @Last Modified time: 2016-03-01 13:37:09
+* @Last Modified time: 2016-03-03 21:30:32
 */
 
 'use strict';
@@ -12,6 +12,7 @@ var RCTRefreshControl = require('react-refresh-control');
 var BusyBox           = require('../Parts/BusyBox');
 var theme             = require('../theme');
 var Icon              = require('react-native-vector-icons/MaterialIcons');
+var EmptyView         = require('../Parts/EmptyView');
 
 
 var {
@@ -32,7 +33,9 @@ var SearchList = React.createClass({
 			loadingNext: true,
 			showHeader: false,
 			title: this.props.title,
-			haveMore: true
+			haveMore: true,
+			empty: false,
+			loading: false,
 		};
 	},
 
@@ -41,10 +44,16 @@ var SearchList = React.createClass({
 	  		dataSource: ds.cloneWithRows(nextProps.dataList),
 	  		loadingNext: nextProps.loadingNext,
 	  		haveMore: nextProps.haveMore,
+	  		empty: nextProps.dataList.length > 0 ? false : true,
+	  		// loading: false,
 	  	});
 	},
 
 	componentDidMount: function() {
+		this._registerRefreshControl();
+	},
+
+	_registerRefreshControl: function() {
 		RCTRefreshControl.configure({
 	      node: this.refs["list"]
 	    }, this._handleReload);
@@ -59,18 +68,18 @@ var SearchList = React.createClass({
 	},
 
 	_handleReload: function() {
-		this.reloading = true;
+		this.setState({
+			loading: true
+		});
 		this.props.loadData && this.props.loadData(this._endRefreshing);
 	},
 
 	_endRefreshing: function() {
-		this.reloading && 
+		this.state.loading &&
 			RCTRefreshControl.endRefreshing(this.refs["list"]);
-		this.reloading = false;
 	},
 
 	_onEndReached: function({ nativeEvent , timeStamp } = {}) {
-		console.log(nativeEvent);
 		if(this.state.haveMore && nativeEvent && this.props.loadNext) {
 			this.setState({ loadingNext: true });
 			this.props.loadNext();
@@ -78,6 +87,9 @@ var SearchList = React.createClass({
 	},
 
 	_renderHeader: function() {
+		if (!this.props.header)
+			return
+
 		var title = this.state.title || 'Resutls';
 		return  <TouchableOpacity style={styles.header}>
 					<Text style={styles.headerText}>{title}</Text>
@@ -99,9 +111,15 @@ var SearchList = React.createClass({
 	_renderFooter: function() {
 		if (this.state.haveMore && this.state.loadingNext)
 			return <BusyBox isVisible={true}/>
+
+		if (this.state.empty)
+			return <EmptyView style={{ marginTop: 100 }}loading={false} text="Pull down to refresh"/>
 	},
 
 	render: function() {
+		// if (this.state.empty)
+		// 	return <EmptyView loading={this.state.loading} text="Nothing found" buttonText="Try again" onPress={()=> this._handleReload()} />
+		
 	    return (
 	      <View style={[styles.container, this.props.style]}>
 	      		<ListView 

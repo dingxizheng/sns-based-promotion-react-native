@@ -2,7 +2,7 @@
 * @Author: dingxizheng
 * @Date:   2016-01-23 13:24:54
 * @Last Modified by:   dingxizheng
-* @Last Modified time: 2016-03-01 23:01:38
+* @Last Modified time: 2016-03-03 22:10:54
 */
 
 'use strict';
@@ -29,6 +29,12 @@ var {
   TabBar,
   Actions
 } = require('react-native-router-flux');
+
+global.__debug__ = true;
+
+if (!__debug__) {
+	console.log = function(){};
+}
 
 require('./storage');
 require('./App/httpmiddlewares');
@@ -93,9 +99,9 @@ var App = React.createClass({
 	},
 
 	setNavBarStyle: function(style) {
-		this.setState({
-			navStyle: style
-		});
+		// this.setState({
+		// 	navStyle: style
+		// });
 		// var colorValue = new Animated.Value(0);
 		// var animatedColor = colorValue.interpolate({
 	 //        inputRange: [0, 1], outputRange: [Tools.hexToRgbStr(this.initialColor), Tools.hexToRgbStr(backgroundColor)]
@@ -141,7 +147,7 @@ var App = React.createClass({
     },
 
 	render: function () {
-			
+		console.log("first pagelll");
 		return <Router navigationBarStyle={{
 
 							backgroundColor: theme.colors.MAIN,
@@ -197,7 +203,7 @@ var App = React.createClass({
 	                <Route name="newPromotion" component={NewPromotion} title="New Promtion" schema="modal"/>
 	                <Route name="autoComplete" component={AutoComplete} title="AutoComplete" schema="none"/>
 
-	                <Route name="simpleInput" component={SimpleInput} type="modal" title="SimpleInput"/>                
+	                <Route name="simpleInput" component={SimpleInput} title="SimpleInput" schema="modal"/>                
 	                <Route name="toast" component={ToastView} type="modal" title="ToastView"/>
 
 				</Router>

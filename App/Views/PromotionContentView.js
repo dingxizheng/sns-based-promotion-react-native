@@ -2,7 +2,7 @@
 * @Author: dingxizheng
 * @Date:   2016-01-28 20:26:18
 * @Last Modified by:   dingxizheng
-* @Last Modified time: 2016-03-01 21:48:33
+* @Last Modified time: 2016-03-02 19:09:26
 */
 
 'use strict';
@@ -53,7 +53,7 @@ var PromotionView = React.createClass({
 
 	_renderRoot: function() {
 		if (this.state.promotion.root){
-			var {body, photos, tags, created_at} = this.state.promotion.root;
+			var {body, photos, tags, created_at, price, address, coordinates} = this.state.promotion.root;
 			var {avatar, name} = this.state.promotion.root.user;
 			avatar = avatar || {};
 			
@@ -88,9 +88,15 @@ var PromotionView = React.createClass({
 					<ImageGroup  style={{marginTop: 0, marginBottom: 10}}
 									columns={ photos.length == 1 ? 1 : 2 } square={true} imageHeight={120} images={photos}/>
 
-					<LocationImage style={{marginTop: 0, marginBottom: 10}}
-						address="472 Ruper St, Thunder Bay, Ontario"
-						coordinates={[48.425893, -89.243557]}/>
+					{(()=>{
+						if (address) 
+							return <LocationView style={{marginTop: 0}} 
+										title={ name }
+										address={ address || "472 Ruper St, Thunder Bay, Ontario"}
+										coordinates={coordinates || [48.425893, -89.243557]}/>
+						else 
+							return null;
+					})()}
 
 					</TouchableOpacity>
 					
@@ -157,6 +163,7 @@ var PromotionView = React.createClass({
 					{(()=>{
 						if (!root) 
 							return <LocationView style={{marginTop: 10}} 
+										title={ name }
 										address={ address || "472 Ruper St, Thunder Bay, Ontario"}
 										coordinates={coordinates || [48.425893, -89.243557]}/>
 						else 

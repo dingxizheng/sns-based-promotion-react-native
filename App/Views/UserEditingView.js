@@ -47,7 +47,7 @@ var UserEditingView = React.createClass({
 
 	getInitialState: function() {
 	    return {
-	    	user: this.props.user.data,
+	    	user: this.props.user,
 	    	fullIntro: false,
 	    	renderPlaceHolderOnly: true
 	    };
@@ -69,7 +69,7 @@ var UserEditingView = React.createClass({
 	componentDidMount: function() {
 		InteractionManager.runAfterInteractions(() => {
 			LayoutAnimation.configureNext(LayoutAnimation.Presets.spring);
-			this.setState({ user: this.props.user.data, renderPlaceHolderOnly: false });
+			this.setState({ renderPlaceHolderOnly: false });
 	      	this._fetchInitial();
 	    });
 	},
@@ -78,7 +78,7 @@ var UserEditingView = React.createClass({
 		// console.log("part", this.props.user.data);
 		this.props.user.fetch().then(function(e) {
 			LayoutAnimation.configureNext(LayoutAnimation.Presets.spring);
-			this.setState({ user: this.props.user.data });
+			this.setState({ user: this.props.user });
 		}.bind(this));
 	},
 
@@ -105,7 +105,7 @@ var UserEditingView = React.createClass({
 			console.log(result);
 			this.new_background = null;
 			this.new_avatar = null;
-			this.setState({ user: this.state.user.data });
+			this.setState({ user: this.state.user });
 
 			Actions.toast({ msg: 'Profile updated successfully!', type: 'info' });
 		} catch (e) {
@@ -131,7 +131,7 @@ var UserEditingView = React.createClass({
 		    this['new_' + field] = source;
 
 		    this.state.user.set({ [field]: { image_url: source.uri, thumb_url: source.uri } });
-		    this.setState({ user: this.state.user.data });
+		    this.setState({ user: this.state.user });
 		  }
 		});
 	},
@@ -140,7 +140,7 @@ var UserEditingView = React.createClass({
 	
 	_updateField: function (field, value) {
 		this.state.user.set({ [field]: value });
-		this.setState({ user: this.state.user.data });
+		this.setState({ user: this.state.user });
 		this.setRightButtons([
     		{
     			text: 'Save',
@@ -158,7 +158,7 @@ var UserEditingView = React.createClass({
 		Actions.simpleInput({
 			title: "Change Phone", 
 			placeholder: "phone number",
-			initialValue: this.state.user.phone || '',
+			initialValue: this.state.user.data.phone || '',
 			textInputHeight: 30,
 			buttonName: 'Done',
 			onDone: (e) => this._updateField('phone', e)  
@@ -169,7 +169,7 @@ var UserEditingView = React.createClass({
 		Actions.simpleInput({
 			title: "Change Name", 
 			placeholder: "profile name",
-			initialValue: this.state.user.name || '',
+			initialValue: this.state.user.data.name || '',
 			textInputHeight: 50,
 			buttonName: 'Done',
 			onDone: (e) => this._updateField('name', e) 
@@ -180,7 +180,7 @@ var UserEditingView = React.createClass({
 		Actions.simpleInput({
 			title: "Change Address", 
 			placeholder: "address",
-			initialValue: this.state.user.address || '',
+			initialValue: this.state.user.data.address || '',
 			textInputHeight: 100,
 			buttonName: 'Done',
 			onDone: (e) => this._updateField('address', e) 
@@ -191,7 +191,7 @@ var UserEditingView = React.createClass({
 		Actions.simpleInput({
 			title: "Change Description", 
 			placeholder: "description",
-			initialValue: this.state.user.description || '',
+			initialValue: this.state.user.data.description || '',
 			textInputHeight: 180,
 			buttonName: 'Done',
 			onDone: (e) => this._updateField('description', e) 
@@ -203,7 +203,7 @@ var UserEditingView = React.createClass({
             rightButton: 'Add',
             content: require('../AutoComplete/Tags'),
             contentProps: { 
-                initialTags: this.state.user.tags,
+                initialTags: this.state.user.data.tags,
                 onTagsChange: this._tagsChange
             }
         });
@@ -214,7 +214,7 @@ var UserEditingView = React.createClass({
     },
 
 	_renderForeground: function() {
-		var {avatar, name} = this.state.user;
+		var {avatar, name} = this.state.user.data;
 		avatar = avatar || {};
 		return (
 			<View style={styles.foreground}>
@@ -230,7 +230,7 @@ var UserEditingView = React.createClass({
 	},
 
 	_renderBackground: function() {
-		var {background} = this.state.user;
+		var {background} = this.state.user.data;
 		background = background || {};
 		return (
 			<View style={styles.background}>
@@ -251,7 +251,7 @@ var UserEditingView = React.createClass({
 	},
 
 	_renderIntro: function (argument) {
-		var {description} = this.state.user;
+		var {description} = this.state.user.data;
 		return <Text style={styles.cellText}>{description || 'none'}</Text>;
 	},
 	
@@ -265,7 +265,7 @@ var UserEditingView = React.createClass({
 			tags, description, address,
 			photos_count, promotions_count, phone,
 			likers_count, comments_count, opinions_count
-		} = this.state.user;
+		} = this.state.user.data;
 
 		avatar = avatar || {};
 		background = background || {};

@@ -2,7 +2,7 @@
 * @Author: dingxizheng
 * @Date:   2016-02-25 02:29:19
 * @Last Modified by:   dingxizheng
-* @Last Modified time: 2016-03-01 13:32:03
+* @Last Modified time: 2016-03-02 20:17:09
 */
 
 /* @flow */
@@ -62,7 +62,7 @@ var UserSmallList = React.createClass({
                     dataList: list,
                     loadingNext: false,
                     haveMore: list.length < this.per_page ? false : true,
-                    page: 1
+                    page: 2
                 });
                endrefreshing();
             })
