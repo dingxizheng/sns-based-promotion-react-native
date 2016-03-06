@@ -1,8 +1,8 @@
 /* 
 * @Author: dingxizheng
 * @Date:   2016-02-01 14:14:30
-* @Last Modified by:   dingxizheng
-* @Last Modified time: 2016-03-03 22:48:18
+* @Last Modified by:   mover
+* @Last Modified time: 2016-03-04 16:01:00
 */
 
 'use strict';
@@ -80,6 +80,10 @@ var PromotionCard = React.createClass({
 		} catch(e) {
 			console.log(e);
 		}
+	},
+
+	_sharePromotion: function() {
+		Utiliites.sharePromotion(this.state.promotion);
 	},
 
 	_goToDetails: function(initialPage) {
@@ -192,6 +196,9 @@ var PromotionCard = React.createClass({
 					</View>					
 				</TouchableOpacity>
 				<BottomActions style={{ height: 35, marginTop: 10 }}>
+						<BottomItem onPress={this._sharePromotion} 
+							icon="share"
+							type="icon-only"/>
 						<BottomItem
 						 	type={ comments.count < 1 ? "icon-only" : "nihao" }
 							onPress={ comments.count < 1 ? this._writeComment : () => this._goToDetails(1) } 
@@ -207,7 +214,6 @@ var PromotionCard = React.createClass({
 							iconStyle={this.state.liked ? {color: '#C64A4A'} : null} 
 							type={ likes.count < 1 ? "icon-only" : "nihao" }
 							text={ Utiliites.abbrNum(likes.count, 1) + ''}/>
-						<BottomItem icon="more-horiz" type="icon-only" text="more"/>
 				</BottomActions>
 			</View>
 		);

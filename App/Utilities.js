@@ -1,13 +1,19 @@
 /* 
 * @Author: dingxizheng
 * @Date:   2016-02-03 15:55:55
-* @Last Modified by:   dingxizheng
-* @Last Modified time: 2016-03-01 19:39:02
+* @Last Modified by:   mover
+* @Last Modified time: 2016-03-04 15:59:43
 */
 
 'use strict';
 
 var UIImagePickerManager = require('NativeModules').UIImagePickerManager;
+var React              = require('react-native');
+var Actions            = require('react-native-router-flux').Actions;
+
+var {
+	ActionSheetIOS,
+} = React;
 
 var imageOptions = {
    title: 'Select Photo', 
@@ -21,6 +27,24 @@ var imageOptions = {
 };
 
 var Utilities = {
+
+	sharePromotion: function(promotion) {
+		ActionSheetIOS.showShareActionSheetWithOptions({
+    		message: promotion.data.body.length > 140 ? promotion.data.body.substring(0, 137) + ' ...' : promotion.data.body,
+    		url: promotion.data.user.avatar.image_url,
+    		subject: 'New Deal'
+    	}, (e)=>{
+    		Actions.toast({
+    			msg: 'Failed to share !',
+    			view_type: 'error',
+    		});
+    	}, ()=>{
+    		Actions.toast({
+    			msg: 'Shared successfully!',
+    			view_type: 'info',
+    		});
+    	});
+	},
 
 	selectPhoto: function(options, cbk, errcbk) {
 		UIImagePickerManager.showImagePicker(Object.assign({}, imageOptions, options), (response) => {

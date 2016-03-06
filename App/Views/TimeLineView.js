@@ -1,8 +1,8 @@
 /* 
 * @Author: dingxizheng
 * @Date:   2016-02-01 02:59:09
-* @Last Modified by:   dingxizheng
-* @Last Modified time: 2016-03-03 21:39:23
+* @Last Modified by:   mover
+* @Last Modified time: 2016-03-05 20:23:36
 */
 
 'use strict';
@@ -53,18 +53,24 @@ var TimeLine = React.createClass({
 	},
 
 	rightButtonsDidMount: function() {
-	},
-
-	leftButtonsDidMount: function() {
 		this.setRightButtons([
 			{
 				icon: 'search',
 				onPress: this._openSearch
 			},
 			{
-				icon: 'add',
+				icon: 'open-in-new',
 				onPress: () => Actions.newPromotion()
 			},
+		]);
+	},
+
+	leftButtonsDidMount: function() {
+		this.setLeftButtons([
+			{
+				icon: 'videocam',
+				onPress: Actions.recorder
+			}
 		]);
 	},
 
@@ -113,9 +119,9 @@ var TimeLine = React.createClass({
 
 	_openSearch: function (argument) {
 		Actions.autoComplete({ 
-			rightButton: 'Add',
-			content: require('../AutoComplete/Tags'),
-			contentProps: { initialTags: ["oneeee"] }
+			rightButton: 'Search',
+			content: require('../AutoComplete/Search'),
+			contentProps: {}
 		});
 	},
 

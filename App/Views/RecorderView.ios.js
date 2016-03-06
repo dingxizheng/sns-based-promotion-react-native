@@ -1,8 +1,8 @@
 /* 
 * @Author: dingxizheng
 * @Date:   2016-01-22 20:15:03
-* @Last Modified by:   dingxizheng
-* @Last Modified time: 2016-02-16 15:34:10
+* @Last Modified by:   mover
+* @Last Modified time: 2016-03-04 16:15:37
 */
 
 'use strict';
@@ -39,8 +39,8 @@ var VideoRecorder = React.createClass({
 
 	_onPressOut: function() {
 		Animated.timing(this.state.durationBarWidth, {
-			duration: 400,
-			toValue:0
+			duration: 10,
+			toValue: this.state.durationBarWidth
 		}).start();
 	},
 

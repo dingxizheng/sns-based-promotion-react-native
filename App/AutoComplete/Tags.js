@@ -1,8 +1,8 @@
 /* 
 * @Author: dingxizheng
 * @Date:   2016-02-23 15:00:05
-* @Last Modified by:   dingxizheng
-* @Last Modified time: 2016-03-01 12:14:05
+* @Last Modified by:   mover
+* @Last Modified time: 2016-03-05 17:49:20
 */
 
 /* @flow */
@@ -11,6 +11,7 @@
 var React     = require('react-native');
 var Tags      = require('./EditTagsView');
 var {Tag}     = require('../apis');
+var GroupButtons = require('../Parts/GroupButtons');
 
 var {TableView, Section, Cell, CustomCell} = require('react-native-tableview-simple');
 
