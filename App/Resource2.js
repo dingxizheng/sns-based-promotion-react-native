@@ -1,4 +1,8 @@
-/* 
+/*
+* @Author: dingxizheng
+* @Date:   2016-03-29 16:16:43
+* @Last Modified by:   dingxizheng
+* @Last Modified time: 2016-03-29 16:23:21
 * @Author: dingxizheng
 * @Date:   2016-02-04 10:47:54
 * @Last Modified by:   dingxizheng
@@ -8,6 +12,30 @@
 'use strict';
 var queryString = require('query-string');
 var {NativeModules} = require('react-native');
+
+var _fetch = async function(url, options) {
+	try {
+		var request = {url, options};
+		
+		request = await globalBeforeActions.reduce(async function(req, current){
+			return await current.action(await req);
+		}, request);
+
+		request = convertQueryParams(request);
+		
+		var response = await fetch(request.url, Object.assign({}, request.options, { headers: Object.assign({}, defaultHttpOptions.headers, request.options.headers) }));
+		
+		response = await globalAfterActions.reduce(async function(res, current){
+			return await current.action(request, await res);
+		}, response);
+
+		return response;
+
+	} catch(e) {
+		return Promise.reject(e);
+	}
+};
+
 
 var Promisefy = function(fn) {
 	var newFn = function() {

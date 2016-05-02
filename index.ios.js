@@ -2,7 +2,7 @@
 * @Author: dingxizheng
 * @Date:   2016-01-23 13:24:54
 * @Last Modified by:   dingxizheng
-* @Last Modified time: 2016-03-03 22:10:54
+* @Last Modified time: 2016-03-09 18:43:33
 */
 
 'use strict';
@@ -178,7 +178,7 @@ var App = React.createClass({
 					
 					<Schema hideNavBar={false} name="modal" sceneConfig={Navigator.SceneConfigs.FloatFromBottom}/>
 	                <Schema hideNavBar={false} name="default" sceneConfig={Navigator.SceneConfigs.FloatFromRight}/>
-	                
+	       
 	                <Schema hideNavBar={false} name="none" sceneConfig={Navigator.SceneConfigs.FloatFromBottom}/>
 
 	                <Schema hideNavBar={false} name="nonarbar" sceneConfig={Navigator.SceneConfigs.FloatFromRight}/>
